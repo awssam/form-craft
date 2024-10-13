@@ -31,7 +31,7 @@ const ColorPicker = ({
         {showLabel && <input className="bg-transparent mx-2 border-none max-w-14 text-foreground text-xs outline-none" value={color} onChange={(e) => onChange(e.target.value)} />}
       </PopoverTrigger>
 
-      <PopoverContent className="p-0">
+      <PopoverContent align="start" alignOffset={15} className="p-0">
         <HexColorPicker color={color} onChange={onChange} />
       </PopoverContent>
     </Popover>
