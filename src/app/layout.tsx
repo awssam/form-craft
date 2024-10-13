@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   description: "Work In Progress Fun Project from Varadarajan M",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={CLERK_APPEARANCE_CONFIG}>
       <html lang="en">
-        <body className={`bg-black antialiased`}>
+        <body className={`bg-black antialiased dark`}>
           {children}
         </body>
       </html>
