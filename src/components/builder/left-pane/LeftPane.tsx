@@ -1,9 +1,9 @@
 import React from "react";
 
 import Header from "./Header";
-import FormInfoSection from "./FormInfo";
-import FormStructureSection from "./FormStructure";
-import FormCustomizationSection from "./FormCustomization";
+import FormInfoSection from "./form-info/FormInfo";
+import FormStructureSection from "./form-structure/FormStructure";
+import FormCustomizationSection from "./form-customization/FormCustomization";
 
 import { cn } from "@/lib/utils";
 import { GenericProps } from "@/types/common";

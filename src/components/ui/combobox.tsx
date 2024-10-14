@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { GenericProps } from "@/types/common";
 
-type Option = {
+export type Option = {
   value: string;
   label: string;
 };
@@ -30,27 +30,25 @@ type Option = {
 interface ComboboxProps extends GenericProps {
   options: Option[];
   allowMultiple?: boolean;
+  selectedValues?: Option[];
+  handleChange?: (values: Option[]) => void;
 }
 
-export function Combobox({ options: _options, allowMultiple }: ComboboxProps) {
+export function Combobox({ options: _options, allowMultiple, selectedValues = [], handleChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [values, setValues] = React.useState<Option[]>([]);
+  const [values, setValues] = React.useState<Option[]>(selectedValues);
   const [popupWidth, setPopupWidth] = React.useState(0);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const handleSelect = (currentValue: string) => {
     if (allowMultiple) {
-      setValues((current) => {
-        const selected = _options.find(
-          (option) => option.value === currentValue
-        ) as Option;
-        return current?.find((d) => d.value === currentValue)
-          ? current.filter((d) => d.value !== currentValue)
-          : [...current, selected];
-      });
+      const selected = _options.find((option) => option.value === currentValue) as Option;
+      const updated = values?.find(d => d.value === currentValue) ? values?.filter((d) => d.value !== currentValue) : [...values, selected];
+      setValues(updated);
+      handleChange?.(updated);
     } else {
-      setValues([
-        _options.find((option) => option.value === currentValue) as Option,
-      ]);
+      const updated = _options.find((option) => option.value === currentValue) as Option;
+      setValues([updated]);
+      handleChange?.([updated]);
       setOpen(false);
     }
   };

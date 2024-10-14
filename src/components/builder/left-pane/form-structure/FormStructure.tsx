@@ -1,26 +1,10 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Grip, List } from "lucide-react";
 
 import FormConfigSection from "@/components/common/FormConfigSection";
 import { Button } from "@/components/ui/button";
 
-const DUMMY_FIELDS = [
-  "First Name",
-  "Last Name",
-  "Email",
-  "Password",
-  "Confirm Password",
-  "Date of Birth",
-];
-
-const DUMMY_FIELDS2 = [
-  "Phone Number",
-  "Address",
-  "City",
-  "Zip Code",
-  "State",
-  "Country",
-];
+import { useFormProperty } from "@/zustand/store";
 
 type DraggableFieldProps = {
   label: string;
@@ -46,6 +30,10 @@ const CenteredLineText = ({ label }: { label: string }) => {
 };
 
 const FormStructure = () => {
+  const pages = useFormProperty("pages");
+  const pageEntities = useFormProperty("pageEntities");
+  const fieldEntities = useFormProperty("fieldEntities");
+
   return (
     <FormConfigSection
       icon={<List className="w-4 h-4 text-headerPink" />}
@@ -58,13 +46,16 @@ const FormStructure = () => {
         </Button>
 
         <section className="flex flex-col gap-3">
-          <CenteredLineText label="Page 1" />
-          {DUMMY_FIELDS.map((field, index) => (
-            <DraggableField key={index} label={field} />
-          ))}
-          <CenteredLineText label="Page 2" />
-          {DUMMY_FIELDS2.map((field, index) => (
-            <DraggableField key={index} label={field} />
+          {pages?.map((pageId: string, idx: number) => (
+            <Fragment key={pageId}>
+              <CenteredLineText label={`Page ${idx + 1}`} />
+              {pageEntities?.[pageId]?.fields?.map((fieldId) => (
+                <DraggableField
+                  key={fieldId}
+                  label={fieldEntities?.[fieldId]?.label as string}
+                />
+              ))}
+            </Fragment>
           ))}
         </section>
         <Button className="bg-zinc-900 hover:bg-zinc-800 mt-3 w-full text-foreground transition-colors">
