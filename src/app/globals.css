@@ -42,7 +42,7 @@
   }
   .dark {
     /* --background: 240 10% 3.9%; */
-    --background:199.53deg 13.47% 16.6% / 14%;
+    --background:199.53deg 7.75% 1.86% / 14%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -90,5 +90,22 @@
     border-radius: 13px;
     /* border: 2px solid #262525; */
   }
+
+  .center-pane {
+    background-size: 1.2rem 1.2rem;
+    background-image: radial-gradient(hsla(0, 0%, 100%, .1) 1px, transparent 0);
+    background-position: 0 -1.2rem;
+    cursor: grab;
+  }
+
+  .center-pane::-webkit-scrollbar{
+    display: none;
+  }
+
+  .center-pane:active {
+    cursor: grabbing;
+    user-select: none;
+  }
 }
+
 

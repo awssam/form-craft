@@ -27,7 +27,7 @@ const FormConfigSection = ({
           {title}
         </h3>
         </div>
-         {subtitle && <small className="ml-6 text-[11px] text-muted-foreground text-opacity-80">{subtitle}</small>}
+         {subtitle && <small className="-mt-0.5 ml-6 text-[11px] text-muted-foreground text-opacity-80">{subtitle}</small>}
       </div>
 
       {children}

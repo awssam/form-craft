@@ -102,8 +102,8 @@ export const formConfig: FormConfig = {
     },
     styles: {
       fontFamily: "Arial, sans-serif",
-      backgroundColor: "#f4f4f4", // Light gray background color
-      fontPrimaryColor: "#333333", // Dark font color
+      backgroundColor: "#0a0909", // black background color
+      fontPrimaryColor: "#e0c7c7", // lighter  font color
       fontSecondaryColor: "#666666", // Lighter font color for secondary text
     },
   };

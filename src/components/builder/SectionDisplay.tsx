@@ -28,6 +28,9 @@ const SectionDisplay = () => {
     "hidden md:flex": section !== FORMSECTIONS.Settings,
   });
 
+
+  // TODO: Add drag and drop related logic here
+
   return (
     <>
       <LeftPane className={leftPaneClasses} />

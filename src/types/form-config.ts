@@ -21,7 +21,7 @@ export interface FormConfig {
     fields: string[]; // Array of field IDs to maintain the order of appearance of fields
   }
   
-  interface FieldEntity {
+ export interface FieldEntity {
     id: string; // Unique identifier for the field
     type: FieldType; // The type of the field (e.g., text, checkbox)
     label: string; // Label for the field
