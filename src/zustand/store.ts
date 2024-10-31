@@ -11,6 +11,7 @@ type FormAction = {
   updateFormConfig: (formConfig: Partial<FormConfig>) => void;
   resetFormConfig: () => void;
   updateFormStyles: (styles: Partial<FormConfig["styles"]>) => void;
+  updateFormTheme: (theme: Partial<FormConfig["theme"]>) => void;
   setPageFields: (pageId: string, fields: string[] ) => void;
 };
 
@@ -33,6 +34,18 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
         styles: {
           ...state.formConfig.styles,
           ...styles,
+        },
+      },
+    }));
+  },
+
+  updateFormTheme: (theme) => {
+    set((state) => ({
+      formConfig: {
+        ...state.formConfig,
+        theme: {
+          ...state.formConfig.theme,
+          ...theme,
         },
       },
     }));

@@ -6,7 +6,11 @@ import { Button } from "@/components/ui/button";
 import DraggableField from "./DraggableField";
 import PageDivider from "./PageDivider";
 
-import { useFormActionProperty, useFormProperty, useUIEventsActionProperty } from "@/zustand/store";
+import {
+  useFormActionProperty,
+  useFormProperty,
+  useUIEventsActionProperty,
+} from "@/zustand/store";
 import DroppablePageArea from "./DroppablePageArea";
 import {
   arrayMove,
@@ -36,17 +40,16 @@ const FormStructure = () => {
   const setPageFields = useFormActionProperty("setPageFields");
   const [activeField, setActiveField] = React.useState<FieldEntity | null>(
     null
-
   );
 
-
-  const setIsDraggingFormField = useUIEventsActionProperty('setIsDraggingFormField')
-
+  const setIsDraggingFormField = useUIEventsActionProperty(
+    "setIsDraggingFormField"
+  );
 
   const sensors = useSensors(
     useSensor(MouseSensor),
     useSensor(TouchSensor),
-    useSensor(KeyboardSensor),
+    useSensor(KeyboardSensor)
   );
 
   const [draggedOverField, setDraggedOverField] = useState<{
@@ -54,12 +57,8 @@ const FormStructure = () => {
     position: "top" | "bottom";
   } | null>(null);
 
-  const handleDragEnd = ({ active, over, }: DragEndEvent) => {
-
-
-    setIsDraggingFormField(false)
-   
-  
+  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    setIsDraggingFormField(false);
 
     if (
       active.id === over?.id ||
@@ -82,8 +81,6 @@ const FormStructure = () => {
     let targetIdx = over?.data?.current?.sortable?.index;
 
     if (draggedOverField?.position === "top") {
-
-
       if (targetIdx === 0) targetIdx = 0;
 
       if (targetIdx > 0 && targetIdx > sourceIdx && isSamePage) targetIdx--;
@@ -91,20 +88,13 @@ const FormStructure = () => {
       if (!targetIdx || isNaN(targetIdx)) {
         targetIdx = 0;
       }
-
     } else if (draggedOverField?.position === "bottom") {
       // If dragged over bottom half
-
-     
-
-
-      if((targetIdx < sourceIdx && isSamePage) || !isSamePage) targetIdx++
-
+      if ((targetIdx < sourceIdx && isSamePage) || !isSamePage) targetIdx++;
 
       if (!targetIdx || isNaN(targetIdx)) {
         targetIdx = targetPageFields?.length;
       }
-
     }
 
     // if source and target page is different and target page has no fields
@@ -143,13 +133,12 @@ const FormStructure = () => {
   };
 
   const handleDragStart = (event: DragStartEvent) => {
-    setIsDraggingFormField(true)
+    setIsDraggingFormField(true);
     setActiveField(fieldEntities?.[event.active?.id as string] as FieldEntity);
   };
 
- const handleDragMove = ({ active, over }: DragMoveEvent) => {
+  const handleDragMove = ({ active, over }: DragMoveEvent) => {
     if (over) {
-
       if (active?.id === over?.id) return setDraggedOverField(null);
 
       if (
@@ -159,29 +148,22 @@ const FormStructure = () => {
         return;
 
       const fieldId = over?.id as string;
-
       const droppable = document.getElementById(fieldId)!;
-
       const dragOverlay = document.getElementById(`overlay-${active?.id}`)!;
-
       const dragOverlayRect = dragOverlay?.getBoundingClientRect();
-
       const droppableRect = droppable?.getBoundingClientRect();
-
 
       // Check for top position
       if (dragOverlayRect.top < droppableRect.top + droppableRect.height / 2) {
-          setDraggedOverField({ id: fieldId, position: "top" });
-      }
-      
-      // Check for bottom position
-      if (dragOverlayRect.top  > droppableRect.top + (droppableRect.height / 2 - 30)) {
-          setDraggedOverField({ id: fieldId, position: "bottom" });
+        setDraggedOverField({ id: fieldId, position: "top" });
       }
 
-      
+      // Check for bottom position
+      if ( dragOverlayRect.top > droppableRect.top + (droppableRect.height / 2 - 30)) {
+        setDraggedOverField({ id: fieldId, position: "bottom" });
+      }
     }
-  }; 
+  };
 
   return (
     <FormConfigSection
@@ -204,9 +186,16 @@ const FormStructure = () => {
             id="form-structure"
           >
             {pages?.map((pageId: string, idx: number) => (
-              <DroppablePageArea pageId={pageId} key={pageId} isPageEmpty={pageEntities?.[pageId]?.fields?.length === 0} isOverPageItem={new Set(pageEntities?.[pageId]?.fields).has(draggedOverField?.id as string)}>
+              <DroppablePageArea
+                pageId={pageId}
+                key={pageId}
+                isPageEmpty={pageEntities?.[pageId]?.fields?.length === 0}
+                isOverPageItem={new Set(pageEntities?.[pageId]?.fields).has(
+                  draggedOverField?.id as string
+                )}
+              >
                 <PageDivider label={`Page ${idx + 1}`} />
-               
+
                 <SortableContext
                   id={pageId}
                   items={pageEntities?.[pageId]?.fields as UniqueIdentifier[]}
@@ -223,8 +212,6 @@ const FormStructure = () => {
                     />
                   ))}
                 </SortableContext>
-     
-
               </DroppablePageArea>
             ))}
             {

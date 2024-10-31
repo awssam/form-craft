@@ -1,8 +1,8 @@
 import { useFormProperty } from "@/zustand/store";
-import React, { Fragment } from "react";
+import React from "react";
 
-export const FormHeaderContent = () => {
-  const formStyles = useFormProperty("styles");
+const FormHeaderContent = () => {
+  const formTheme = useFormProperty("theme");
   const formName = useFormProperty("name");
   const formDescription = useFormProperty("description");
 
@@ -10,13 +10,13 @@ export const FormHeaderContent = () => {
     <div className="flex flex-col gap-1">
       <h3
         className="font-bold text-xl"
-        style={{ color: formStyles?.fontPrimaryColor }}
+        style={{ color: formTheme?.properties?.primaryTextColor }}
       >
         {formName}
       </h3>
       <p
         className="font-semibold text-[13px]"
-        style={{ color: formStyles?.fontPrimaryColor }}
+        style={{ color: formTheme?.properties?.primaryTextColor }}
       >
         {formDescription}
       </p>
@@ -24,12 +24,8 @@ export const FormHeaderContent = () => {
   );
 };
 
-const FormContent = () => {
-  return (
-    <Fragment>
-        <p>Some other content here</p>
-    </Fragment>
-  );
-};
 
-export default FormContent;
+
+
+
+export default FormHeaderContent

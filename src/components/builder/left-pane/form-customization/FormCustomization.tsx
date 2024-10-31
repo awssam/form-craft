@@ -5,8 +5,8 @@ import FormConfigSection from "@/components/common/FormConfigSection";
 
 import {
   FormFontPrimaryColor,
-  FormBackgroundColor,
   FormFontSecondaryColor,
+  FormThemePicker,
 } from "./fields";
 
 const FormCustomization = () => {
@@ -17,7 +17,7 @@ const FormCustomization = () => {
       subtitle="Make your form look like your brand."
     >
       <div className="flex flex-col gap-3 border-input bg-background px-3 py-5 border border-dashed rounded-md min-w-100">
-        <FormBackgroundColor />
+        <FormThemePicker />
         <FormFontPrimaryColor />
         <FormFontSecondaryColor />
       </div>

@@ -2,12 +2,14 @@
 import { cn } from "@/lib/utils";
 import { GenericProps } from "@/types/common";
 import React, { useRef } from "react";
-import { useUIEventsProperty } from "@/zustand/store";
+import { useFormProperty, useUIEventsProperty } from "@/zustand/store";
 import FormPage from "./form/FormPage";
-import FormContent, { FormHeaderContent } from "./form/FormContent";
+import FormFieldContainer from "./form/FormFieldContainer";
+import FormHeaderContent from "./form/FormHeader";
 
 const CenterPane = ({ className }: GenericProps) => {
   const isDraggingFormField = useUIEventsProperty("isDraggingFormField");
+  const pages = useFormProperty("pages");
 
   const paneRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -59,16 +61,16 @@ const CenterPane = ({ className }: GenericProps) => {
       onMouseLeave={handleMouseLeave}
     >
       <div className="flex flex-col items-center gap-12 w-full min-h-[200dvh]">
-
-
-           <FormPage pageNumber={1} className="items-start !cursor-auto">
-                 <FormHeaderContent />
+        {pages?.map((pageId, index) => (
+          <FormPage
+            key={pageId}
+            pageNumber={index + 1}
+            className="items-start !cursor-auto"
+          >
+            <FormHeaderContent />
+            <FormFieldContainer pageId={pageId} />
           </FormPage>
-
-          <FormPage pageNumber={2} className="items-start !cursor-auto">
-                 <FormContent />
-          </FormPage>
-
+        ))}
       </div>
     </div>
   );

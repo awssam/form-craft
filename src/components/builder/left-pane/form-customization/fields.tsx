@@ -1,41 +1,38 @@
 import FormField from "@/components/common/FormField";
 import ColorPicker from "@/components/ui/colorpicker";
 
-import { useFormActionProperty, useFormConfigStore } from "@/zustand/store";
+import {
+  useFormActionProperty,
+  useFormConfigStore,
+  useFormProperty,
+} from "@/zustand/store";
 
-import { FormConfig } from "@/types/form-config";
+import { FormConfig, Theme } from "@/types/form-config";
+import { formThemes } from "@/zustand/data";
+import { Combobox, Option } from "@/components/ui/combobox";
 
-const useFormStylesUpdater = () => {
-  const updateFormStyles = useFormActionProperty("updateFormStyles");
-  const handleChange = (key: keyof FormConfig["styles"]) => (val: unknown) => {
-    updateFormStyles({ [key]: val });
-  };
+const useFormThemeUpdater = () => {
+  const theme = useFormProperty("theme")!;
+
+  const updateFormTheme = useFormActionProperty("updateFormTheme");
+  const handleChange =
+    (key: keyof FormConfig["theme"]["properties"]) => (val: unknown) => {
+      updateFormTheme({
+        ...theme,
+        properties: {
+          ...theme?.properties,
+          [key]: val,
+        }
+      });
+    };
   return handleChange;
-};
-
-export const FormBackgroundColor = () => {
-  const bgColor = useFormConfigStore(
-    (state) => state.formConfig.styles.backgroundColor
-  );
-  const handleChange = useFormStylesUpdater();
-  return (
-    <FormField label="Background Color" id="primaryColor">
-      <ColorPicker
-        showLabel={true}
-        triggerClassName="flex-row w-[max-content]"
-        className="w-6 h-6"
-        color={bgColor!}
-        onChange={handleChange("backgroundColor")}
-      />
-    </FormField>
-  );
 };
 
 export const FormFontPrimaryColor = () => {
   const fontPrimary = useFormConfigStore(
-    (state) => state.formConfig.styles.fontPrimaryColor
+    (state) => state?.formConfig?.theme?.properties?.primaryTextColor
   );
-  const handleChange = useFormStylesUpdater();
+  const handleChange = useFormThemeUpdater();
   return (
     <FormField label="Font Primary Color" id="primaryColor">
       <ColorPicker
@@ -43,7 +40,7 @@ export const FormFontPrimaryColor = () => {
         triggerClassName="flex-row w-[max-content]"
         className="w-6 h-6"
         color={fontPrimary!}
-        onChange={handleChange("fontPrimaryColor")}
+        onChange={handleChange("primaryTextColor")}
       />
     </FormField>
   );
@@ -51,9 +48,9 @@ export const FormFontPrimaryColor = () => {
 
 export const FormFontSecondaryColor = () => {
   const fontSecondary = useFormConfigStore(
-    (state) => state.formConfig.styles.fontSecondaryColor
+    (state) => state?.formConfig?.theme?.properties?.secondaryTextColor
   );
-  const handleChange = useFormStylesUpdater();
+  const handleChange = useFormThemeUpdater();
   return (
     <FormField label="Font Secondary Color" id="primaryColor">
       <ColorPicker
@@ -61,7 +58,42 @@ export const FormFontSecondaryColor = () => {
         triggerClassName="flex-row w-[max-content]"
         className="w-6 h-6"
         color={fontSecondary!}
-        onChange={handleChange("fontSecondaryColor")}
+        onChange={handleChange("secondaryTextColor")}
+      />
+    </FormField>
+  );
+};
+
+const formThemeOptions = Object.keys(formThemes).map((theme) => ({
+  label: theme
+    ?.split("-")
+    ?.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    ?.join(" "),
+  value: theme,
+}));
+
+export const FormThemePicker = () => {
+  const updateFormTheme = useFormActionProperty("updateFormTheme");
+  const theme = useFormProperty("theme");
+
+  const handleSelect = (options: Option[]) => {
+    updateFormTheme({
+      type: options[0].value as Theme,
+      id: options[0].value as Theme,
+      properties: formThemes[options[0].value as Theme],
+    });
+  };
+
+  return (
+    <FormField label="Form Theme" id="theme">
+      <Combobox
+        handleChange={handleSelect}
+        selectedValues={[
+          formThemeOptions.find(
+            (option) => option.value === theme?.type
+          ) as Option,
+        ]}
+        options={formThemeOptions}
       />
     </FormField>
   );
