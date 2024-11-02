@@ -1,5 +1,5 @@
 import { useFormProperty } from "@/zustand/store";
-import { Fragment } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import FieldRenderer from "./FieldRenderer";
 import { FieldEntity } from "@/types/form-config";
 import { useForm, UseFormReturn } from "react-hook-form";
@@ -8,15 +8,30 @@ import { Button } from "@/components/ui/button";
 
 interface FormFieldsProps {
   pageId: string;
-  isLastPage: boolean
+  isLastPage: boolean;
 }
 
-const FormFieldContainer = ({ pageId,isLastPage }: FormFieldsProps) => {
+const FormFieldContainer = ({ pageId, isLastPage }: FormFieldsProps) => {
   const fieldEntities = useFormProperty("fieldEntities");
   const pageEntities = useFormProperty("pageEntities");
 
-
   const form = useForm({});
+  const fields = useMemo(
+    () => Object.keys(fieldEntities || {}),
+    [fieldEntities]
+  );
+
+
+
+  // unregister fields that are no longer in the form - this is important for multipage forms with drag and drop
+  useEffect(() => {
+    const fieldSet = new Set(fields);
+    Object.keys(form.getValues()).forEach((value) => {
+      if (!fieldSet.has(value)) {
+        form.unregister(value);
+      }
+    });
+  }, [fields, form]);
 
   return (
     <Form {...form}>
@@ -37,7 +52,9 @@ const FormFieldContainer = ({ pageId,isLastPage }: FormFieldsProps) => {
             </Fragment>
           ))}
         </div>
-        <Button className='mt-4' type="submit">{isLastPage ? "Submit" : "Next"}</Button>
+        <Button className="mt-4" type="submit">
+          {isLastPage ? "Submit" : "Next"}
+        </Button>
       </form>
     </Form>
   );

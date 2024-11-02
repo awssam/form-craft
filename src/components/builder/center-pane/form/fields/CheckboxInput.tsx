@@ -7,7 +7,7 @@ import FormLabel from "./FormLabel";
 import { useFormConfigStore } from "@/zustand/store";
 import FormFieldWrapper from "./FormFieldWrapper";
 import { FormMessage } from "@/components/ui/form";
-import { useFormContext, useFormState } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 
 const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore(
