@@ -12,9 +12,9 @@ const withResponsiveWidthClasses =
       <Component
         {...props}
         className={cn("w-full", {
-          "md:w-[calc(75%-12px)]": field?.width === "75%",
-          "md:w-[calc(50%-12px)]": field?.width === "50%",
-          "md:w-[calc(25%-12px)]": field?.width === "25%",
+          "lg:w-[calc(75%-12px)]": field?.width === "75%",
+          "lg:w-[calc(50%-12px)]": field?.width === "50%",
+          "lg:w-[calc(25%)]": field?.width === "25%",
           "w-full": field?.width === "100%" || field?.width === "75%" ||  field?.width === "50%" ,
           "w-[calc(75%-12px)]":  field?.width === "25%",
         })}

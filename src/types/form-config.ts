@@ -73,7 +73,7 @@ interface FieldValidation {
     message: string; // Custom error message for maxLength
   };
   pattern?: {
-    value: string; // Regex pattern to validate against
+    value: RegExp; // Regex pattern to validate against
     message: string; // Custom error message for pattern mismatch
   };
   required?: {

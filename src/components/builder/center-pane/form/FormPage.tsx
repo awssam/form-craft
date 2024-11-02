@@ -14,7 +14,6 @@ const FormPage = ({ className, children, pageNumber }: FormPageProps) => {
   );
   const classes = cn(
     "flex flex-col gap-3 border-yellow-200/10 px-3 py-5 md:px-5 md:py-5  border border-dashed rounded-md min-h-64   transition-all duration-300",
-
     className
   );
   return (

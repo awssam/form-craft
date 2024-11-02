@@ -119,8 +119,8 @@ export const formConfig: FormConfig = {
       placeholder: "Write any additional feedback here...",
       validation: {
         maxLength: {
-          value: 500,
-          message: "Your comments should not exceed 500 characters.",
+          value: 50,
+          message: "Your comments should not exceed 50 characters.",
         },
       },
       width: "100%",

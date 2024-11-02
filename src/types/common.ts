@@ -1,5 +1,6 @@
 import React from "react";
 import { FieldEntity } from "./form-config";
+import { Control } from "react-hook-form";
 
 export interface GenericProps {
     style?:React.CSSProperties,
@@ -8,5 +9,6 @@ export interface GenericProps {
 }
 
 export interface FormFieldProps extends GenericProps {
-    field:FieldEntity
+    field:FieldEntity,
+    control:Control
 }

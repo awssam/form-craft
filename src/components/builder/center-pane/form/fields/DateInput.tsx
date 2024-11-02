@@ -1,14 +1,14 @@
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
 import React from "react";
-import withResponsiveWidthClasses from "./withResponsiveWidthClasses";
-import { FormFieldProps } from "@/types/common";
 import FormLabel from "./FormLabel";
+import { FormFieldProps } from "@/types/common";
 import { useFormConfigStore } from "@/zustand/store";
+import { DatePicker } from "@/components/ui/datepicker";
+import { cn } from "@/lib/utils";
+import withResponsiveWidthClasses from "./withResponsiveWidthClasses";
 import FormFieldWrapper from "./FormFieldWrapper";
 import { FormMessage } from "@/components/ui/form";
 
-const FormTextInput = ({ field, control, className }: FormFieldProps) => {
+const DateInput = ({ field, className, control }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
 
   const primaryColor = useFormConfigStore(
@@ -17,6 +17,7 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore(
     (s) => s.formConfig.theme?.properties?.inputBorderColor
   );
+
   return (
     <FormFieldWrapper
       control={control}
@@ -24,18 +25,19 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
       render={(rhFormField) => (
         <div className={cn("flex flex-col gap-2", className)}>
           <FormLabel>{field.label}</FormLabel>
-          <Input
-            placeholder={field.placeholder}
-            id={field.id}
-            className={cn({
-              "placeholder:text-[#7F7F7F]": theme === "midnight-black",
-              "placeholder:text-[#A1A1A1]": theme === "deep-space",
-              "placeholder:text-[#8C8C8C]": theme === "charcoal-black",
-              "placeholder:text-[#A77BCA]": theme === "deep-violet",
-              "placeholder:text-[#BDC3C7]": theme === "night-sky",
-            })}
+          <DatePicker
             style={{ color: primaryColor, borderColor: inputBorderColor }}
-            {...rhFormField}
+            date={rhFormField.value}
+            setDate={rhFormField.onChange}
+            className={className}
+            placeholder={field.placeholder ?? "Pick a date"}
+            placeHolderClasses={cn({
+              "text-[#7F7F7F]": theme === "midnight-black",
+              "text-[#A1A1A1]": theme === "deep-space",
+              "text-[#8C8C8C]": theme === "charcoal-black",
+              "text-[#A77BCA]": theme === "deep-violet",
+              "text-[#BDC3C7]": theme === "night-sky",
+            })}
           />
           <FormMessage />
         </div>
@@ -44,4 +46,4 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
   );
 };
 
-export default withResponsiveWidthClasses(FormTextInput);
+export default withResponsiveWidthClasses(DateInput);
