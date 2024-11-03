@@ -1,4 +1,4 @@
-import {  FormConfig } from "@/types/form-config";
+import { FieldEntity, FormConfig } from "@/types/form-config";
 import { create } from "zustand";
 import { formConfig } from "./data";
 
@@ -12,7 +12,8 @@ type FormAction = {
   resetFormConfig: () => void;
   updateFormStyles: (styles: Partial<FormConfig["styles"]>) => void;
   updateFormTheme: (theme: Partial<FormConfig["theme"]>) => void;
-  setPageFields: (pageId: string, fields: string[] ) => void;
+  setPageFields: (pageId: string, fields: string[]) => void;
+  updateFormField: (fieldId: string, update: Partial<FieldEntity>) => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set) => ({
@@ -26,7 +27,7 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
       },
     }));
   },
- 
+
   updateFormStyles: (styles) => {
     set((state) => ({
       formConfig: {
@@ -50,36 +51,51 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
       },
     }));
   },
-  
+
   resetFormConfig: () => set({ formConfig: {} as FormConfig }),
-  setPageFields: (pageId: string, fields: string[] ) => set((state) => {
-    return {
-      formConfig: {
-        ...state?.formConfig,
-        pageEntities: {
-          ...state.formConfig?.pageEntities,
-          [pageId]: {
-            ...state.formConfig?.pageEntities?.[pageId],
-            fields,
+  setPageFields: (pageId: string, fields: string[]) =>
+    set((state) => {
+      return {
+        formConfig: {
+          ...state?.formConfig,
+          pageEntities: {
+            ...state.formConfig?.pageEntities,
+            [pageId]: {
+              ...state.formConfig?.pageEntities?.[pageId],
+              fields,
+            },
           },
         },
-      },
-    }
-  })
+      };
+    }),
 
+  updateFormField: (fieldId, update) =>
+    set((state) => {
+      return {
+        formConfig: {
+          ...state.formConfig,
+          fieldEntities: {
+            ...state.formConfig.fieldEntities,
+            [fieldId]: {
+              ...state.formConfig.fieldEntities?.[fieldId],
+              ...update,
+            },
+          },
+        },
+      };
+    }),
 }));
-
-
 
 /**
  * A hook to get top level properties from the form config. If the key is not present in the config, returns null.
  * @param key The key of the top level property to get. Must be a valid key in the FormConfig type.
  * @returns The value of the property if it exists, null otherwise.
  */
-export const useFormProperty = <K extends keyof FormConfig> (key:K) : FormConfig[K] | null => {
+export const useFormProperty = <K extends keyof FormConfig>(
+  key: K
+): FormConfig[K] | null => {
   return useFormConfigStore((state) => state.formConfig[key] ?? null);
 };
-
 
 /**
  * A hook to get an action from the store. This is useful to get action methods that are used in the form config.
@@ -92,24 +108,41 @@ export const useFormActionProperty = <T extends keyof FormAction>(
   return useFormConfigStore((state) => state?.[key]);
 };
 
+type SelectedFieldState = {
+  selectedField: FieldEntity | null;
+};
+type SelectedFieldAction = {
+  setSelectedField: (selectedField: FieldEntity | null) => void;
+  updateSelectedField: (update: Partial<FieldEntity> | null) => void;
+};
 
-
-
-
-
+export const useSelectedFieldStore = create<
+  SelectedFieldState & SelectedFieldAction
+>((set, get) => ({
+  selectedField: null,
+  setSelectedField: (selectedField) => set({ selectedField }),
+  updateSelectedField: (update) => {
+    const id = get().selectedField?.id;
+    set((s) => ({
+      ...s,
+      selectedField: { ...s.selectedField, ...update } as FieldEntity,
+    }));
+    useFormConfigStore?.getState()?.updateFormField(id!, update!)
+  },
+}));
 
 type UIState = {
   isDraggingFormField: boolean;
-}
+};
 
 type UIAction = {
-  setIsDraggingFormField:(isDragging:boolean) => void;
-}
-
+  setIsDraggingFormField: (isDragging: boolean) => void;
+};
 
 export const useUIEventsStore = create<UIState & UIAction>((set) => ({
   isDraggingFormField: false,
-  setIsDraggingFormField: (isDragging) => set({ isDraggingFormField: isDragging }),
+  setIsDraggingFormField: (isDragging) =>
+    set({ isDraggingFormField: isDragging }),
 }));
 
 export const useUIEventsProperty = <T extends keyof UIState>(
@@ -122,4 +155,4 @@ export const useUIEventsActionProperty = <T extends keyof UIAction>(
   key: T
 ): UIAction[T] => {
   return useUIEventsStore((state) => state[key]);
-}
+};

@@ -18,7 +18,7 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={CLERK_APPEARANCE_CONFIG}>
       <html lang="en">
-        <body className={`bg-black antialiased dark`}>
+        <body className={`bg-black antialiased dark overflow-hidden`}>
           {children}
         </body>
       </html>

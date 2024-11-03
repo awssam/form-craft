@@ -9,6 +9,7 @@ import PageDivider from "./PageDivider";
 import {
   useFormActionProperty,
   useFormProperty,
+  useSelectedFieldStore,
   useUIEventsActionProperty,
 } from "@/zustand/store";
 import DroppablePageArea from "./DroppablePageArea";
@@ -41,6 +42,7 @@ const FormStructure = () => {
   const [activeField, setActiveField] = React.useState<FieldEntity | null>(
     null
   );
+  const setSelectedField = useSelectedFieldStore(s => s.setSelectedField)
 
   const setIsDraggingFormField = useUIEventsActionProperty(
     "setIsDraggingFormField"
@@ -165,6 +167,12 @@ const FormStructure = () => {
     }
   };
 
+
+  const handleFieldSettingsClick = (id: string) => {
+    const field = fieldEntities?.[id] as FieldEntity;
+    setSelectedField(field);
+  }
+
   return (
     <FormConfigSection
       icon={<List className="w-4 h-4 text-headerPink" />}
@@ -209,6 +217,7 @@ const FormStructure = () => {
                       activeField={activeField}
                       isDraggingOver={draggedOverField?.id === fieldId}
                       draggedOverPosition={draggedOverField?.position}
+                      onFieldSettingsClick={handleFieldSettingsClick}
                     />
                   ))}
                 </SortableContext>
@@ -221,6 +230,7 @@ const FormStructure = () => {
                     id={activeField?.id}
                     label={activeField?.label}
                     isOverlay
+                    onFieldSettingsClick={handleFieldSettingsClick}
                   />
                 ) : null}
               </DragOverlay>

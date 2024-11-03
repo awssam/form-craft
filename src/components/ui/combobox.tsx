@@ -21,11 +21,9 @@ import {
 import { GenericProps } from "@/types/common";
 
 export type Option = {
-  value: string;
+  value: string | number | boolean;
   label: string;
 };
-
-
 
 interface ComboboxProps extends GenericProps {
   options: Option[];
@@ -34,19 +32,30 @@ interface ComboboxProps extends GenericProps {
   handleChange?: (values: Option[]) => void;
 }
 
-export function Combobox({ options: _options, allowMultiple, selectedValues = [], handleChange }: ComboboxProps) {
+export function Combobox({
+  options: _options,
+  allowMultiple,
+  selectedValues = [],
+  handleChange,
+}: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState<Option[]>(selectedValues);
   const [popupWidth, setPopupWidth] = React.useState(0);
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const handleSelect = (currentValue: string) => {
     if (allowMultiple) {
-      const selected = _options.find((option) => option.value === currentValue) as Option;
-      const updated = values?.find(d => d.value === currentValue) ? values?.filter((d) => d.value !== currentValue) : [...values, selected];
+      const selected = _options.find(
+        (option) => option.value === currentValue
+      ) as Option;
+      const updated = values?.find((d) => d.value === currentValue)
+        ? values?.filter((d) => d.value !== currentValue)
+        : [...values, selected];
       setValues(updated);
       handleChange?.(updated);
     } else {
-      const updated = _options.find((option) => option.value === currentValue) as Option;
+      const updated = _options.find(
+        (option) => option.value === currentValue
+      ) as Option;
       setValues([updated]);
       handleChange?.([updated]);
       setOpen(false);
@@ -58,6 +67,11 @@ export function Combobox({ options: _options, allowMultiple, selectedValues = []
       setPopupWidth(buttonRef.current?.getBoundingClientRect()?.width || 0);
     }
   }, [open]);
+
+  React.useEffect(() => {
+    console.log('setting...')
+    setValues(selectedValues);
+  }, [selectedValues]);
 
   const label = (
     <span>
@@ -98,15 +112,15 @@ export function Combobox({ options: _options, allowMultiple, selectedValues = []
             <CommandGroup>
               {_options?.map((option) => (
                 <CommandItem
-                  key={option.value}
-                  value={option.value}
+                  key={option?.value as string}
+                  value={option?.value as string}
                   onSelect={handleSelect}
                 >
-                  {option.label}
+                  {option?.label}
                   <CheckIcon
                     className={cn(
                       "ml-auto h-4 w-4",
-                      values?.find((v) => v.value === option.value)
+                      values?.find((v) => v?.value === option?.value)
                         ? "opacity-100"
                         : "opacity-0"
                     )}

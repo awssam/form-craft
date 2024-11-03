@@ -30,7 +30,7 @@ const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
 
     setSelected(newSelected);
 
-    setValue(field.id, Array.from(newSelected), { shouldValidate: true });
+    setValue(field.name, Array.from(newSelected), { shouldValidate: true });
   };
 
   return (
@@ -53,11 +53,13 @@ const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
                     rhFormField.onChange(e);
                     handleCheckboxChange(!!e, option?.value as string);
                   }}
-                  id={option?.value as string}
+                  id={(option?.label + "-" + field.label) as string}
                   style={{ borderColor: inputBorderColor }}
                   color={primaryColor}
                 />
-                <FormLabel htmlFor={option?.value as string}>
+                <FormLabel
+                  htmlFor={(option?.label + "-" + field.label) as string}
+                >
                   {option?.label}
                 </FormLabel>
                 <span className="sr-only">{option?.helperText}</span>

@@ -1,14 +1,20 @@
+import React from "react";
+import FieldConfigMenu from "./field-config-menu/FieldConfigMenu";
+
 import { cn } from "@/lib/utils";
 import { GenericProps } from "@/types/common";
-import React from "react";
 
 const RightPane = ({ className }: GenericProps) => {
-  const classes = cn("h-full bg-background p-4", className);
+  const classes = cn(
+    "h-full bg-background p-4 flex flex-col gap-6 overflow-auto",
+    className
+  );
 
   return (
     <div className={classes}>
-      {/* Left Pane */}
-      <h3 className="font-bold text-white text-xl"> Right pane </h3>{" "}
+      {/* Right Pane */}
+
+      <FieldConfigMenu />
     </div>
   );
 };

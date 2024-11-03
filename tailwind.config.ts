@@ -65,7 +65,7 @@ const config: Config = {
           "5": "hsl(var(--chart-5))",
         },
         greyBorder: "#40414363",
-        headerPink: "rgb(212 43 144)",
+        headerPink: "#ff70c5",
       },
       borderRadius: {
         lg: "var(--radius)",

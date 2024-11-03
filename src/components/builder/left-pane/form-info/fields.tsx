@@ -22,7 +22,6 @@ const usePropertyAndUpdate = <K extends keyof FormConfig>(key: K) => {
 
 export const FormDescription = () => {
   const { v: description, handleChange } = usePropertyAndUpdate("description");
-
   return (
     <FormField label="Form Description" id="description">
       <Input

@@ -31,10 +31,10 @@ const FormRadioInput = ({ field, className, control }: FormFieldProps) => {
               >
                 <RadioGroupItem
                   value={option?.value as string}
-                  id={option?.value as string}
+                  id={option?.label+ "-" + field.label as string}
                   style={{ borderColor: inputBorderColor }}
                 />
-                <FormLabel htmlFor={option?.value as string}>
+                <FormLabel htmlFor={option?.label+ "-" + field.label as string}>
                   {option?.label}
                 </FormLabel>
                 <span className="sr-only">{option?.helperText}</span>

@@ -1,4 +1,4 @@
-import { Grip } from "lucide-react";
+import { Grip, Settings } from "lucide-react";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import { LegacyRef } from "react";
@@ -13,6 +13,7 @@ type DraggableFieldProps = {
   isOverlay?: boolean;
   isDraggingOver?: boolean;
   draggedOverPosition?: "top" | "bottom";
+  onFieldSettingsClick: (id: string) => void;
 };
 
 const DraggableField = ({
@@ -20,6 +21,7 @@ const DraggableField = ({
   id,
   isOverlay,
   draggedOverPosition,
+  onFieldSettingsClick
 }: DraggableFieldProps) => {
   const {
     attributes,
@@ -60,13 +62,18 @@ const DraggableField = ({
         ref={setNodeRef}
       >
         <p className="font-semibold text-foreground text-sm">{label}</p>
+        <div className="flex items-center gap-2">
+
+        <Settings className="hover:opacity-60 w-4 min-w-4 h-6 min-h-6 text-[#b6a2a2] cursor-pointer" onClick={() => onFieldSettingsClick?.(id)}  />
         <Grip
-          className={cn("w-4 min-w-4 h-6 min-h-6 text-foreground cursor-grab focus:outline-none",{
+          className={cn("w-4 min-w-4 h-6 min-h-6 text-[#b6a2a2] cursor-grab focus:outline-none",{
             "cursor-grabbing": isDragging || isOverlay})}
           ref={setActivatorNodeRef as LegacyRef<SVGSVGElement>}
           {...listeners}
           {...attributes}
         />
+        </div>
+
       </div>
     </>
   );

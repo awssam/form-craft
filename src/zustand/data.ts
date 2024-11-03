@@ -68,6 +68,7 @@ export const formConfig: FormConfig = {
   fieldEntities: {
     field1_id: {
       id: "field1_id",
+      name:'full-name',
       type: "text",
       label: "Full Name",
       placeholder: "Enter your full name",
@@ -81,10 +82,11 @@ export const formConfig: FormConfig = {
           message: "Full name must be at least 3 characters long.",
         },
       },
-      width: "75%",
+      width: "50%",
     },
     field2_id: {
       id: "field2_id",
+      name: "date-of-birth",
       type: "date",
       label: "Date of Birth",
       placeholder: "Select your date of birth",
@@ -94,10 +96,11 @@ export const formConfig: FormConfig = {
           message: "Date of birth is required.",
         },
       },
-      width: "25%",
+      width: "50%",
     },
     field3_id: {
       id: "field3_id",
+      name: "satisfaction",
       type: "radio",
       label: "Are you satisfied with our service?",
       options: [
@@ -114,6 +117,7 @@ export const formConfig: FormConfig = {
     },
     field4_id: {
       id: "field4_id",
+      name: "additional-comments",
       type: "textarea",
       label: "Additional Comments",
       placeholder: "Write any additional feedback here...",
@@ -127,6 +131,7 @@ export const formConfig: FormConfig = {
     },
     field5_id: {
       id: "field5_id",
+      name: "recommendation",
       type: "checkbox",
       label: "Would you recommend us to others?",
       options: [

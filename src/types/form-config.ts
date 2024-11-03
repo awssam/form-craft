@@ -44,7 +44,8 @@ interface PageEntity {
 }
 
 export interface FieldEntity {
-  id: string; // Unique identifier for the field
+  id: string; // Unique identifier for the field,
+  name: string; // Name of the field
   type: FieldType; // The type of the field (e.g., text, checkbox)
   label: string; // Label for the field
   placeholder?: string; // Placeholder text (optional, mainly for input fields)
@@ -54,7 +55,7 @@ export interface FieldEntity {
   width?: FormFieldWidth;
 }
 
-type FieldType =
+export type FieldType =
   | "text"
   | "checkbox"
   | "radio"

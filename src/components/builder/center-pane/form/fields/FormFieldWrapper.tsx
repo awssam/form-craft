@@ -17,10 +17,11 @@ const FormFieldWrapper = ({
   return (
     <FormField
       control={control}
-      name={field?.id}
+      
+      name={field?.name}
       rules={field?.validation}
       render={({ field: rhFormField }) => (
-        <FormControl>{render(rhFormField)}</FormControl>
+        <FormControl>{render(rhFormField)}</FormControl>  
       )}
     />
   );

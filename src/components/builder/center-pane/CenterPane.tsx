@@ -6,10 +6,6 @@ import { useFormProperty, useUIEventsProperty } from "@/zustand/store";
 import FormPage from "./form/FormPage";
 import FormFieldContainer from "./form/FormFieldContainer";
 import FormHeaderContent from "./form/FormHeader";
-import { DatePickerForm } from "./DummyForm";
-import { useForm } from "react-hook-form";
-import { Form } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 
 const CenterPane = ({ className }: GenericProps) => {
   const isDraggingFormField = useUIEventsProperty("isDraggingFormField");
@@ -55,9 +51,7 @@ const CenterPane = ({ className }: GenericProps) => {
     isDragging.current = false;
   };
 
-  const form = useForm({
-    mode: "onChange",
-  });
+ 
 
   return (
     <div
@@ -73,7 +67,7 @@ const CenterPane = ({ className }: GenericProps) => {
           <FormPage
             key={pageId}
             pageNumber={index + 1}
-            className="items-start !cursor-auto"
+            className="relative items-start !cursor-auto"
           >
             <FormHeaderContent />
             <FormFieldContainer pageId={pageId} isLastPage={index === pages.length - 1} />
