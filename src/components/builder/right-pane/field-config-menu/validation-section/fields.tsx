@@ -2,6 +2,7 @@ import FormField from "@/components/common/FormField";
 import { Combobox, Option } from "@/components/ui/combobox";
 import { Input } from "@/components/ui/input";
 import { debounce } from "@/lib/utils";
+import { CUSTOM_FIELD_VALIDATIONS } from "@/lib/validation";
 import { FieldEntity } from "@/types/form-config";
 import { useSelectedFieldStore } from "@/zustand/store";
 import { useMemo, useState } from "react";
@@ -97,178 +98,178 @@ export const FieldRequired = () => {
   );
 };
 
-export const FieldMinLength = () => {
-  const selectedField = useSelectedField();
-  const { value, message } = selectedField?.validation?.minLength || {};
-  const updateSelectedField = debounce(
-    useSelectedFieldStore((s) => s.updateSelectedField),
-    500
-  );
+export const createValidationComponent = (
+  label: string,
+  key: keyof typeof CUSTOM_FIELD_VALIDATIONS.text,
+  placeholder: string,
+  cb: (v: string) => boolean
+) => {
+  // eslint-disable-next-line react/display-name
+  return () => {
+    const selectedField = useSelectedField();
+    const { value: fieldValidationValue, message: fieldValidationMessage } =
+      selectedField?.validation?.custom?.[key] || {};
+    const updateSelectedField = useSelectedFieldStore(
+      (s) => s.updateSelectedField
+    );
+    console.log("field value", fieldValidationValue);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = e.target;
 
-    if (name === "value") {
-      updateSelectedField({
+      const validationValue =
+        name === "value"
+          ? value
+          : selectedField?.validation?.custom?.[key]?.value;
+      const msg =
+        name === "message"
+          ? value
+          : selectedField?.validation?.custom?.[key]?.message;
+
+      const validationFn = CUSTOM_FIELD_VALIDATIONS.text[key](
+        validationValue,
+        msg
+      );
+
+      const getUpdatedField = (k: string, v: string | number) => ({
         validation: {
           ...selectedField?.validation,
-          minLength: {
-            ...selectedField?.validation?.minLength,
-            value,
+          custom: {
+            ...selectedField?.validation?.custom,
+            [key]: {
+              ...selectedField?.validation?.custom?.[key],
+              [k]: v,
+            },
+          },
+          validate: {
+            ...selectedField?.validation?.validate,
+            [key]: validationFn,
           },
         },
       });
-    }
 
-    if (name === "message") {
-      updateSelectedField({
-        validation: {
-          ...selectedField?.validation,
-          minLength: {
-            ...selectedField?.validation?.minLength,
-            message: value,
-          },
-        },
-      });
-    }
-  };
+      updateSelectedField(
+        getUpdatedField(name, value) as unknown as FieldEntity
+      );
+    };
 
-  return (
-    <FormField id="minLength" label="Minimum Length">
-      <Input
-        name="value"
-        placeholder="Eg: 2"
-        defaultValue={value ?? ""}
-        type="number"
-        min={0}
-        onChange={handleChange}
-      />
-      {value! > 0 && (
+    return (
+      <FormField id={key} label={label}>
         <Input
-          defaultValue={message}
-          name="message"
-          className="mt-2"
-          placeholder="Eg: Should contain atleast 2 chars."
+          name="value"
+          placeholder={placeholder}
+          type="text"
+          value={fieldValidationValue ?? ""}
           onChange={handleChange}
         />
-      )}
-    </FormField>
-  );
-};
-
-export const FieldMaxLength = () => {
-  const selectedField = useSelectedField();
-  const { value, message } = selectedField?.validation?.maxLength || {};
-  const updateSelectedField = debounce(
-    useSelectedFieldStore((s) => s.updateSelectedField),
-    500
-  );
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    if (name === "value") {
-      updateSelectedField({
-        validation: {
-          ...selectedField?.validation,
-          maxLength: {
-            ...selectedField?.validation?.maxLength,
-            value,
-          },
-        },
-      });
-    }
-
-    if (name === "message") {
-      updateSelectedField({
-        validation: {
-          ...selectedField?.validation,
-          maxLength: {
-            ...selectedField?.validation?.maxLength,
-            message: value,
-          },
-        },
-      });
-    }
+        {cb(fieldValidationValue) && (
+          <Input
+            value={fieldValidationMessage}
+            name="message"
+            className="mt-2"
+            placeholder={`Eg: ${label} validation message`}
+            onChange={handleChange}
+          />
+        )}
+      </FormField>
+    );
   };
-
-  return (
-    <FormField id="maxLength" label="Maximum Length">
-      <Input
-        name="value"
-        placeholder="Eg: 20"
-        type="number"
-        min={0}
-        defaultValue={value ?? ""}
-        onChange={handleChange}
-      />
-      {value! > 0 && (
-        <Input
-          defaultValue={message}
-          name="message"
-          className="mt-2"
-          placeholder="Eg: Can't exceed 20 chars."
-          onChange={handleChange}
-        />
-      )}
-    </FormField>
-  );
 };
 
-export const FieldPattern = () => {
-  const selectedField = useSelectedField();
-  const { value, message } = selectedField?.validation?.pattern || {};
-  const updateSelectedField = debounce(
-    useSelectedFieldStore((s) => s.updateSelectedField),
-    500
-  );
+export const FieldExactLength = createValidationComponent(
+  "Exact Length",
+  "exactLength",
+  "Eg: 5",
+  (v) => +v > 0
+);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
+export const FieldStartsWith = createValidationComponent(
+  "Starts With",
+  "startsWith",
+  "Eg: Me",
+  (v) => v?.length > 0
+);
 
-    if (name === "value") {
-      const regex = new RegExp(value);
-      updateSelectedField({
-        validation: {
-          ...selectedField?.validation,
-          pattern: {
-            ...selectedField?.validation?.pattern,
-            value: regex,
-          },
-        },
-      });
-    }
+export const FieldEndsWith = createValidationComponent(
+  "Ends With",
+  "endsWith",
+  "Eg: .com",
+  (v) => v?.length > 0
+);
 
-    if (name === "message") {
-      updateSelectedField({
-        validation: {
-          ...selectedField?.validation,
-          pattern: {
-            ...selectedField?.validation?.pattern,
-            message: value,
-          },
-        },
-      });
-    }
-  };
+export const FieldMinLength = createValidationComponent(
+  "Minimum Length",
+  "minLength",
+  "Eg: 5",
+  (v) => +v > 0
+);
 
-  return (
-    <FormField id="pattern" label="Regex Pattern">
-      <Input
-        name="value"
-        defaultValue={JSON.stringify(value) ?? ""}
-        onChange={handleChange}
-        placeholder="e.g., /^[a-zA-Z0-9]+$/ (only alphanumeric characters)"
-      />
-      {JSON.stringify(value)?.trim()?.length > 0 && (
-        <Input
-          defaultValue={message}
-          name="message"
-          className="mt-2"
-          placeholder="Eg: Field should have only alphanumeric characters."
-          onChange={handleChange}
-        />
-      )}
-    </FormField>
-  );
-};
+export const FieldMaxLength = createValidationComponent(
+  "Maximum Length",
+  "maxLength",
+  "Eg: 20",
+  (v) => +v > 0
+);
+
+export const FieldContains = createValidationComponent(
+  "Contains",
+  "contains",
+  "Eg: world",
+  (v) => v?.length > 0
+);
+
+export const FieldMatchesRegex = createValidationComponent(
+  "Matches Regex",
+  "matchesRegex",
+  "Eg: ^[a-zA-Z0-9]+$",
+  (v) => v?.length > 0
+);
+
+export const FieldNoWhitespace = createValidationComponent(
+  "No Whitespace",
+  "noWhitespace",
+  "Eg: No spaces allowed",
+  () => false
+);
+
+export const FieldIsEmail = createValidationComponent(
+  "Is Email",
+  "isEmail",
+  "Eg: Should be an email",
+  () => false
+);
+
+export const FieldIsURL = createValidationComponent(
+  "Is URL",
+  "isURL",
+  "Eg: Should be a valid url",
+  () => false
+);
+
+export const FieldIsNumeric = createValidationComponent(
+  "Is Numeric",
+  "isNumeric",
+  "Eg: 12345",
+  (v) => v?.length > 0
+);
+
+export const FieldIsAlpha = createValidationComponent(
+  "Is Alpha",
+  "isAlpha",
+  "Eg: abcXYZ",
+  (v) => v?.length > 0
+);
+
+export const FieldIsAlphanumeric = createValidationComponent(
+  "Is Alphanumeric",
+  "isAlphanumeric",
+  "Eg: abc123",
+  (v) => v?.length > 0
+);
+
+export const FieldNoSpecialCharacters = createValidationComponent(
+  "No Special Characters",
+  "noSpecialCharacters",
+  "Eg: abc123",
+  (v) => v?.length > 0
+);

@@ -77,10 +77,12 @@ export const formConfig: FormConfig = {
           value: true,
           message: "Full name is required.",
         },
-        minLength: {
-          value: 3,
-          message: "Full name must be at least 3 characters long.",
-        },
+        custom: {
+          minLength: {
+            value: 3,
+            message: "Full name must be at least 3 characters long.",
+          },
+        }
       },
       width: "50%",
     },
@@ -122,10 +124,7 @@ export const formConfig: FormConfig = {
       label: "Additional Comments",
       placeholder: "Write any additional feedback here...",
       validation: {
-        maxLength: {
-          value: 50,
-          message: "Your comments should not exceed 50 characters.",
-        },
+       
       },
       width: "100%",
     },

@@ -69,7 +69,6 @@ export function Combobox({
   }, [open]);
 
   React.useEffect(() => {
-    console.log('setting...')
     setValues(selectedValues);
   }, [selectedValues]);
 

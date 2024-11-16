@@ -65,22 +65,20 @@ export type FieldType =
   | "textarea";
 
 interface FieldValidation {
-  minLength?: {
-    value: number; // Minimum length value
-    message: string; // Custom error message for minLength
-  };
-  maxLength?: {
-    value: number; // Maximum length value
-    message: string; // Custom error message for maxLength
-  };
-  pattern?: {
-    value: RegExp; // Regex pattern to validate against
-    message: string; // Custom error message for pattern mismatch
-  };
+  validate?: Record<string,(v:unknown) => boolean | string>
+
   required?: {
     value: boolean; // Whether the field is required
     message: string; // Custom error message for required field
   };
+  custom?: Record<
+  string, // A unique key for the custom validation
+  {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    value: any// The validation value (criteria)
+    message: string; // The custom error message for this validation
+  }
+>;
 }
 
 interface FieldOption {
