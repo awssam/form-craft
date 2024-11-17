@@ -1,4 +1,4 @@
-import { isBefore, isToday } from 'date-fns';
+import { isBefore, isToday } from '@/lib/datetime';
 
 export const CUSTOM_FIELD_VALIDATIONS = {
   text: {

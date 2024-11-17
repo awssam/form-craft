@@ -1,13 +1,13 @@
 import FormField from '@/components/common/FormField';
-import { Combobox, Option } from '@/components/ui/combobox';
-import { DatePicker, DateTimePicker } from '@/components/ui/datepicker';
+import { Combobox } from '@/components/ui/combobox';
+import { DateTimePicker } from '@/components/ui/datepicker';
 import { Input } from '@/components/ui/input';
 import { debounce } from '@/lib/utils';
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { FieldEntity } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
-import { isValid } from 'date-fns';
-import { useMemo, useState } from 'react';
+import { isValid } from '@/lib/datetime';
+import { useMemo } from 'react';
 
 const requiredOptions = [
   {
@@ -21,9 +21,9 @@ const useSelectedField = () => useSelectedFieldStore((s) => s.selectedField);
 
 // Text field validations
 
-export const createValidationComponent = (
+export const createValidationComponent = <T extends keyof typeof CUSTOM_FIELD_VALIDATIONS.text.withValue>(
   label: string,
-  key: keyof typeof CUSTOM_FIELD_VALIDATIONS.text.withValue,
+  key: T,
   placeholder: string,
   cb: (v: string) => boolean,
 ) => {
@@ -43,7 +43,7 @@ export const createValidationComponent = (
       const validationValue = name === 'value' ? value : selectedField?.validation?.custom?.[key]?.value;
       const msg = name === 'message' ? value : selectedField?.validation?.custom?.[key]?.message;
 
-      const validationFn = CUSTOM_FIELD_VALIDATIONS.text?.withValue?.[key](validationValue, msg);
+      const validationFn = CUSTOM_FIELD_VALIDATIONS.text?.withValue[key](validationValue, msg);
 
       const getUpdatedField = (k: string, v: string | number) => ({
         validation: {
@@ -114,6 +114,7 @@ export const createBinaryValidationComponent = (
   key: keyof typeof CUSTOM_FIELD_VALIDATIONS.text.binary,
   isRequired: boolean = false,
 ) => {
+  // eslint-disable-next-line react/display-name
   return () => {
     const selectedField = useSelectedField();
     const { value, message } = selectedField?.validation?.custom?.[key] || {};
@@ -258,7 +259,7 @@ export const createValidationComponentForDate = (
         <DateTimePicker
           granularity="day"
           placeholder={placeholder}
-          value={fieldValidationValue ? new Date(fieldValidationValue) : (null as any)}
+          value={fieldValidationValue ? new Date(fieldValidationValue) : (null as unknown as Date)}
           onChange={(date: Date | undefined) => {
             handleChange({
               target: { name: 'value', value: date?.toISOString() },
@@ -305,6 +306,7 @@ export const createBinaryValidationComponentForDate = (
   key: keyof typeof CUSTOM_FIELD_VALIDATIONS.date.binary,
   isRequired: boolean = false,
 ) => {
+  // eslint-disable-next-line react/display-name
   return () => {
     const selectedField = useSelectedField();
     const { value, message } = selectedField?.validation?.custom?.[key] || {};
