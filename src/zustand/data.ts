@@ -72,14 +72,14 @@ export const formConfig: FormConfig = {
       label: 'Full Name',
       placeholder: 'Enter your full name',
       validation: {
-        required: {
-          value: true,
-          message: 'Full name is required.',
-        },
         custom: {
           minLength: {
             value: 3,
             message: 'Full name must be at least 3 characters long.',
+          },
+          required: {
+            value: true,
+            message: 'Full name is required.',
           },
         },
       },
@@ -111,9 +111,11 @@ export const formConfig: FormConfig = {
         { label: 'No', value: 'no', helperText: 'You are not satisfied' },
       ],
       validation: {
-        required: {
-          value: true,
-          message: 'Please select an option.',
+        custom: {
+          required: {
+            value: true,
+            message: 'Please select an option.',
+          },
         },
       },
       width: '50%',
@@ -137,9 +139,11 @@ export const formConfig: FormConfig = {
         { label: 'No', value: 'no', helperText: 'You will not recommend us' },
       ],
       validation: {
-        required: {
-          value: true,
-          message: 'Please check at least one option.',
+        custom: {
+          required: {
+            value: true,
+            message: 'Please select an option.',
+          },
         },
       },
       width: '50%',
