@@ -76,10 +76,12 @@ export const formConfig: FormConfig = {
           minLength: {
             value: 3,
             message: 'Full name must be at least 3 characters long.',
+            type: 'withValue',
           },
           required: {
             value: true,
             message: 'Full name is required.',
+            type: 'binary',
           },
         },
       },
@@ -96,6 +98,7 @@ export const formConfig: FormConfig = {
           required: {
             value: true,
             message: 'Date of birth is required.',
+            type: 'binary',
           },
         },
       },
@@ -115,6 +118,7 @@ export const formConfig: FormConfig = {
           required: {
             value: true,
             message: 'Please select an option.',
+            type: 'binary',
           },
         },
       },
@@ -143,6 +147,7 @@ export const formConfig: FormConfig = {
           required: {
             value: true,
             message: 'Please select an option.',
+            type: 'binary',
           },
         },
       },

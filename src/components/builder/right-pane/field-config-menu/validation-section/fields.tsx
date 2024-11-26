@@ -53,6 +53,7 @@ export const createValidationComponent = <T extends keyof typeof CUSTOM_FIELD_VA
             [key]: {
               ...selectedField?.validation?.custom?.[key],
               [k]: v,
+              type: 'withValue',
             },
           },
           validate: {
@@ -143,6 +144,7 @@ export const createBinaryValidationComponent = (
             [key]: {
               ...selectedField?.validation?.custom?.[key],
               message: value,
+              type: 'binary',
             },
           },
           validate: {
@@ -242,6 +244,7 @@ export const createValidationComponentForDate = (
             [key]: {
               ...selectedField?.validation?.custom?.[key],
               [k]: v,
+              type: 'withValue',
             },
           },
           validate: {
@@ -335,6 +338,7 @@ export const createBinaryValidationComponentForDate = (
             [key]: {
               ...selectedField?.validation?.custom?.[key],
               message: value,
+              type: 'binary',
             },
           },
           validate: {

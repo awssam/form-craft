@@ -63,6 +63,10 @@ const FieldValidationSection = () => {
       );
     }
 
+    if (selectedField?.type === 'radio') {
+      fields.push(FieldRequired);
+    }
+
     if (fields?.length > 4) {
       return (
         <>

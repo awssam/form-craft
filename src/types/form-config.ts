@@ -14,12 +14,7 @@ export interface FormConfig {
   theme: FormTheme;
 }
 
-export type Theme =
-| "midnight-black" 
-  | "deep-space" 
-  | "charcoal-black" 
-  | "deep-violet" 
-  | "night-sky";
+export type Theme = 'midnight-black' | 'deep-space' | 'charcoal-black' | 'deep-violet' | 'night-sky';
 
 export interface ThemeProperties {
   formBackgroundColor: string; // Background color for the form
@@ -35,7 +30,7 @@ interface FormTheme {
   properties: ThemeProperties;
 }
 
-type FormStatus = "draft" | "published";
+type FormStatus = 'draft' | 'published';
 
 interface PageEntity {
   id: string; // Unique identifier for the page
@@ -55,30 +50,27 @@ export interface FieldEntity {
   width?: FormFieldWidth;
 }
 
-export type FieldType =
-  | "text"
-  | "checkbox"
-  | "radio"
-  | "dropdown"
-  | "date"
-  | "file"
-  | "textarea";
+export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'file' | 'textarea';
+
+export type CustomValidationType = 'withValue' | 'binary';
 
 interface FieldValidation {
-  validate?: Record<string,(v:unknown) => boolean | string>
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
+  validate?: Record<string, Function>;
 
   required?: {
     value: boolean; // Whether the field is required
     message: string; // Custom error message for required field
   };
   custom?: Record<
-  string, // A unique key for the custom validation
-  {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    value: any// The validation value (criteria)
-    message: string; // The custom error message for this validation
-  }
->;
+    string, // A unique key for the custom validation
+    {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: any; // The validation value (criteria)
+      message: string; // The custom error message for this validation
+      type: CustomValidationType;
+    }
+  >;
 }
 
 interface FieldOption {
@@ -87,7 +79,7 @@ interface FieldOption {
   helperText: string;
 }
 
-type FormFieldWidth = "25%" | "50%" | "75%" | "100%";
+type FormFieldWidth = '25%' | '50%' | '75%' | '100%';
 
 interface ConditionalLogic {
   showWhen: {
