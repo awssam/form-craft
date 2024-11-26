@@ -712,7 +712,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
             ref={buttonRef}
             style={style}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="mr-2 min-h-4 min-w-4 h-4 w-4 md:inline-block hidden" />
             {value ? (
               format(value, hourCycle === 24 ? initHourFormat.hour24 : initHourFormat.hour12, {
                 locale: loc,
@@ -727,7 +727,10 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
             mode="single"
             selected={value}
             month={month}
-            onSelect={(d) => handleSelect(d)}
+            onSelect={(d) => {
+              handleSelect(d);
+              buttonRef.current?.click();
+            }}
             onMonthChange={handleSelect}
             yearRange={yearRange}
             locale={locale}

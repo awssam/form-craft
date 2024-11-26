@@ -1,4 +1,5 @@
 import { isBefore, isToday } from '@/lib/datetime';
+import { FieldEntity } from '@/types/form-config';
 
 export const CUSTOM_FIELD_VALIDATIONS = {
   text: {
@@ -103,6 +104,25 @@ export const CUSTOM_FIELD_VALIDATIONS = {
       },
       required: (msg: string) => (val: string) => {
         return !!val || msg;
+      },
+    },
+  },
+
+  checkbox: {
+    withValue: {
+      minCount: (minCount: number, msg?: string, selectedField?: FieldEntity | null) => (val: string[]) => {
+        if (minCount > (selectedField?.options?.length || 0)) minCount = selectedField?.options?.length || 0;
+        return val?.length >= +minCount || msg;
+      },
+      maxCount: (maxCount: number, msg?: string, selectedField?: FieldEntity | null) => (val: string[]) => {
+        if (maxCount < 1 || maxCount > (selectedField?.options?.length || 0))
+          maxCount = selectedField?.options?.length || 0;
+        return val?.length <= +maxCount || msg;
+      },
+    },
+    binary: {
+      required: (msg: string) => (val: string | string[]) => {
+        return val?.length > 0 || msg;
       },
     },
   },

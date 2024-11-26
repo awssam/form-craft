@@ -21,6 +21,9 @@ import {
   DateFieldRestrictFutureDate,
   DateFieldRestrictPastDate,
   DateFieldRequired,
+  CheckboxFieldRequired,
+  CheckboxFieldMinCount,
+  CheckboxFieldMaxCount,
 } from './Fields';
 import { Button } from '@/components/ui/button';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -67,7 +70,11 @@ const FieldValidationSection = () => {
       fields.push(FieldRequired);
     }
 
-    if (fields?.length > 4) {
+    if (selectedField?.type === 'checkbox') {
+      fields.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount);
+    }
+
+    if (fields?.length > 7) {
       return (
         <>
           {fields?.slice(0, 4).map((Field, idx) => (

@@ -100,6 +100,11 @@ export const formConfig: FormConfig = {
             message: 'Date of birth is required.',
             type: 'binary',
           },
+          // isBefore: {
+          //   value: new Date('2000-01-01'),
+          //   message: 'Should be before 2000-01-01.',
+          //   type: 'withValue',
+          // },
         },
       },
       width: '50%',

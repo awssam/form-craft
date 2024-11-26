@@ -19,7 +19,8 @@ const usePopulateFieldValidation = (pageId: string) => {
       const field = fieldEntities?.[fieldId];
       const fieldValidations =
         CUSTOM_FIELD_VALIDATIONS?.[fieldType as keyof typeof CUSTOM_FIELD_VALIDATIONS] ?? CUSTOM_FIELD_VALIDATIONS.text;
-      const validationMap = fieldValidations?.[validationType];
+
+      const validationMap = fieldValidations?.[validationType as keyof typeof fieldValidations];
       const customValidation = field?.validation?.custom?.[validatorKey];
 
       let validationFn: ((value: string) => boolean) | null = null;
@@ -36,6 +37,7 @@ const usePopulateFieldValidation = (pageId: string) => {
       const validationFunctor = validationMap?.[validatorKey as keyof typeof validationMap] as (
         ...args: unknown[]
       ) => (value: string) => boolean;
+
       validationFn = validationFunctor?.(...args);
 
       updateFormField(fieldId, {
@@ -53,6 +55,7 @@ const usePopulateFieldValidation = (pageId: string) => {
       const field = fieldEntities?.[fieldId];
       Object.entries(field?.validation?.custom || {})?.forEach(([key, value]) => {
         const fieldType = field?.type as FieldType;
+        // console.log(fieldType, value);
         updateFieldWithCorrectValidationType(fieldId, fieldType, value?.type, key);
       });
     });
