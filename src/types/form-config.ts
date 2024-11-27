@@ -38,12 +38,16 @@ interface PageEntity {
   fields: string[]; // Array of field IDs to maintain the order of appearance of fields
 }
 
+type ValueType = string | number | Date | boolean | string[];
+
 export interface FieldEntity {
   id: string; // Unique identifier for the field,
   name: string; // Name of the field
   type: FieldType; // The type of the field (e.g., text, checkbox)
   label: string; // Label for the field
   placeholder?: string; // Placeholder text (optional, mainly for input fields)
+  defaultValue?: ValueType; // Default value for the field
+  readonly?: boolean; // Whether the field is read-only
   validation?: FieldValidation; // Validation rules for the field (optional)
   options?: FieldOption[]; // Options for fields like checkboxes, radios, dropdowns (optional)
   conditionalLogic?: ConditionalLogic; // Conditional logic for showing/hiding the field (optional)

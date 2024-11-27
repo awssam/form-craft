@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { FieldName, FieldLabel, FieldType, FieldPlaceholder, FieldHelperText } from './Fields';
+import { FieldName, FieldLabel, FieldType, FieldPlaceholder, FieldHelperText, FieldDefaultValue } from './Fields';
 import { Tag } from 'lucide-react';
 import FormConfigSection from '@/components/common/FormConfigSection';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -20,6 +20,7 @@ const FieldConfigSection = () => {
       <FieldName />
       <FieldType />
       <FieldLabel />
+      <FieldDefaultValue />
       <FieldPlaceholder />
       <FieldHelperText />
     </FormConfigSection>

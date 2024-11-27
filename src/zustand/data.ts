@@ -71,6 +71,7 @@ export const formConfig: FormConfig = {
       type: 'text',
       label: 'Full Name',
       placeholder: 'Enter your full name',
+      defaultValue: 'John Doe',
       validation: {
         custom: {
           minLength: {
@@ -93,6 +94,7 @@ export const formConfig: FormConfig = {
       type: 'date',
       label: 'Date of Birth',
       placeholder: 'Select your date of birth',
+      defaultValue: new Date('1990-01-01'),
       validation: {
         custom: {
           required: {
@@ -114,6 +116,7 @@ export const formConfig: FormConfig = {
       name: 'satisfaction',
       type: 'radio',
       label: 'Are you satisfied with our service?',
+      defaultValue: 'yes',
       options: [
         { label: 'Yes', value: 'yes', helperText: 'You are satisfied' },
         { label: 'No', value: 'no', helperText: 'You are not satisfied' },
@@ -135,6 +138,7 @@ export const formConfig: FormConfig = {
       type: 'textarea',
       label: 'Additional Comments',
       placeholder: 'Write any additional feedback here...',
+      defaultValue: 'Some comments',
       validation: {},
       width: '100%',
     },
@@ -143,6 +147,7 @@ export const formConfig: FormConfig = {
       name: 'recommendation',
       type: 'checkbox',
       label: 'Would you recommend us to others?',
+      defaultValue: ['yes', 'no'],
       options: [
         { label: 'Yes', value: 'yes', helperText: 'You will recommend us' },
         { label: 'No', value: 'no', helperText: 'You will not recommend us' },

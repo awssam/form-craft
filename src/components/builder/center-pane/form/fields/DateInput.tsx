@@ -2,7 +2,7 @@ import React from 'react';
 import FormLabel from './FormLabel';
 import { FormFieldProps } from '@/types/common';
 import { useFormConfigStore } from '@/zustand/store';
-import { DatePicker, DateTimePicker } from '@/components/ui/datepicker';
+import { DateTimePicker } from '@/components/ui/datepicker';
 import { cn } from '@/lib/utils';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import FormFieldWrapper from './FormFieldWrapper';
@@ -25,7 +25,7 @@ const DateInput = ({ field, className, control }: FormFieldProps) => {
           <DateTimePicker
             granularity="day"
             style={{ color: primaryColor, borderColor: inputBorderColor }}
-            value={rhFormField.value}
+            value={rhFormField.value ?? field?.defaultValue}
             onChange={rhFormField.onChange}
             className={className}
             placeholder={field.placeholder ?? 'Pick a date'}
