@@ -46,6 +46,7 @@ export interface FieldEntity {
   type: FieldType; // The type of the field (e.g., text, checkbox)
   label: string; // Label for the field
   placeholder?: string; // Placeholder text (optional, mainly for input fields)
+  helperText?: string; // Helper text (optional, mainly for input fields)
   defaultValue?: ValueType; // Default value for the field
   readonly?: boolean; // Whether the field is read-only
   validation?: FieldValidation; // Validation rules for the field (optional)

@@ -12,6 +12,7 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
 
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
+  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
   return (
     <FormFieldWrapper
@@ -34,7 +35,7 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
             defaultValue={field?.defaultValue as string}
             {...rhFormField}
           />
-          <FormMessage />
+          <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
         </div>
       )}
     />

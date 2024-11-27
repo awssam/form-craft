@@ -113,7 +113,7 @@ export const FieldHelperText = memo(() => {
 
   return (
     <FormField id="helperText" label="Helper Text" required>
-      <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('label')} />
+      <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('helperText')} />
     </FormField>
   );
 });

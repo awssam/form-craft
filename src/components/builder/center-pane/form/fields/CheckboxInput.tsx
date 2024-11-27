@@ -12,6 +12,7 @@ import { useFormContext } from 'react-hook-form';
 const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
+  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
 
   const formState = useFormContext();
   const { setValue } = formState;
@@ -65,7 +66,7 @@ const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
               </div>
             ))}
           </div>
-          <FormMessage />
+          <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
         </div>
       )}
     />

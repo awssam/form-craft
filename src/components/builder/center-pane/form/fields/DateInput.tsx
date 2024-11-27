@@ -12,6 +12,7 @@ const DateInput = ({ field, className, control }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
 
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
+  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
 
   return (
@@ -37,7 +38,7 @@ const DateInput = ({ field, className, control }: FormFieldProps) => {
               'text-[#BDC3C7]': theme === 'night-sky',
             })}
           />
-          <FormMessage />
+          <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
         </div>
       )}
     />

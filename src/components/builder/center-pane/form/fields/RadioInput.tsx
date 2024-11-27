@@ -10,6 +10,7 @@ import { FormMessage } from '@/components/ui/form';
 
 const FormRadioInput = ({ field, className, control }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
+  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
 
   return (
     <FormFieldWrapper
@@ -35,7 +36,7 @@ const FormRadioInput = ({ field, className, control }: FormFieldProps) => {
               </div>
             ))}
           </RadioGroup>
-          <FormMessage />
+          <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
         </div>
       )}
     />
