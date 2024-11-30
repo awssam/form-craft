@@ -48,8 +48,8 @@ const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
         <div className={cn('flex flex-col gap-2', className)}>
           <FormLabel>{field.label}</FormLabel>
           <div className="flex flex-wrap items-center gap-4 my-1">
-            {field.options?.map((option) => (
-              <div className="flex items-center space-x-1.5" key={option?.value}>
+            {field.options?.map((option, index) => (
+              <div className="flex items-center space-x-1.5" key={index}>
                 <Checkbox
                   value={option?.value as string}
                   checked={selected.has(option?.value as string)}

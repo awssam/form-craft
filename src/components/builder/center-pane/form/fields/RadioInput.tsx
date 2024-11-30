@@ -24,8 +24,8 @@ const FormRadioInput = ({ field, className, control }: FormFieldProps) => {
             value={rhFormField.value ?? (field?.defaultValue as string)}
             className="flex flex-wrap items-center gap-4 my-1"
           >
-            {field.options?.map((option) => (
-              <div className="flex items-center space-x-1.5" key={option?.value}>
+            {field.options?.map((option, index) => (
+              <div className="flex items-center space-x-1.5" key={index}>
                 <RadioGroupItem
                   value={option?.value as string}
                   id={(option?.label + '-' + field.label) as string}

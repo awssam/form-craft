@@ -82,7 +82,9 @@ const FieldValidationSection = () => {
           ))}
           {showMore && fields?.slice(4, fields?.length).map((Field, idx) => <Field key={idx} />)}
           <div className="flex justify-center">
-            <Button onClick={() => setShowMore(!showMore)}>{showMore ? 'Show less...' : 'Show more...'}</Button>
+            <Button variant={'secondary'} onClick={() => setShowMore(!showMore)}>
+              {showMore ? 'Show less...' : 'Show more...'}
+            </Button>
           </div>
         </>
       );

@@ -1,6 +1,14 @@
 import React from 'react';
 
-import { FieldName, FieldLabel, FieldType, FieldPlaceholder, FieldHelperText, FieldDefaultValue } from './Fields';
+import {
+  FieldName,
+  FieldLabel,
+  FieldType,
+  FieldPlaceholder,
+  FieldHelperText,
+  FieldDefaultValue,
+  FieldOptionsForm,
+} from './Fields';
 import { Tag } from 'lucide-react';
 import FormConfigSection from '@/components/common/FormConfigSection';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -9,6 +17,16 @@ const FieldConfigSection = () => {
   const selectedField = useSelectedFieldStore((s) => s?.selectedField);
 
   if (!selectedField) return null;
+
+  const renderFieldSpecificConfig = () => {
+    switch (selectedField?.type) {
+      case 'radio':
+      case 'checkbox':
+        return <FieldOptionsForm />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <FormConfigSection
@@ -23,6 +41,7 @@ const FieldConfigSection = () => {
       <FieldDefaultValue />
       <FieldPlaceholder />
       <FieldHelperText />
+      {renderFieldSpecificConfig()}
     </FormConfigSection>
   );
 };

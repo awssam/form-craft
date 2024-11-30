@@ -1,12 +1,16 @@
-import FormField from '@/components/common/FormField';
+import FormFieldWrapper from '@/components/common/FormField';
+import { Button } from '@/components/ui/button';
 import { Combobox, Option } from '@/components/ui/combobox';
 import { DateTimePicker } from '@/components/ui/datepicker';
+import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { debounce } from '@/lib/utils';
+import { cn, debounce } from '@/lib/utils';
 import { FieldEntity } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
+import { Plus, Trash } from 'lucide-react';
 import { memo } from 'react';
+import { useFieldArray, useForm } from 'react-hook-form';
 
 const useSelectedFieldUpdate = () => {
   const updateSelectedField = useSelectedFieldStore((state) => state.updateSelectedField);
@@ -22,7 +26,7 @@ const useSelectedFieldUpdate = () => {
     };
 
   const handlePropertyChangeWithValue =
-    <T extends string | number | boolean | Date | string[]>(property: keyof FieldEntity) =>
+    <T extends string | number | boolean | Date | string[] | Option[]>(property: keyof FieldEntity) =>
     (value: T) => {
       debouncedSelectedFieldUpdate(property, value);
     };
@@ -41,12 +45,12 @@ export const FieldName = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormField id="Name" label="Field name" required>
+    <FormFieldWrapper id="Name" label="Field name" required>
       <Input
         defaultValue={selectedField?.name ?? selectedField?.label?.toLowerCase()?.replaceAll(' ', '-') ?? ''}
         onChange={handlePropertyChange('name')}
       />
-    </FormField>
+    </FormFieldWrapper>
   );
 });
 FieldName.displayName = 'FieldName';
@@ -69,9 +73,9 @@ export const FieldType = memo(() => {
 
   const selectedFieldTypeOption = types?.find((type) => type?.value === selectedField?.type) as Option;
   return (
-    <FormField id="type" label="Field Type" required>
+    <FormFieldWrapper id="type" label="Field Type" required>
       <Combobox options={types} selectedValues={[selectedFieldTypeOption]} />
-    </FormField>
+    </FormFieldWrapper>
   );
 });
 
@@ -82,13 +86,13 @@ export const FieldPlaceholder = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormField id="placeholder" label="Field placeholder">
+    <FormFieldWrapper id="placeholder" label="Field placeholder">
       <Input
         defaultValue={selectedField?.placeholder ?? ''}
         placeholder="Eg: Enter something here..."
         onChange={handlePropertyChange('placeholder')}
       />
-    </FormField>
+    </FormFieldWrapper>
   );
 });
 
@@ -99,9 +103,9 @@ export const FieldLabel = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormField id="label" label="Field Label" required>
+    <FormFieldWrapper id="label" label="Field Label" required>
       <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('label')} />
-    </FormField>
+    </FormFieldWrapper>
   );
 });
 
@@ -112,9 +116,9 @@ export const FieldHelperText = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormField id="helperText" label="Helper Text" required>
+    <FormFieldWrapper id="helperText" label="Helper Text" required>
       <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('helperText')} />
-    </FormField>
+    </FormFieldWrapper>
   );
 });
 FieldHelperText.displayName = 'FieldHelperText';
@@ -183,10 +187,113 @@ export const FieldDefaultValue = memo(() => {
   };
 
   return (
-    <FormField id="defaultValue" label="Default Value">
+    <FormFieldWrapper id="defaultValue" label="Default Value">
       {renderDefaultValueInput()}
-    </FormField>
+    </FormFieldWrapper>
   );
 });
 
 FieldDefaultValue.displayName = 'FieldDefaultValue';
+
+const defaultOptions = [{ label: 'Option 1', value: 'option-1' }];
+
+export const FieldOptionsForm = memo(() => {
+  const { handlePropertyChangeWithValue } = useSelectedFieldUpdate();
+  const selectedField = useSelectedField();
+  const form = useForm<{ options: Option[] }>({
+    mode: 'onTouched',
+    defaultValues: {
+      options: selectedField?.options ?? defaultOptions,
+    },
+  });
+
+  const { fields, append, remove, insert } = useFieldArray({
+    name: 'options',
+    control: form.control,
+  });
+
+  const renderActionButton = (Icon: React.ElementType, title: string, onClick: () => void, className?: string) => {
+    return (
+      <span
+        tabIndex={0}
+        title={title}
+        aria-label={title}
+        aria-roledescription={title}
+        role="button"
+        className={cn('cursor-pointer bg-white text-black rounded-full h-full p-1 inline-block', className)}
+        onClick={onClick}
+        onKeyDown={(e) => e.key === 'Enter' && onClick()}
+      >
+        <Icon className="w-4 h-4" />
+      </span>
+    );
+  };
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+        <FormFieldWrapper id="options" label="Options" required className="flex flex-col gap-3">
+          {fields?.map((field, index) => (
+            <div className="flex items-start gap-3 mb-3" key={field.id}>
+              <FormField
+                control={form.control}
+                name={`options.${index}.label`}
+                rules={{
+                  required: 'Label is required',
+                }}
+                render={({ field: rhfField }) => (
+                  <FormControl>
+                    <div className="flex flex-col gap-2 space-x-2">
+                      <Input {...rhfField} />
+                      <FormMessage />
+                    </div>
+                  </FormControl>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name={`options.${index}.value`}
+                rules={{
+                  required: 'Label is required',
+                }}
+                render={({ field: rhfField }) => (
+                  <FormControl>
+                    <div className="flex flex-col gap-2 space-x-2">
+                      <Input {...rhfField} value={rhfField.value as string} />
+                      <FormMessage />
+                    </div>
+                  </FormControl>
+                )}
+              />
+              {renderActionButton(
+                Plus,
+                'Add Option',
+                () => insert(index + 1, defaultOptions[0]),
+                cn('self-center', form.formState.errors?.options?.[index] && 'self-start mt-1'),
+              )}
+              {renderActionButton(
+                Trash,
+                'Remove Option',
+                () => remove(index),
+                cn('bg-red-500 text-white self-center', form.formState.errors?.options?.[index] && 'self-start mt-1'),
+              )}
+            </div>
+          ))}
+          {fields?.length === 0 && <div className="flex items-center gap-3 ">No Options</div>}
+          <Button type="submit" variant="default" onClick={() => append(defaultOptions[0])}>
+            Add Option
+          </Button>
+          <Button
+            type="submit"
+            variant="secondary"
+            onClick={() => handlePropertyChangeWithValue('options')(form.getValues('options'))}
+          >
+            Save Changes
+          </Button>
+        </FormFieldWrapper>
+      </form>
+    </Form>
+  );
+});
+
+FieldOptionsForm.displayName = 'FieldOptions';
