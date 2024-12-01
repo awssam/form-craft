@@ -52,7 +52,7 @@ export interface FieldEntity {
   validation?: FieldValidation; // Validation rules for the field (optional)
   options?: FieldOption[]; // Options for fields like checkboxes, radios, dropdowns (optional)
   conditionalLogic?: ConditionalLogic; // Conditional logic for showing/hiding the field (optional)
-  width?: FormFieldWidth;
+  width: FormFieldWidth;
 }
 
 export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'file' | 'textarea';
@@ -86,12 +86,17 @@ interface FieldOption {
 
 type FormFieldWidth = '25%' | '50%' | '75%' | '100%';
 
-interface ConditionalLogic {
+export interface ConditionalLogic {
   showWhen: {
     fieldId: string; // The ID of the field whose value triggers the condition
+    label: string;
+    operator: ConditionalLogicOperator; // The operator for comparison
     value: string | number | boolean; // The value that triggers the condition
-  };
+  }[];
+  operator: 'AND' | 'OR';
 }
+
+export type ConditionalLogicOperator = 'exists' | 'notExists' | 'equals' | 'notEquals';
 
 interface FormSettings {
   submission: {

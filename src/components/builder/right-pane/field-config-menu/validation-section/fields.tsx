@@ -24,6 +24,7 @@ interface CreateGenericSingleValueValidationComponentProps {
   validatorKey: string;
   placeholder: string;
   cb: (v: string) => boolean;
+  helperText?: string;
   renderer?: (props: {
     fieldValidationValue: string | undefined;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -37,6 +38,7 @@ export const createGenericSingleValueValidationComponent = ({
   validatorKey,
   placeholder,
   cb,
+  helperText,
   renderer, // Accept renderer as a parameter
 }: CreateGenericSingleValueValidationComponentProps) => {
   // eslint-disable-next-line react/display-name
@@ -90,7 +92,7 @@ export const createGenericSingleValueValidationComponent = ({
     };
 
     return (
-      <FormField id={validatorKey} label={label} key={selectedField?.id}>
+      <FormField id={validatorKey} label={label} key={selectedField?.id} helperText={helperText}>
         {renderer ? (
           renderer({
             fieldValidationValue,
@@ -125,6 +127,7 @@ interface CreateGenericBinaryValidationComponentProps {
   fieldType: FieldType;
   validatorKey: string;
   isRequired?: boolean;
+  helperText?: string;
 }
 
 export const createGenericBinaryValidationComponent = ({
@@ -132,6 +135,7 @@ export const createGenericBinaryValidationComponent = ({
   fieldType,
   validatorKey,
   isRequired,
+  helperText,
 }: CreateGenericBinaryValidationComponentProps) => {
   // eslint-disable-next-line react/display-name
   return () => {
@@ -181,7 +185,7 @@ export const createGenericBinaryValidationComponent = ({
     };
 
     return (
-      <FormField id={validatorKey} label={label} required={isRequired} key={selectedField?.id}>
+      <FormField id={validatorKey} label={label} required={isRequired} key={selectedField?.id} helperText={helperText}>
         <Combobox
           options={requiredOptions}
           selectedValues={[required]}
@@ -227,6 +231,7 @@ export const FieldExactLength = createGenericSingleValueValidationComponent({
   label: 'Exact Length',
   placeholder: 'Eg: 5',
   cb: (v) => +v > 0,
+  helperText: 'Input must be exactly this number of characters.',
 });
 
 export const FieldStartsWith = createGenericSingleValueValidationComponent({
@@ -235,6 +240,7 @@ export const FieldStartsWith = createGenericSingleValueValidationComponent({
   label: 'Starts With',
   placeholder: 'Eg: Me',
   cb: (v) => v?.length > 0,
+  helperText: 'Input should begin with this text.',
 });
 
 export const FieldEndsWith = createGenericSingleValueValidationComponent({
@@ -243,6 +249,7 @@ export const FieldEndsWith = createGenericSingleValueValidationComponent({
   label: 'Ends With',
   placeholder: 'Eg: .com',
   cb: (v) => v?.length > 0,
+  helperText: 'Input must end with this text.',
 });
 
 export const FieldMinLength = createGenericSingleValueValidationComponent({
@@ -251,6 +258,7 @@ export const FieldMinLength = createGenericSingleValueValidationComponent({
   label: 'Minimum Length',
   placeholder: 'Eg: 5',
   cb: (v) => +v > 0,
+  helperText: 'Input must have at least this many characters.',
 });
 
 export const FieldMaxLength = createGenericSingleValueValidationComponent({
@@ -259,6 +267,7 @@ export const FieldMaxLength = createGenericSingleValueValidationComponent({
   label: 'Maximum Length',
   placeholder: 'Eg: 20',
   cb: (v) => +v > 0,
+  helperText: 'Input cannot exceed this number of characters.',
 });
 
 export const FieldContains = createGenericSingleValueValidationComponent({
@@ -267,6 +276,7 @@ export const FieldContains = createGenericSingleValueValidationComponent({
   label: 'Contains',
   placeholder: 'Eg: world',
   cb: (v) => v?.length > 0,
+  helperText: 'Input must include this text anywhere.',
 });
 
 export const FieldMatchesRegex = createGenericSingleValueValidationComponent({
@@ -275,58 +285,68 @@ export const FieldMatchesRegex = createGenericSingleValueValidationComponent({
   label: 'Matches Regex',
   placeholder: 'Eg: ^[a-zA-Z0-9]+$',
   cb: (v) => v?.length > 0,
+  helperText: 'Input must match this regular expression pattern.',
 });
 
-// Yes or No type Fields
+// Binary field validations
 
 export const FieldRequired = createGenericBinaryValidationComponent({
   label: 'Required',
   fieldType: 'text',
   validatorKey: 'required',
   isRequired: true,
+  helperText: 'If Yes, this field must be filled out.',
 });
 
 export const FieldNoWhitespace = createGenericBinaryValidationComponent({
   label: 'No Whitespace',
   fieldType: 'text',
   validatorKey: 'noWhitespace',
+  helperText: 'If Yes, input cannot contain any spaces.',
 });
 
 export const FieldIsEmail = createGenericBinaryValidationComponent({
   label: 'Is Email',
   fieldType: 'text',
   validatorKey: 'isEmail',
+  helperText: 'If Yes, input must be a valid email address.',
 });
 
 export const FieldIsURL = createGenericBinaryValidationComponent({
   label: 'Is URL',
   fieldType: 'text',
   validatorKey: 'isURL',
+  helperText: 'If Yes, input must be a valid URL.',
 });
 
 export const FieldIsNumeric = createGenericBinaryValidationComponent({
   label: 'Is Numeric',
   fieldType: 'text',
   validatorKey: 'isNumeric',
+  helperText: 'If Yes, input must contain only numbers.',
 });
 
 export const FieldIsAlpha = createGenericBinaryValidationComponent({
   label: 'Is Alpha',
   fieldType: 'text',
   validatorKey: 'isAlpha',
+  helperText: 'If Yes, input must contain only letters.',
 });
 
 export const FieldIsAlphanumeric = createGenericBinaryValidationComponent({
   label: 'Is Alphanumeric',
   fieldType: 'text',
   validatorKey: 'isAlphanumeric',
+  helperText: 'If Yes, input must contain only letters and numbers.',
 });
 
 export const FieldNoSpecialCharacters = createGenericBinaryValidationComponent({
   label: 'No Special Characters',
   fieldType: 'text',
   validatorKey: 'noSpecialCharacters',
+  helperText: 'If Yes, input cannot include special characters.',
 });
+
 // Date type Fields
 
 export const createSingleValueValidationComponentForDate = (
@@ -334,6 +354,7 @@ export const createSingleValueValidationComponentForDate = (
   key: keyof typeof CUSTOM_FIELD_VALIDATIONS.date.withValue,
   placeholder: string,
   cb: (v: string) => boolean,
+  helperText?: string,
 ) => {
   // eslint-disable-next-line react/display-name
   return () => {
@@ -344,6 +365,7 @@ export const createSingleValueValidationComponentForDate = (
       validatorKey: key,
       placeholder,
       cb, // Pass through the callback for validation
+      helperText,
       renderer: ({ fieldValidationValue, handleChange, placeholder }) => (
         <DateTimePicker
           granularity="day"
@@ -365,6 +387,7 @@ export const DateFieldIsBefore = createSingleValueValidationComponentForDate(
   'isBefore',
   'Eg: 2023-01-01',
   (v) => v?.toString()?.length > 0,
+  'The date must be before this specified date.',
 );
 
 export const DateFieldIsAfter = createSingleValueValidationComponentForDate(
@@ -372,6 +395,7 @@ export const DateFieldIsAfter = createSingleValueValidationComponentForDate(
   'isAfter',
   'Eg: 2023-01-01',
   (v) => v?.toString()?.length > 0,
+  'The date must be after this specified date.',
 );
 
 export const DateFieldMatchesFormat = createSingleValueValidationComponentForDate(
@@ -379,6 +403,7 @@ export const DateFieldMatchesFormat = createSingleValueValidationComponentForDat
   'matchesFormat',
   'Eg: YYYY-MM-DD',
   (v) => v?.toString()?.length > 0,
+  'The date must match this format.',
 );
 
 export const DateFieldRestrictFutureDate = createGenericBinaryValidationComponent({
@@ -386,6 +411,7 @@ export const DateFieldRestrictFutureDate = createGenericBinaryValidationComponen
   fieldType: 'date',
   validatorKey: 'restrictFutureDate',
   isRequired: true,
+  helperText: 'If Yes, future dates are not allowed.',
 });
 
 export const DateFieldRestrictPastDate = createGenericBinaryValidationComponent({
@@ -393,6 +419,7 @@ export const DateFieldRestrictPastDate = createGenericBinaryValidationComponent(
   fieldType: 'date',
   validatorKey: 'restrictPastDate',
   isRequired: true,
+  helperText: 'If Yes, past dates are not allowed.',
 });
 
 export const DateFieldRequired = createGenericBinaryValidationComponent({
@@ -400,6 +427,7 @@ export const DateFieldRequired = createGenericBinaryValidationComponent({
   fieldType: 'date',
   validatorKey: 'required',
   isRequired: true,
+  helperText: 'If Yes, this field must be filled out.',
 });
 
 // Checkbox type Fields
@@ -409,6 +437,7 @@ export const CheckboxFieldRequired = createGenericBinaryValidationComponent({
   fieldType: 'checkbox',
   validatorKey: 'required',
   isRequired: true,
+  helperText: 'If Yes, at least one checkbox must be selected.',
 });
 
 export const CheckboxFieldMinCount = createGenericSingleValueValidationComponent({
@@ -417,6 +446,7 @@ export const CheckboxFieldMinCount = createGenericSingleValueValidationComponent
   validatorKey: 'minCount',
   placeholder: 'Eg: 2',
   cb: (v) => +v > 0,
+  helperText: 'Minimum number of checkboxes that must be selected.',
 });
 
 export const CheckboxFieldMaxCount = createGenericSingleValueValidationComponent({
@@ -425,4 +455,5 @@ export const CheckboxFieldMaxCount = createGenericSingleValueValidationComponent
   validatorKey: 'maxCount',
   placeholder: 'Eg: 2',
   cb: (v) => +v > 0,
+  helperText: 'Maximum number of checkboxes that can be selected.',
 });

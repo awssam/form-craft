@@ -19,9 +19,16 @@ interface ComboboxProps extends GenericProps {
   allowMultiple?: boolean;
   selectedValues?: Option[];
   handleChange?: (values: Option[]) => void;
+  placeholder?: string;
 }
 
-export function Combobox({ options: _options, allowMultiple, selectedValues = [], handleChange }: ComboboxProps) {
+export function Combobox({
+  placeholder,
+  options: _options,
+  allowMultiple,
+  selectedValues = [],
+  handleChange,
+}: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState<Option[]>(selectedValues);
   const [popupWidth, setPopupWidth] = React.useState(0);
@@ -71,7 +78,7 @@ export function Combobox({ options: _options, allowMultiple, selectedValues = []
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button ref={buttonRef} variant="outline" role="combobox" aria-expanded={open} className="justify-between">
-          {values.length > 0 ? label : 'Select...'}
+          {values.length > 0 ? label : placeholder || 'Select...'}
           <CaretSortIcon className="opacity-50 ml-2 w-4 h-4 shrink-0" />
         </Button>
       </PopoverTrigger>

@@ -45,7 +45,7 @@ export const FieldName = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="Name" label="Field name" required>
+    <FormFieldWrapper id="Name" label="Field name" required helperText="This must be an unique value">
       <Input
         defaultValue={selectedField?.name ?? selectedField?.label?.toLowerCase()?.replaceAll(' ', '-') ?? ''}
         onChange={handlePropertyChange('name')}
@@ -73,7 +73,12 @@ export const FieldType = memo(() => {
 
   const selectedFieldTypeOption = types?.find((type) => type?.value === selectedField?.type) as Option;
   return (
-    <FormFieldWrapper id="type" label="Field Type" required>
+    <FormFieldWrapper
+      id="type"
+      label="Field Type"
+      required
+      helperText="Conversion of types will reset field specific settings"
+    >
       <Combobox options={types} selectedValues={[selectedFieldTypeOption]} />
     </FormFieldWrapper>
   );
@@ -86,7 +91,7 @@ export const FieldPlaceholder = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="placeholder" label="Field placeholder">
+    <FormFieldWrapper id="placeholder" label="Field placeholder" helperText="A hint for what to enter in the field">
       <Input
         defaultValue={selectedField?.placeholder ?? ''}
         placeholder="Eg: Enter something here..."
@@ -103,7 +108,7 @@ export const FieldLabel = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="label" label="Field Label" required>
+    <FormFieldWrapper id="label" label="Field Label" required helperText="What the field is called?">
       <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('label')} />
     </FormFieldWrapper>
   );
@@ -116,7 +121,7 @@ export const FieldHelperText = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="helperText" label="Helper Text" required>
+    <FormFieldWrapper id="helperText" label="Helper Text" helperText="Any additional helper text for the field">
       <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('helperText')} />
     </FormFieldWrapper>
   );
@@ -187,13 +192,50 @@ export const FieldDefaultValue = memo(() => {
   };
 
   return (
-    <FormFieldWrapper id="defaultValue" label="Default Value">
+    <FormFieldWrapper
+      id="defaultValue"
+      label="Pre filled Value"
+      helperText="Use this to pre fill the field with a default value"
+    >
       {renderDefaultValueInput()}
     </FormFieldWrapper>
   );
 });
 
 FieldDefaultValue.displayName = 'FieldDefaultValue';
+
+const widthOptions = [
+  { label: '1/4 Quarter Width', value: '25%' },
+  { label: 'Half Width', value: '50%' },
+  { label: '3/4 Quarter Width', value: '75%' },
+  { label: 'Full Width', value: '100%' },
+];
+
+export const FieldWidth = memo(() => {
+  const { handlePropertyChangeWithValue } = useSelectedFieldUpdate();
+  const selectedField = useSelectedField();
+
+  const getSelectedOption = () => {
+    return widthOptions?.find((option) => option?.value === selectedField?.width) ?? widthOptions[0];
+  };
+
+  return (
+    <FormFieldWrapper
+      id="width"
+      label="Field Width"
+      required
+      helperText="The width of the field (Responsive by default)"
+    >
+      <Combobox
+        options={widthOptions}
+        selectedValues={[getSelectedOption()]}
+        handleChange={(values) => handlePropertyChangeWithValue('width')(values?.[0]?.value as string)}
+      />
+    </FormFieldWrapper>
+  );
+});
+
+FieldWidth.displayName = 'FieldWidth';
 
 const defaultOptions = [{ label: 'Option 1', value: 'option-1' }];
 
@@ -244,7 +286,7 @@ export const FieldOptionsForm = memo(() => {
                 render={({ field: rhfField }) => (
                   <FormControl>
                     <div className="flex flex-col gap-2 space-x-2">
-                      <Input {...rhfField} />
+                      <Input {...rhfField} value={rhfField.value as string} placeholder='Label e.g "Option 1"' />
                       <FormMessage />
                     </div>
                   </FormControl>
@@ -254,12 +296,12 @@ export const FieldOptionsForm = memo(() => {
                 control={form.control}
                 name={`options.${index}.value`}
                 rules={{
-                  required: 'Label is required',
+                  required: 'Value is required',
                 }}
                 render={({ field: rhfField }) => (
                   <FormControl>
                     <div className="flex flex-col gap-2 space-x-2">
-                      <Input {...rhfField} value={rhfField.value as string} />
+                      <Input {...rhfField} value={rhfField.value as string} placeholder='Value e.g "option-1' />
                       <FormMessage />
                     </div>
                   </FormControl>

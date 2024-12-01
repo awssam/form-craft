@@ -8,6 +8,7 @@ import {
   FieldHelperText,
   FieldDefaultValue,
   FieldOptionsForm,
+  FieldWidth,
 } from './Fields';
 import { Tag } from 'lucide-react';
 import FormConfigSection from '@/components/common/FormConfigSection';
@@ -41,6 +42,7 @@ const FieldConfigSection = () => {
       <FieldDefaultValue />
       <FieldPlaceholder />
       <FieldHelperText />
+      <FieldWidth />
       {renderFieldSpecificConfig()}
     </FormConfigSection>
   );

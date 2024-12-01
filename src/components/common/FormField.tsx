@@ -7,9 +7,18 @@ interface FormFieldProps extends GenericProps {
   id: string;
   required?: boolean;
   renderLabelExtraContent?: () => React.ReactNode;
+  helperText?: string;
 }
 
-const FormField = ({ label, id, children, className, required, renderLabelExtraContent }: FormFieldProps) => {
+const FormField = ({
+  label,
+  id,
+  children,
+  className,
+  required,
+  helperText,
+  renderLabelExtraContent,
+}: FormFieldProps) => {
   const classes = cn('flex flex-col gap-1', className);
   return (
     <Label className={classes} htmlFor={id}>
@@ -18,6 +27,7 @@ const FormField = ({ label, id, children, className, required, renderLabelExtraC
         {required && <sup className="top-[-0.1em] ml-[1px] font-bold text-red-500 text-sm">*</sup>}
         {renderLabelExtraContent?.()}
       </span>
+      {helperText && <p className="text-xs text-muted-foreground/90 mb-1">{helperText}</p>}
       {children}
     </Label>
   );
