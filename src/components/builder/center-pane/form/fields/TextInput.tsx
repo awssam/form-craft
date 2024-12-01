@@ -32,8 +32,8 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
               'placeholder:text-[#BDC3C7]': theme === 'night-sky',
             })}
             style={{ color: primaryColor, borderColor: inputBorderColor }}
-            defaultValue={field?.defaultValue as string}
             {...rhFormField}
+            value={rhFormField.value ?? field?.defaultValue ?? ''}
           />
           <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
         </div>
