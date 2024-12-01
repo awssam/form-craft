@@ -1,4 +1,4 @@
-import { isBefore, isToday } from '@/lib/datetime';
+import { isAfter, isBefore, isToday } from '@/lib/datetime';
 import { FieldEntity } from '@/types/form-config';
 
 export const CUSTOM_FIELD_VALIDATIONS = {
@@ -66,12 +66,13 @@ export const CUSTOM_FIELD_VALIDATIONS = {
       isBefore: (compareDate: string, msg?: string) => (val: string) => {
         const date = new Date(val);
         const comparisonDate = new Date(compareDate);
-        return date < comparisonDate || msg;
+        return isBefore(date, comparisonDate) || msg;
       },
       isAfter: (compareDate: string, msg?: string) => (val: string) => {
         const date = new Date(val);
         const comparisonDate = new Date(compareDate);
-        return date > comparisonDate || msg;
+
+        return isAfter(date, comparisonDate) || msg;
       },
       matchesFormat: (format: string, msg?: string) => (val: string) => {
         // Example format check for 'YYYY-MM-DD'
@@ -102,6 +103,15 @@ export const CUSTOM_FIELD_VALIDATIONS = {
 
         return true;
       },
+      required: (msg: string) => (val: string) => {
+        return !!val || msg;
+      },
+    },
+  },
+
+  radio: {
+    withValue: {},
+    binary: {
       required: (msg: string) => (val: string) => {
         return !!val || msg;
       },

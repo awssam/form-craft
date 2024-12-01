@@ -1,6 +1,6 @@
-import { FieldEntity, FormConfig } from "@/types/form-config";
-import { create } from "zustand";
-import { formConfig } from "./data";
+import { FieldEntity, FormConfig } from '@/types/form-config';
+import { create } from 'zustand';
+import { formConfig } from './data';
 
 type FormState = {
   formConfig: FormConfig;
@@ -10,8 +10,8 @@ type FormAction = {
   setFormConfig: (formConfig: FormConfig) => void;
   updateFormConfig: (formConfig: Partial<FormConfig>) => void;
   resetFormConfig: () => void;
-  updateFormStyles: (styles: Partial<FormConfig["styles"]>) => void;
-  updateFormTheme: (theme: Partial<FormConfig["theme"]>) => void;
+  updateFormStyles: (styles: Partial<FormConfig['styles']>) => void;
+  updateFormTheme: (theme: Partial<FormConfig['theme']>) => void;
   setPageFields: (pageId: string, fields: string[]) => void;
   updateFormField: (fieldId: string, update: Partial<FieldEntity>) => void;
 };
@@ -91,9 +91,7 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
  * @param key The key of the top level property to get. Must be a valid key in the FormConfig type.
  * @returns The value of the property if it exists, null otherwise.
  */
-export const useFormProperty = <K extends keyof FormConfig>(
-  key: K
-): FormConfig[K] | null => {
+export const useFormProperty = <K extends keyof FormConfig>(key: K): FormConfig[K] | null => {
   return useFormConfigStore((state) => state.formConfig[key] ?? null);
 };
 
@@ -102,9 +100,7 @@ export const useFormProperty = <K extends keyof FormConfig>(
  * @param key The key of the action to get. Must be a valid key in the State type.
  * @returns The value of the action if it exists, null otherwise.
  */
-export const useFormActionProperty = <T extends keyof FormAction>(
-  key: T
-): FormAction[T] => {
+export const useFormActionProperty = <T extends keyof FormAction>(key: T): FormAction[T] => {
   return useFormConfigStore((state) => state?.[key]);
 };
 
@@ -113,22 +109,34 @@ type SelectedFieldState = {
 };
 type SelectedFieldAction = {
   setSelectedField: (selectedField: FieldEntity | null) => void;
-  updateSelectedField: (update: Partial<FieldEntity> | null) => void;
+  updateSelectedField: (update: Partial<FieldEntity> | null, onlyUpdateSelectedField?: boolean) => void;
 };
 
-export const useSelectedFieldStore = create<
-  SelectedFieldState & SelectedFieldAction
->((set, get) => ({
+export const useSelectedFieldStore = create<SelectedFieldState & SelectedFieldAction>((set, get) => ({
   selectedField: null,
   setSelectedField: (selectedField) => set({ selectedField }),
-  updateSelectedField: (update) => {
+  updateSelectedField: (update, onlyUpdateSelectedField = false) => {
     const id = get().selectedField?.id;
+    if (!id) return;
+
     set((s) => ({
       ...s,
       selectedField: { ...s.selectedField, ...update } as FieldEntity,
     }));
-    useFormConfigStore?.getState()?.updateFormField(id!, update!)
+    !onlyUpdateSelectedField && useFormConfigStore?.getState()?.updateFormField(id!, update!);
   },
+}));
+
+type FieldVisibilityState = {
+  fields: Record<string, boolean>;
+};
+type FieldVisibilityAction = {
+  setFieldVisibility: (fieldId: string, visible: boolean) => void;
+};
+
+export const useFieldVisibilityStore = create<FieldVisibilityState & FieldVisibilityAction>((set, get) => ({
+  fields: {},
+  setFieldVisibility: (fieldId, visible) => set({ fields: { ...get().fields, [fieldId]: visible } }),
 }));
 
 type UIState = {
@@ -141,18 +149,13 @@ type UIAction = {
 
 export const useUIEventsStore = create<UIState & UIAction>((set) => ({
   isDraggingFormField: false,
-  setIsDraggingFormField: (isDragging) =>
-    set({ isDraggingFormField: isDragging }),
+  setIsDraggingFormField: (isDragging) => set({ isDraggingFormField: isDragging }),
 }));
 
-export const useUIEventsProperty = <T extends keyof UIState>(
-  key: T
-): UIState[T] => {
+export const useUIEventsProperty = <T extends keyof UIState>(key: T): UIState[T] => {
   return useUIEventsStore((state) => state[key]);
 };
 
-export const useUIEventsActionProperty = <T extends keyof UIAction>(
-  key: T
-): UIAction[T] => {
+export const useUIEventsActionProperty = <T extends keyof UIAction>(key: T): UIAction[T] => {
   return useUIEventsStore((state) => state[key]);
 };

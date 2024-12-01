@@ -1,4 +1,4 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import FieldRenderer from './FieldRenderer';
@@ -10,6 +10,8 @@ import useFieldUnregister from '@/hooks/useFieldUnregister';
 import usePopulateFieldValidation from '@/hooks/usePopulateFieldValidation';
 
 import { FieldEntity } from '@/types/form-config';
+import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
+import useFieldConditionalLogicCheck from '@/hooks/useFieldConditionalLogicCheck';
 
 interface FormFieldsProps {
   pageId: string;
@@ -28,6 +30,9 @@ const FormFieldContainer = ({ pageId, isLastPage }: FormFieldsProps) => {
 
   // for all fields populate the validation functions from the client validation map
   usePopulateFieldValidation(pageId);
+
+  // // validate conditional logic for all fields
+  useFieldConditionalLogicCheck(fields!);
 
   return (
     <Form {...form}>

@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input';
-import { cn } from '@/lib/utils';
+import { cn, debounce } from '@/lib/utils';
 import React from 'react';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import { FormFieldProps } from '@/types/common';
@@ -14,6 +14,7 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
   const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
+
   return (
     <FormFieldWrapper
       control={control}
