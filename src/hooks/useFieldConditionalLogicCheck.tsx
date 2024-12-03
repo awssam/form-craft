@@ -1,6 +1,6 @@
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { FieldEntity } from '@/types/form-config';
-import { useFieldVisibilityStore, useFormActionProperty, useFormProperty } from '@/zustand/store';
+import { useFieldVisibilityStore, useFormProperty } from '@/zustand/store';
 import { useEffect } from 'react';
 
 const useFieldConditionalLogicCheck = (fields: string[]) => {
@@ -10,13 +10,13 @@ const useFieldConditionalLogicCheck = (fields: string[]) => {
 
   useEffect(() => {
     fields?.forEach((fieldId) => {
-      const field = fieldEntities?.[fieldId]!;
+      const field = fieldEntities?.[fieldId] as FieldEntity;
 
       if (field.conditionalLogic) {
         // conditional logic validation
 
-        const { showWhen } = field.conditionalLogic || {};
-        const conditions: Boolean[] = [];
+        const { showWhen, operator } = field.conditionalLogic || {};
+        const conditions: boolean[] = [];
 
         showWhen?.forEach((condition) => {
           const operator = condition?.operator;
@@ -34,20 +34,26 @@ const useFieldConditionalLogicCheck = (fields: string[]) => {
           const functor = availableFieldValidations?.[operator as keyof typeof availableFieldValidations] as Function;
           const validationFn = functor ? functor(value) : () => true;
 
-          console.log(condition, validationFn, functor, fieldEntities?.[fieldId]);
-
           const isValid = validationFn(conditionalFieldValue);
-          console.log(isValid, conditionalFieldValue, value);
 
           conditions.push(isValid);
         });
 
-        const isAllConditionFalse = conditions.every((c) => !c);
+        if (operator === 'OR') {
+          const isAnyConditionTrue = conditions.some((c) => c);
+          setFieldVisibility(fieldId, isAnyConditionTrue);
+          return;
+        }
 
-        setFieldVisibility(fieldId, !isAllConditionFalse);
+        if (operator === 'AND') {
+          const isAllConditionTrue = conditions.every((c) => c);
+          console.log(isAllConditionTrue, conditions);
+          setFieldVisibility(fieldId, isAllConditionTrue);
+          return;
+        }
       }
     });
-  }, [fields, fieldEntities]);
+  }, [fields, fieldEntities, setFieldVisibility]);
 
   return null;
 };

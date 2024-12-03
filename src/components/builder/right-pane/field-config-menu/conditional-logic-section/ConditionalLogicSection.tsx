@@ -1,4 +1,4 @@
-import React, { memo, useCallback, useMemo, useState } from 'react';
+import React, { memo, useCallback, useMemo } from 'react';
 import { ShieldQuestion } from 'lucide-react';
 import FormConfigSection from '@/components/common/FormConfigSection';
 import { useFormProperty, useSelectedFieldStore } from '@/zustand/store';
@@ -7,8 +7,9 @@ import { Combobox, Option } from '@/components/ui/combobox';
 import { Input } from '@/components/ui/input';
 import { ConditionalLogic, ConditionalLogicOperator, CustomValidationType } from '@/types/form-config';
 import { Button } from '@/components/ui/button';
-import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
+import { CONDITIONAL_LOGIC_VALIDATIONS } from '@/lib/validation';
 import { DateTimePicker } from '@/components/ui/datepicker';
+import { camelCaseToReadable } from '@/lib/utils';
 
 const defaultConditionalLogic: ConditionalLogic = {
   showWhen: [
@@ -27,20 +28,59 @@ type OptionWithType = Option & {
   type: CustomValidationType;
 };
 
+const conditionalOperators = [
+  {
+    label: 'AND (Only visible if all conditions are met)',
+    value: 'AND',
+  },
+  {
+    label: 'OR (Visible if any one condition is met)',
+    value: 'OR',
+  },
+];
+
 const FieldConditionalLogicSection = () => {
   const selectedField = useSelectedFieldStore((s) => s?.selectedField);
   const fieldEntities = useFormProperty('fieldEntities');
   const updateSelectedField = useSelectedFieldStore((s) => s?.updateSelectedField);
 
-  const updateConditionalLogic = (index: number, updates: Partial<ConditionalLogic['showWhen'][0]>) => {
+  const { operator: conditionalLogicOperator } = selectedField?.conditionalLogic ?? {};
+
+  const updateConditionalLogic = (
+    index: number,
+    updates: Partial<ConditionalLogic['showWhen'][0]>,
+    isRemove: boolean = false,
+  ) => {
+    const defaultOperatorVal = (
+      conditionalLogicOperator || (selectedField?.conditionalLogic?.showWhen?.length || 0) >= 1
+        ? 'AND'
+        : conditionalLogicOperator
+    ) as ConditionalLogic['operator'];
+
+    if (isRemove) {
+      const updatedShowWhen = selectedField?.conditionalLogic?.showWhen?.filter((c, i) => i !== index);
+
+      updateSelectedField({
+        conditionalLogic: {
+          showWhen: updatedShowWhen ?? [],
+          operator: defaultOperatorVal,
+        },
+      });
+      return;
+    }
+
     const updatedShowWhen = selectedField?.conditionalLogic?.showWhen?.map((c, i) => {
       return i === index ? { ...c, ...updates } : c;
     }) ?? [{ ...defaultConditionalLogic.showWhen[0], ...updates }];
 
+    if (index === selectedField?.conditionalLogic?.showWhen?.length) {
+      updatedShowWhen.unshift({ ...defaultConditionalLogic.showWhen[0], ...updates });
+    }
+
     updateSelectedField({
       conditionalLogic: {
         showWhen: updatedShowWhen,
-        operator: 'AND', // Assuming the operator remains constant for now
+        operator: defaultOperatorVal,
       },
     });
   };
@@ -70,17 +110,18 @@ const FieldConditionalLogicSection = () => {
     (fieldId: string): OptionWithType[] => {
       const fieldType = fieldEntities?.[fieldId]?.type;
       const validations =
-        CUSTOM_FIELD_VALIDATIONS?.[fieldType as keyof typeof CUSTOM_FIELD_VALIDATIONS] ?? CUSTOM_FIELD_VALIDATIONS.text;
+        CONDITIONAL_LOGIC_VALIDATIONS?.[fieldType as keyof typeof CONDITIONAL_LOGIC_VALIDATIONS] ??
+        CONDITIONAL_LOGIC_VALIDATIONS.text;
       const withValue = Object.keys(validations?.withValue ?? {}).map((validatorKey) => {
         return {
-          label: validatorKey,
+          label: camelCaseToReadable(validatorKey),
           value: validatorKey,
           type: 'withValue' as CustomValidationType,
         };
       });
       const binary = Object.keys(validations?.binary ?? {}).map((validatorKey) => {
         return {
-          label: validatorKey,
+          label: camelCaseToReadable(validatorKey),
           value: validatorKey,
           type: 'binary' as CustomValidationType,
         };
@@ -131,6 +172,22 @@ const FieldConditionalLogicSection = () => {
     }
   };
 
+  const handleUpdateOperator = (operator: ConditionalLogic['operator']) => {
+    updateSelectedField({
+      conditionalLogic: {
+        showWhen: selectedField?.conditionalLogic?.showWhen ?? [],
+        operator,
+      },
+    });
+  };
+
+  const getOption = (label: string, value: string) => ({
+    label,
+    value,
+  });
+
+  const getRandomIndexFromList = (len: number) => Math.floor(Math.random() * len);
+
   return (
     <FormConfigSection
       icon={<ShieldQuestion className="w-4 h-4 text-muted-foreground" />}
@@ -138,11 +195,41 @@ const FieldConditionalLogicSection = () => {
       subtitle="Show or hide this field based on the value of another field"
       key={selectedField?.id}
     >
+      {(selectedField?.conditionalLogic?.showWhen?.length || 0) > 1 && (
+        <Combobox
+          options={conditionalOperators}
+          placeholder="Select conditional logic operator"
+          selectedValues={
+            selectedField?.conditionalLogic?.operator
+              ? [
+                  getOption(
+                    conditionalOperators.find((o) => o.value === selectedField?.conditionalLogic?.operator)?.label ||
+                      '',
+                    conditionalLogicOperator!,
+                  ),
+                ]
+              : []
+          }
+          handleChange={(value) => handleUpdateOperator(value?.[0]?.value as ConditionalLogic['operator'])}
+        />
+      )}
+
+      <Button
+        variant="secondary"
+        onClick={() =>
+          handleFieldChange(
+            fieldOptions?.[getRandomIndexFromList(fieldOptions?.length || 0)],
+            selectedField?.conditionalLogic?.showWhen?.length || 0,
+          )
+        }
+      >
+        Add Condition
+      </Button>
       {selectedField?.conditionalLogic?.showWhen?.map((condition, index) => {
         return (
           <section
-            key={condition.fieldId}
-            className="space-y-4 border border-dashed border-input bg-background px-3 py-5 rounded-md flex flex-col gap-3"
+            key={index}
+            className="space-y-4 border border-dashed border-input bg-background px-3 py-5 rounded-md flex flex-col gap-3 hover:border-yellow-200/30 transition-colors duration-300"
           >
             <FormField label="Show this field if" id="field" helperText="Select a field and specify the condition.">
               <Combobox
@@ -163,7 +250,9 @@ const FieldConditionalLogicSection = () => {
                     placeholder="Select an operator"
                     options={getValidationOptions(condition?.fieldId)}
                     selectedValues={
-                      condition.operator ? [{ label: condition?.operator, value: condition?.operator }] : []
+                      condition.operator
+                        ? [{ label: camelCaseToReadable(condition?.operator), value: condition?.operator }]
+                        : []
                     }
                     handleChange={(value) => handleOperatorChange(value?.[0] as OptionWithType, index)}
                   />
@@ -180,16 +269,12 @@ const FieldConditionalLogicSection = () => {
                 )}
               </>
             )}
+            <Button variant="destructive" onClick={() => updateConditionalLogic(index, {}, true)}>
+              Remove Condition
+            </Button>
           </section>
         );
       })}
-      {!selectedField?.conditionalLogic?.showWhen?.length && (
-        <>
-          <Button variant="outline" onClick={() => handleFieldChange(fieldOptions?.[0], 0)}>
-            Add Condition
-          </Button>
-        </>
-      )}
     </FormConfigSection>
   );
 };

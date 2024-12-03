@@ -123,7 +123,7 @@ export const useSelectedFieldStore = create<SelectedFieldState & SelectedFieldAc
       ...s,
       selectedField: { ...s.selectedField, ...update } as FieldEntity,
     }));
-    !onlyUpdateSelectedField && useFormConfigStore?.getState()?.updateFormField(id!, update!);
+    if (!onlyUpdateSelectedField) useFormConfigStore?.getState()?.updateFormField(id!, update!);
   },
 }));
 
@@ -136,7 +136,9 @@ type FieldVisibilityAction = {
 
 export const useFieldVisibilityStore = create<FieldVisibilityState & FieldVisibilityAction>((set, get) => ({
   fields: {},
-  setFieldVisibility: (fieldId, visible) => set({ fields: { ...get().fields, [fieldId]: visible } }),
+  setFieldVisibility: (fieldId, visible) => {
+    set({ fields: { ...get().fields, [fieldId]: visible } });
+  },
 }));
 
 type UIState = {

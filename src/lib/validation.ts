@@ -1,5 +1,6 @@
 import { isAfter, isBefore, isToday } from '@/lib/datetime';
 import { FieldEntity } from '@/types/form-config';
+import { omitFromObject, pickFromObject } from './utils';
 
 export const CUSTOM_FIELD_VALIDATIONS = {
   text: {
@@ -121,11 +122,12 @@ export const CUSTOM_FIELD_VALIDATIONS = {
   checkbox: {
     withValue: {
       minCount: (minCount: number, msg?: string, selectedField?: FieldEntity | null) => (val: string[]) => {
-        if (minCount > (selectedField?.options?.length || 0)) minCount = selectedField?.options?.length || 0;
+        if (selectedField && +minCount > (selectedField?.options?.length || 0))
+          minCount = selectedField?.options?.length || 0;
         return val?.length >= +minCount || msg;
       },
       maxCount: (maxCount: number, msg?: string, selectedField?: FieldEntity | null) => (val: string[]) => {
-        if (maxCount < 1 || maxCount > (selectedField?.options?.length || 0))
+        if (selectedField && (+maxCount < 1 || +maxCount > (selectedField?.options?.length || 0)))
           maxCount = selectedField?.options?.length || 0;
         return val?.length <= +maxCount || msg;
       },
@@ -135,5 +137,13 @@ export const CUSTOM_FIELD_VALIDATIONS = {
         return val?.length > 0 || msg;
       },
     },
+  },
+};
+
+export const CONDITIONAL_LOGIC_VALIDATIONS = {
+  ...CUSTOM_FIELD_VALIDATIONS,
+  date: {
+    binary: pickFromObject(CUSTOM_FIELD_VALIDATIONS.date.binary, ['required']),
+    withValue: omitFromObject(CUSTOM_FIELD_VALIDATIONS.date.withValue, ['matchesFormat']),
   },
 };
