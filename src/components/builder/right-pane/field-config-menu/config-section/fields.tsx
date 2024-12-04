@@ -45,7 +45,7 @@ export const FieldName = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="Name" label="Field name" required helperText="This must be an unique value">
+    <FormFieldWrapper id="Name" label="Field Name" required helperText="This must be an unique value">
       <Input
         defaultValue={selectedField?.name ?? selectedField?.label?.toLowerCase()?.replaceAll(' ', '-') ?? ''}
         onChange={handlePropertyChange('name')}
@@ -91,7 +91,7 @@ export const FieldPlaceholder = memo(() => {
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="placeholder" label="Field placeholder" helperText="A hint for what to enter in the field">
+    <FormFieldWrapper id="placeholder" label="Field Placeholder" helperText="A hint for what to enter in the field">
       <Input
         defaultValue={selectedField?.placeholder ?? ''}
         placeholder="Eg: Enter something here..."
@@ -194,7 +194,7 @@ export const FieldDefaultValue = memo(() => {
   return (
     <FormFieldWrapper
       id="defaultValue"
-      label="Pre filled Value"
+      label="Pre Filled Value"
       helperText="Use this to pre fill the field with a default value"
     >
       {renderDefaultValueInput()}

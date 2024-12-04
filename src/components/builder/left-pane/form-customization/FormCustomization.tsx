@@ -1,18 +1,14 @@
-"use client";
+'use client';
 
-import { Brush } from "lucide-react";
-import FormConfigSection from "@/components/common/FormConfigSection";
+import { Brush } from 'lucide-react';
+import FormConfigSection from '@/components/common/FormConfigSection';
 
-import {
-  FormFontPrimaryColor,
-  FormFontSecondaryColor,
-  FormThemePicker,
-} from "./fields";
+import { FormFontPrimaryColor, FormFontSecondaryColor, FormThemePicker } from './fields';
 
 const FormCustomization = () => {
   return (
     <FormConfigSection
-      icon={<Brush className="w-4 h-4 text-headerPink" />}
+      icon={<Brush className="w-4 h-4 text-white/90" />}
       title="Customization"
       subtitle="Make your form look like your brand."
     >

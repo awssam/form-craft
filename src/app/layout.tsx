@@ -4,6 +4,7 @@ import { CLERK_APPEARANCE_CONFIG } from "@/config/clerk";
 import "./globals.css";
 
 
+
 export const metadata: Metadata = {
   title: "VI Forms",
   description: "Work In Progress Fun Project from Varadarajan M",

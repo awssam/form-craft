@@ -31,10 +31,11 @@ const FieldConfigSection = () => {
 
   return (
     <FormConfigSection
-      icon={<Tag className="w-4 h-4 text-muted-foreground" />}
-      title="Field Config"
+      icon={<Tag className="w-4 h-4 text-white/90" />}
+      title="Field Configuration"
       subtitle="Basic details about the form field"
       key={selectedField?.id}
+      className="mt-2"
     >
       <FieldName />
       <FieldType />

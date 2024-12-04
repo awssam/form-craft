@@ -6,7 +6,7 @@ import { debounce } from '@/lib/utils';
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { FieldEntity, FieldType } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
-import { useMemo } from 'react';
+import { ComponentProps, useMemo } from 'react';
 
 const requiredOptions = [
   {
@@ -25,6 +25,7 @@ interface CreateGenericSingleValueValidationComponentProps {
   placeholder: string;
   cb: (v: string) => boolean;
   helperText?: string;
+  inputType?: ComponentProps<'input'>['type'];
   renderer?: (props: {
     fieldValidationValue: string | undefined;
     handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -38,6 +39,7 @@ export const createGenericSingleValueValidationComponent = ({
   validatorKey,
   placeholder,
   cb,
+  inputType,
   helperText,
   renderer, // Accept renderer as a parameter
 }: CreateGenericSingleValueValidationComponentProps) => {
@@ -103,9 +105,10 @@ export const createGenericSingleValueValidationComponent = ({
           <Input
             name="value"
             placeholder={placeholder}
-            type="text"
             defaultValue={fieldValidationValue ?? ''}
             onChange={handleChange}
+            type={inputType ?? 'text'}
+            min={inputType === 'number' ? 0 : undefined}
           />
         )}
         {cb(fieldValidationValue) && (
@@ -231,6 +234,7 @@ export const FieldExactLength = createGenericSingleValueValidationComponent({
   label: 'Exact Length',
   placeholder: 'Eg: 5',
   cb: (v) => +v > 0,
+  inputType: 'number',
   helperText: 'Input must be exactly this number of characters.',
 });
 
@@ -240,6 +244,7 @@ export const FieldStartsWith = createGenericSingleValueValidationComponent({
   label: 'Starts With',
   placeholder: 'Eg: Me',
   cb: (v) => v?.length > 0,
+  inputType: 'text',
   helperText: 'Input should begin with this text.',
 });
 
@@ -249,6 +254,7 @@ export const FieldEndsWith = createGenericSingleValueValidationComponent({
   label: 'Ends With',
   placeholder: 'Eg: .com',
   cb: (v) => v?.length > 0,
+  inputType: 'text',
   helperText: 'Input must end with this text.',
 });
 
@@ -258,6 +264,7 @@ export const FieldMinLength = createGenericSingleValueValidationComponent({
   label: 'Minimum Length',
   placeholder: 'Eg: 5',
   cb: (v) => +v > 0,
+  inputType: 'number',
   helperText: 'Input must have at least this many characters.',
 });
 
@@ -267,6 +274,7 @@ export const FieldMaxLength = createGenericSingleValueValidationComponent({
   label: 'Maximum Length',
   placeholder: 'Eg: 20',
   cb: (v) => +v > 0,
+  inputType: 'number',
   helperText: 'Input cannot exceed this number of characters.',
 });
 
@@ -276,6 +284,7 @@ export const FieldContains = createGenericSingleValueValidationComponent({
   label: 'Contains',
   placeholder: 'Eg: world',
   cb: (v) => v?.length > 0,
+  inputType: 'text',
   helperText: 'Input must include this text anywhere.',
 });
 
@@ -446,6 +455,7 @@ export const CheckboxFieldMinCount = createGenericSingleValueValidationComponent
   validatorKey: 'minCount',
   placeholder: 'Eg: 2',
   cb: (v) => +v > 0,
+  inputType: 'number',
   helperText: 'Minimum number of checkboxes that must be selected.',
 });
 
@@ -455,5 +465,6 @@ export const CheckboxFieldMaxCount = createGenericSingleValueValidationComponent
   validatorKey: 'maxCount',
   placeholder: 'Eg: 2',
   cb: (v) => +v > 0,
+  inputType: 'number',
   helperText: 'Maximum number of checkboxes that can be selected.',
 });

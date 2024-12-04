@@ -147,7 +147,7 @@ const FormStructure = () => {
 
   return (
     <FormConfigSection
-      icon={<List className="w-4 h-4 text-headerPink" />}
+      icon={<List className="w-4 h-4 text-white/90" />}
       title="Form Structure"
       subtitle="Quickly add, reorder and remove fields in your form."
     >

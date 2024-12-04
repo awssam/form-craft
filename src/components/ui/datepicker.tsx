@@ -700,13 +700,19 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
       };
     }
 
+    const displayValue = value
+      ? format(value as Date, hourCycle === 24 ? initHourFormat.hour24 : initHourFormat.hour12, {
+          locale: loc,
+        })
+      : '';
+
     return (
       <Popover>
         <PopoverTrigger asChild disabled={disabled}>
           <Button
             variant="outline"
             className={cn(
-              'min-w-[128px] w-full justify-start text-left font-normal',
+              'w-full overflow-hidden justify-start text-left font-normal outline-none data-[state=open]:![border-color:rgba(255,255,255,0.5)]  focus-visible:![border-color:rgba(255,255,255,0.5)] focus-visible:ring-1 focus-visible:ring-greyBorder',
               !value && 'text-muted-foreground',
             )}
             ref={buttonRef}
@@ -714,9 +720,9 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
           >
             <CalendarIcon className="mr-2 min-h-4 min-w-4 h-4 w-4 md:inline-block hidden" />
             {value ? (
-              format(value, hourCycle === 24 ? initHourFormat.hour24 : initHourFormat.hour12, {
-                locale: loc,
-              })
+              <span className="text-ellipsis overflow-hidden" title={displayValue}>
+                {displayValue}
+              </span>
             ) : (
               <span className={cn('mr-2 text-sm', placeHolderClasses)}>{placeholder ?? 'Pick a date'}</span>
             )}

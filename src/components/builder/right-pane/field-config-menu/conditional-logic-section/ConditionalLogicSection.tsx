@@ -190,7 +190,7 @@ const FieldConditionalLogicSection = () => {
 
   return (
     <FormConfigSection
-      icon={<ShieldQuestion className="w-4 h-4 text-muted-foreground" />}
+      icon={<ShieldQuestion className="w-4 h-4 text-white/90" />}
       title="Conditional Logic"
       subtitle="Show or hide this field based on the value of another field"
       key={selectedField?.id}

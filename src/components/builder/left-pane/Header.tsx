@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import React  from "react";
+import React from 'react';
 
-import LeftPaneBreadCrumbs from "./BreadCrumbs";
-import { Input } from "@/components/ui/input";
+import LeftPaneBreadCrumbs from './BreadCrumbs';
+import { Input } from '@/components/ui/input';
 
-import { useFormActionProperty, useFormProperty } from "@/zustand/store";
+import { useFormActionProperty, useFormProperty } from '@/zustand/store';
 
 const links = [
-  { href: "/", label: "Dashboard" },
-  { href: "/builder", label: "Builder" },
+  { href: '/', label: 'Dashboard' },
+  { href: '/builder', label: 'Builder' },
 ];
 
 const Header = () => {
@@ -24,8 +24,8 @@ const Header = () => {
 };
 
 const FormName = () => {
-  const name = useFormProperty("name")!;
-  const updateFormConfig = useFormActionProperty("updateFormConfig");
+  const name = useFormProperty('name')!;
+  const updateFormConfig = useFormActionProperty('updateFormConfig');
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateFormConfig({ name: e.target.value });
@@ -35,7 +35,7 @@ const FormName = () => {
     <Input
       onChange={handleNameChange}
       value={name}
-      className="border-0 p-0 border-b-[1px] border-b-greyBorder rounded-none focus-visible:ring-0 font-bold text-muted-foreground text-xl"
+      className="border-0 p-0 border-b-[1px] border-b-greyBorder rounded-none focus-visible:ring-0 font-bold text-white/80 text-xl"
     />
   );
 };

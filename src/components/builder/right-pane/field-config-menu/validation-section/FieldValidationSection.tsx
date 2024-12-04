@@ -97,7 +97,7 @@ const FieldValidationSection = () => {
   return (
     <FormConfigSection
       subtitle="Setup validations for your fields quickly"
-      icon={<CheckCircle className="w-4 h-4 text-muted-foreground" />}
+      icon={<CheckCircle className="w-4 h-4 text-white/90" />}
       title="Field validation"
       key={selectedField?.id}
     >

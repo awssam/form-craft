@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,7 +16,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 0 12% 5%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
@@ -42,7 +44,7 @@
   }
   .dark {
     /* --background: 240 10% 3.9%; */
-    --background:199.53deg 7.75% 1.86% / 14%;
+    --background: 199.53deg 7.75% 1.86% / 14%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
     --card-foreground: 0 0% 98%;
@@ -53,7 +55,7 @@
     --secondary: 240 3.7% 15.9%;
     --secondary-foreground: 0 0% 98%;
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 225 10% 70%;
     --accent: 240 3.7% 15.9%;
     --accent-foreground: 0 0% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -74,11 +76,12 @@
     @apply border-border;
   }
   body {
+    font-family: 'Geist', sans-serif;
     @apply bg-background text-foreground;
   }
   /* ===== Scrollbar CSS ===== */
   *::-webkit-scrollbar {
-    width: 8px;
+    width: 7px;
   }
 
   *::-webkit-scrollbar-track {
@@ -86,19 +89,19 @@
   }
 
   *::-webkit-scrollbar-thumb {
-    background-color: #534e50;
+    background-color: #383637;
     border-radius: 13px;
     /* border: 2px solid #262525; */
   }
 
   .center-pane {
     background-size: 1.2rem 1.2rem;
-    background-image: radial-gradient(hsla(0, 0%, 100%, .1) 1px, transparent 0);
+    background-image: radial-gradient(hsla(0, 0%, 100%, 0.1) 1px, transparent 0);
     background-position: 0 -1.2rem;
     cursor: grab;
   }
 
-  .center-pane::-webkit-scrollbar{
+  .center-pane::-webkit-scrollbar {
     display: none;
   }
 
@@ -107,5 +110,3 @@
     user-select: none;
   }
 }
-
-
