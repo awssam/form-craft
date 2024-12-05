@@ -7,6 +7,7 @@ import FormLabel from './FormLabel';
 import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
 import { FormMessage } from '@/components/ui/form';
+import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 
 const FormRadioInput = ({ field, className, control }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
@@ -18,7 +19,7 @@ const FormRadioInput = ({ field, className, control }: FormFieldProps) => {
       field={field}
       render={(rhFormField) => (
         <div className={cn('flex flex-col gap-2', className)}>
-          <FormLabel>{field.label}</FormLabel>
+          <FormFieldLabelAndControls field={field} />
           <RadioGroup
             onValueChange={rhFormField.onChange}
             value={rhFormField.value ?? (field?.defaultValue as string)}

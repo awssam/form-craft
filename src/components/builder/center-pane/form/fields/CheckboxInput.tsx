@@ -8,6 +8,7 @@ import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
 import { FormMessage } from '@/components/ui/form';
 import { useFormContext } from 'react-hook-form';
+import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 
 const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
@@ -46,7 +47,7 @@ const CheckboxInput = ({ field, className, control }: FormFieldProps) => {
       field={field}
       render={(rhFormField) => (
         <div className={cn('flex flex-col gap-2', className)}>
-          <FormLabel>{field.label}</FormLabel>
+          <FormFieldLabelAndControls field={field} />
           <div className="flex flex-wrap items-center gap-4 my-1">
             {field.options?.map((option, index) => (
               <div className="flex items-center space-x-1.5" key={index}>

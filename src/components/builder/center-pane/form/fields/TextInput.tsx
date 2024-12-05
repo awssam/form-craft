@@ -1,12 +1,12 @@
 import { Input } from '@/components/ui/input';
-import { cn, debounce } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import React from 'react';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import { FormFieldProps } from '@/types/common';
-import FormLabel from './FormLabel';
 import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
 import { FormMessage } from '@/components/ui/form';
+import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 
 const FormTextInput = ({ field, control, className }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
@@ -20,8 +20,13 @@ const FormTextInput = ({ field, control, className }: FormFieldProps) => {
       control={control}
       field={field}
       render={(rhFormField) => (
-        <div className={cn('flex flex-col gap-2', className)}>
-          <FormLabel>{field.label}</FormLabel>
+        <div
+          className={cn(
+            'flex flex-col gap-2 hover:bg-yellow-200/10 py-3 px-2 rounded-lg transition-colors duration-200',
+            className,
+          )}
+        >
+          <FormFieldLabelAndControls field={field} />
           <Input
             placeholder={field.placeholder}
             id={field.id}

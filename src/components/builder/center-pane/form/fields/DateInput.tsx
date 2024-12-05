@@ -1,5 +1,4 @@
 import React from 'react';
-import FormLabel from './FormLabel';
 import { FormFieldProps } from '@/types/common';
 import { useFormConfigStore } from '@/zustand/store';
 import { DateTimePicker } from '@/components/ui/datepicker';
@@ -7,6 +6,7 @@ import { cn } from '@/lib/utils';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import FormFieldWrapper from './FormFieldWrapper';
 import { FormMessage } from '@/components/ui/form';
+import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 
 const DateInput = ({ field, className, control }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
@@ -21,7 +21,7 @@ const DateInput = ({ field, className, control }: FormFieldProps) => {
       field={field}
       render={(rhFormField) => (
         <div className={cn('flex flex-col gap-2', className)}>
-          <FormLabel>{field.label}</FormLabel>
+          <FormFieldLabelAndControls field={field} />
 
           <DateTimePicker
             granularity="day"

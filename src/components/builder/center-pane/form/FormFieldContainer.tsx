@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 
 import FieldRenderer from './FieldRenderer';
@@ -10,7 +10,6 @@ import useFieldUnregister from '@/hooks/useFieldUnregister';
 import usePopulateFieldValidation from '@/hooks/usePopulateFieldValidation';
 
 import { FieldEntity } from '@/types/form-config';
-import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import useFieldConditionalLogicCheck from '@/hooks/useFieldConditionalLogicCheck';
 
 interface FormFieldsProps {
@@ -43,7 +42,7 @@ const FormFieldContainer = ({ pageId, isLastPage }: FormFieldsProps) => {
           (errors) => console.log(JSON.stringify(errors, null, 2)),
         )}
       >
-        <div className="flex flex-wrap w-full [row-gap:1.5rem] overflow-clip [column-gap:0.5rem]">
+        <div className="flex flex-wrap w-full overflow-clip [column-gap:0.5rem]">
           {fields?.map((fieldId) => (
             <Fragment key={fieldId}>
               <FieldRenderer control={form.control} field={fieldEntities?.[fieldId] as FieldEntity} />

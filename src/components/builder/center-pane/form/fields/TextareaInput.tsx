@@ -3,10 +3,10 @@ import { cn } from '@/lib/utils';
 import { FormFieldProps } from '@/types/common';
 import React from 'react';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
-import FormLabel from './FormLabel';
 import { useFormConfigStore } from '@/zustand/store';
 import { FormMessage } from '@/components/ui/form';
 import FormFieldWrapper from './FormFieldWrapper';
+import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 
 const TextareaInput = ({ field, className, control }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
@@ -20,7 +20,7 @@ const TextareaInput = ({ field, className, control }: FormFieldProps) => {
       field={field}
       render={({ value, ...rhFormField }) => (
         <div className={cn('flex flex-col gap-2', className)}>
-          <FormLabel htmlFor={field?.id}>{field?.label}</FormLabel>
+          <FormFieldLabelAndControls field={field} />
           <Textarea
             placeholder={field?.placeholder}
             id={field?.id}
