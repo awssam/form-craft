@@ -27,16 +27,17 @@ const FormFieldWrapper = ({ control, field, render }: FormFieldWrapperProps) => 
   }, [field?.defaultValue, field.name, setValue]);
 
   useEffect(() => {
-    if (!formFieldValue) return;
+    // console.log(field?.id, typeof formFieldValue, formFieldValue);
+    if (formFieldValue == undefined || formFieldValue == null) return;
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(() => {
       const value = { value: formFieldValue };
-      updateFormField(field?.id!, value);
+      updateFormField(field?.id, value);
       updateSelectedField(value, true);
-    }, 1000);
-  }, [formFieldValue]);
+    }, 300);
+  }, [field?.id, formFieldValue, updateFormField, updateSelectedField]);
 
-  if (fieldVisibilityMap?.[field?.id!] === false) {
+  if (fieldVisibilityMap?.[field?.id] === false) {
     return null;
   }
 

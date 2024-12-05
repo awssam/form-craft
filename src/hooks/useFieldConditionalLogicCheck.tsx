@@ -47,7 +47,6 @@ const useFieldConditionalLogicCheck = (fields: string[]) => {
 
         if (operator === 'AND') {
           const isAllConditionTrue = conditions.every((c) => c);
-          console.log(isAllConditionTrue, conditions);
           setFieldVisibility(fieldId, isAllConditionTrue);
           return;
         }

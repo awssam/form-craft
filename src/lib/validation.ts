@@ -29,7 +29,7 @@ export const CUSTOM_FIELD_VALIDATIONS = {
     },
     binary: {
       required: (msg: string) => (val: string) => {
-        return !!val || msg;
+        return (!!val && val?.trim()?.length > 0) || msg;
       },
       noWhitespace: (msg: string) => (val: string) => {
         return !/\s/.test(val) || msg;
