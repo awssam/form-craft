@@ -29,7 +29,7 @@ const FormField = ({
         {required && <sup className="top-[-0.1em] ml-[1px] font-bold text-red-500 text-sm">*</sup>}
         {renderLabelExtraContent?.()}
       </span>
-      {helperText && <p className="-mt-0.8 text-xs text-muted-foreground font-[500] font-medium mb-1">{helperText}</p>}
+      {helperText && <p className="-mt-0.8 text-xs text-muted-foreground font-medium mb-1">{helperText}</p>}
       {children}
     </Label>
   );
