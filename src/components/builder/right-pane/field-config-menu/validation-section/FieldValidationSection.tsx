@@ -24,6 +24,7 @@ import {
   CheckboxFieldRequired,
   CheckboxFieldMinCount,
   CheckboxFieldMaxCount,
+  FieldIsValidPhoneNumber,
 } from './Fields';
 import { Button } from '@/components/ui/button';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -48,6 +49,7 @@ const FieldValidationSection = () => {
         FieldContains,
         FieldMatchesRegex,
         FieldNoWhitespace,
+        FieldIsValidPhoneNumber,
         FieldIsEmail,
         FieldIsURL,
         FieldIsNumeric,

@@ -14,6 +14,7 @@ type FormAction = {
   updateFormTheme: (theme: Partial<FormConfig['theme']>) => void;
   setPageFields: (pageId: string, fields: string[]) => void;
   updateFormField: (fieldId: string, update: Partial<FieldEntity>) => void;
+  addField: (pageId: string, field: FieldEntity) => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set) => ({
@@ -80,6 +81,25 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
               ...state.formConfig.fieldEntities?.[fieldId],
               ...update,
             },
+          },
+        },
+      };
+    }),
+  addField: (pageId, field) =>
+    set((state) => {
+      return {
+        formConfig: {
+          ...state.formConfig,
+          pageEntities: {
+            ...state.formConfig.pageEntities,
+            [pageId]: {
+              ...state.formConfig.pageEntities?.[pageId],
+              fields: [...state.formConfig.pageEntities?.[pageId].fields, field.id],
+            },
+          },
+          fieldEntities: {
+            ...state.formConfig.fieldEntities,
+            [field.id]: field,
           },
         },
       };

@@ -25,7 +25,7 @@ const FieldConfigSection = () => {
       case 'checkbox':
         return <FieldOptionsForm />;
       default:
-        return null;
+        return <FieldHelperText />;
     }
   };
 
@@ -37,13 +37,12 @@ const FieldConfigSection = () => {
       key={selectedField?.id}
       className="mt-2"
     >
-      <FieldName />
       <FieldType />
+      <FieldName />
       <FieldLabel />
-      <FieldDefaultValue />
-      <FieldPlaceholder />
-      <FieldHelperText />
       <FieldWidth />
+      <FieldPlaceholder />
+      <FieldDefaultValue />
       {renderFieldSpecificConfig()}
     </FormConfigSection>
   );

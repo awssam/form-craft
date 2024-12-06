@@ -1,6 +1,8 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
+import { v7 as uuid } from 'uuid';
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -42,7 +44,9 @@ export const camelCaseToReadable = (camelCaseString: string): string => {
   // Use regex to insert spaces before uppercase letters
   const spacedString = camelCaseString.replace(/([A-Z])/g, ' $1').trim();
 
-  const capitalizedString = spacedString.replace(/\b\w/g, (char) => char.toUpperCase());
+  const capitalizedString = spacedString.replace(/\b\w/g, (char) => char?.toUpperCase());
 
   return capitalizedString;
 };
+
+export const generateId = () => uuid();

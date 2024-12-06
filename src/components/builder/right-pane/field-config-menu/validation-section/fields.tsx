@@ -356,6 +356,13 @@ export const FieldNoSpecialCharacters = createGenericBinaryValidationComponent({
   helperText: 'If Yes, input cannot include special characters.',
 });
 
+export const FieldIsValidPhoneNumber = createGenericBinaryValidationComponent({
+  label: 'Is Valid Phone Number',
+  fieldType: 'text',
+  validatorKey: 'isValidPhoneNumber',
+  helperText: 'If Yes, input must be a valid phone number.',
+});
+
 // Date type Fields
 
 export const createSingleValueValidationComponentForDate = (

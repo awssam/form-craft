@@ -5,6 +5,7 @@ import { DateTimePicker } from '@/components/ui/datepicker';
 import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Field_Type_Options } from '@/lib/form';
 import { cn, debounce } from '@/lib/utils';
 import { FieldEntity } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -41,37 +42,24 @@ const useSelectedFieldUpdate = () => {
 const useSelectedField = () => useSelectedFieldStore((s) => s.selectedField);
 
 export const FieldName = memo(() => {
-  const { handlePropertyChange } = useSelectedFieldUpdate();
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="Name" label="Field Name" required helperText="This must be an unique value">
+    <FormFieldWrapper id="Name" label="Field Name">
       <Input
         defaultValue={selectedField?.name ?? selectedField?.label?.toLowerCase()?.replaceAll(' ', '-') ?? ''}
-        onChange={handlePropertyChange('name')}
+        readOnly
+        disabled
       />
     </FormFieldWrapper>
   );
 });
 FieldName.displayName = 'FieldName';
 
-const types = [
-  'text',
-  'date',
-  'radio',
-  'checkbox',
-  // "dropdown",
-  // "file",
-  'textarea',
-]?.map((type) => ({
-  label: type?.replace(type?.charAt(0), type?.charAt(0)?.toUpperCase()),
-  value: type,
-}));
-
 export const FieldType = memo(() => {
   const selectedField = useSelectedField();
 
-  const selectedFieldTypeOption = types?.find((type) => type?.value === selectedField?.type) as Option;
+  const selectedFieldTypeOption = Field_Type_Options?.find((type) => type?.value === selectedField?.type) as Option;
   return (
     <FormFieldWrapper
       id="type"
@@ -79,7 +67,7 @@ export const FieldType = memo(() => {
       required
       helperText="Conversion of types will reset field specific settings"
     >
-      <Combobox options={types} selectedValues={[selectedFieldTypeOption]} />
+      <Combobox options={Field_Type_Options} selectedValues={[selectedFieldTypeOption]} />
     </FormFieldWrapper>
   );
 });

@@ -30,6 +30,7 @@ import {
 } from '@dnd-kit/core';
 import { FieldEntity } from '@/types/form-config';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
+import AddFieldModal from './AddFieldModal';
 
 const FormStructure = () => {
   const pages = useFormProperty('pages');
@@ -152,8 +153,7 @@ const FormStructure = () => {
       subtitle="Quickly add, reorder and remove fields in your form."
     >
       <div className="flex flex-col gap-3 border-input bg-background px-3 py-5 border border-dashed rounded-md min-w-100 min-h-[400px]">
-        <Button className="bg-zinc-900 hover:bg-zinc-800 w-full text-foreground transition-colors">Add Field</Button>
-
+        <AddFieldModal />
         <section className="flex flex-col gap-3">
           <DndContext
             onDragEnd={handleDragEnd}

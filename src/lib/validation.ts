@@ -53,9 +53,15 @@ export const CUSTOM_FIELD_VALIDATIONS = {
         return /^[a-zA-Z]+$/.test(val) || msg;
       },
       isAlphanumeric: (msg: string) => (val: string) => {
-        console.log(val);
         return /^[a-zA-Z0-9]+$/.test(val) || msg;
       },
+
+      isValidPhoneNumber: (msg: string) => (val: string) => {
+        // const phoneRegex = /^(?:\+?\d{1,3}[- ]?)?(?:\(?\d{1,4}?\)?[- ]?)?\d{1,4}[- ]?\d{1,4}[- ]?\d{1,9}$/;
+        const regex2 = /^\s*(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\s*$/;
+        return regex2.test(val) || msg;
+      },
+
       noSpecialCharacters: (msg: string) => (val: string) => {
         return /^[a-zA-Z0-9\s]+$/.test(val) || msg;
       },
