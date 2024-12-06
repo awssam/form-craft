@@ -36,10 +36,10 @@ const RightPane = ({ className }: GenericProps) => {
             Settings
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="fields" className="mt-8">
+        <TabsContent value="fields" className="mt-6">
           <FieldListMenu />
         </TabsContent>
-        <TabsContent value="settings" className="mt-8 flex flex-col gap-8">
+        <TabsContent value="settings" className="mt-6 flex flex-col gap-8">
           <FieldConfigMenu />
         </TabsContent>
       </Tabs>

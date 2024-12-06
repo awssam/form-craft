@@ -30,29 +30,33 @@ const SectionDisplay = () => {
 
   // TODO: Add drag and drop related logic here
 
+  const leftpane = <LeftPane className={leftPaneClasses} />;
+  const rightpane = <RightPane className={rightPaneClasses} />;
+  const centerpane = <CenterPane className={centerPaneClasses} />;
+
   return (
     <>
       {isLargeScreen && (
         <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={20} minSize={20} maxSize={28}>
-            <LeftPane className={leftPaneClasses} />
+          <ResizablePanel defaultSize={23} minSize={20} maxSize={28}>
+            {leftpane}
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel minSize={40} maxSize={80}>
-            <CenterPane className={centerPaneClasses} />
+            {centerpane}
           </ResizablePanel>
           <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={20} minSize={20} maxSize={28}>
-            <RightPane className={rightPaneClasses} />
+          <ResizablePanel defaultSize={23} minSize={20} maxSize={28}>
+            {rightpane}
           </ResizablePanel>
         </ResizablePanelGroup>
       )}
 
       {!isLargeScreen && (
         <>
-          <LeftPane className={leftPaneClasses} />
-          <CenterPane className={centerPaneClasses} />
-          <RightPane className={rightPaneClasses} />
+          {leftpane}
+          {centerpane}
+          {rightpane}
         </>
       )}
 
