@@ -11,6 +11,7 @@ import { useFormActionProperty, useFormProperty, useSelectedFieldStore } from '@
 import { DialogDescription } from '@radix-ui/react-dialog';
 import React, { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
 
 type NewFieldFormData = {
   fieldName: string;
@@ -60,6 +61,9 @@ const AddFieldModal = () => {
     setSection(FORMSECTIONS.Settings);
 
     setOpen(false);
+    toast('Field added successfully', {
+      description: 'Go to Settings to configure the field.',
+    });
   };
 
   const validations = {
