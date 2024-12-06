@@ -9,11 +9,14 @@ const withResponsiveWidthClasses =
     return (
       <Component
         {...props}
-        className={cn('w-full hover:bg-yellow-200/10 py-3 px-2 rounded-lg transition-colors duration-200 group', {
-          'lg:w-[calc(75%-12px)] w-full': field?.width === '75%',
-          'lg:w-[calc(50%-12px)] w-full': field?.width === '50%',
-          'lg:w-[calc(25%-12px)] w-full': field?.width === '25%',
-        })}
+        className={cn(
+          'lg:w-[calc(100%-12px)] w-full hover:bg-yellow-200/10 py-3 px-2 rounded-lg transition-colors duration-200 group',
+          {
+            'lg:w-[calc(75%-12px)] w-full': field?.width === '75%',
+            'lg:w-[calc(50%-12px)] w-full': field?.width === '50%',
+            'lg:w-[calc(25%-12px)] w-full': field?.width === '25%',
+          },
+        )}
       />
     );
   };

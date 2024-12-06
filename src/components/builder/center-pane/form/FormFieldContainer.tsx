@@ -50,7 +50,7 @@ const FormFieldContainer = ({ pageId, isLastPage }: FormFieldsProps) => {
           ))}
         </div>
         {fields && fields?.length > 0 && (
-          <Button className="mt-8" type="submit">
+          <Button className="mt-8 ml-2" type="submit">
             {isLastPage ? 'Submit' : 'Next'}
           </Button>
         )}

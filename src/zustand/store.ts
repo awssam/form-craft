@@ -1,6 +1,7 @@
 import { FieldEntity, FormConfig } from '@/types/form-config';
 import { create } from 'zustand';
 import { formConfig } from './data';
+import { generateId } from '@/lib/utils';
 
 type FormState = {
   formConfig: FormConfig;
@@ -15,6 +16,7 @@ type FormAction = {
   setPageFields: (pageId: string, fields: string[]) => void;
   updateFormField: (fieldId: string, update: Partial<FieldEntity>) => void;
   addField: (pageId: string, field: FieldEntity) => void;
+  duplicateField: (fieldId: string) => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set) => ({
@@ -100,6 +102,41 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
           fieldEntities: {
             ...state.formConfig.fieldEntities,
             [field.id]: field,
+          },
+        },
+      };
+    }),
+
+  duplicateField: (fieldId) =>
+    set((state) => {
+      const pageId = Object.values(state.formConfig?.pageEntities)?.find((p) => p.fields?.includes(fieldId))?.id;
+      if (!pageId) return state;
+
+      const newFieldId = generateId();
+      const fields = state.formConfig.pageEntities?.[pageId]?.fields;
+
+      if (fields?.includes(fieldId)) {
+        fields.splice(fields.indexOf(fieldId) + 1, 0, newFieldId);
+      }
+
+      return {
+        formConfig: {
+          ...state.formConfig,
+          pageEntities: {
+            ...state.formConfig.pageEntities,
+            [pageId]: {
+              ...state.formConfig.pageEntities?.[pageId],
+              fields,
+            },
+          },
+          fieldEntities: {
+            ...state.formConfig.fieldEntities,
+            [newFieldId]: {
+              ...state.formConfig.fieldEntities?.[fieldId],
+              id: newFieldId,
+              name: generateId(),
+              label: `Copy of ${state.formConfig.fieldEntities?.[fieldId].label}`,
+            },
           },
         },
       };

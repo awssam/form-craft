@@ -1,6 +1,7 @@
 import FormFieldWrapper from '@/components/common/FormField';
 import { Button } from '@/components/ui/button';
 import { Combobox, Option } from '@/components/ui/combobox';
+import CustomTooltip from '@/components/ui/custom-tooltip';
 import { DateTimePicker } from '@/components/ui/datepicker';
 import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -244,18 +245,19 @@ export const FieldOptionsForm = memo(() => {
 
   const renderActionButton = (Icon: React.ElementType, title: string, onClick: () => void, className?: string) => {
     return (
-      <span
-        tabIndex={0}
-        title={title}
-        aria-label={title}
-        aria-roledescription={title}
-        role="button"
-        className={cn('cursor-pointer bg-white text-black rounded-full h-full p-1 inline-block', className)}
-        onClick={onClick}
-        onKeyDown={(e) => e.key === 'Enter' && onClick()}
-      >
-        <Icon className="w-4 h-4" />
-      </span>
+      <CustomTooltip tooltip={title} className={className}>
+        <span
+          tabIndex={0}
+          aria-label={title}
+          aria-roledescription={title}
+          role="button"
+          className={cn('cursor-pointer bg-white text-black rounded-full h-full p-1 inline-block', className)}
+          onClick={onClick}
+          onKeyDown={(e) => e.key === 'Enter' && onClick()}
+        >
+          <Icon className="w-4 h-4" />
+        </span>
+      </CustomTooltip>
     );
   };
 
