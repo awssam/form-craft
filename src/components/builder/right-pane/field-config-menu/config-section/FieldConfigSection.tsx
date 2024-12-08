@@ -35,7 +35,6 @@ const FieldConfigSection = () => {
       title="Field Configuration"
       subtitle="Basic details about the form field"
       key={selectedField?.id}
-      className="mt-2"
     >
       <FieldType />
       <FieldName />

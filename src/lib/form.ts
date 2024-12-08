@@ -30,11 +30,43 @@ export const createNewFormField = ({
         { label: 'Option 2', value: 'option-2', helperText: '' },
       ];
       break;
+
+    case 'date':
+      baseField.placeholder = 'Select a date...';
+      baseField.defaultValue = undefined;
+
     default:
+      baseField.helperText = `This is a ${type} field`;
       break;
   }
 
   return baseField;
+};
+
+export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): FieldEntity => {
+  const newField: FieldEntity = {
+    ...field,
+    type: newFieldType,
+  };
+
+  switch (newFieldType) {
+    case 'checkbox':
+      break;
+    case 'radio':
+      newField.options = field?.options ?? [{ label: 'Option 1', value: 'option-1', helperText: '' }];
+      newField.value = undefined;
+      newField.defaultValue = undefined;
+      break;
+    case 'date':
+      newField.placeholder = 'Select a date...';
+      newField.defaultValue = undefined;
+      newField.value = undefined;
+      break;
+    default:
+      break;
+  }
+
+  return newField;
 };
 
 export const Field_Type_Options = [

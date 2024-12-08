@@ -14,7 +14,7 @@ interface FieldRendererProps {
 }
 
 const FieldRenderer = (props: FieldRendererProps) => {
-  switch (props?.field.type) {
+  switch (props?.field?.type) {
     case 'text':
       return <FormTextInput {...props} />;
     case 'textarea':
@@ -26,7 +26,7 @@ const FieldRenderer = (props: FieldRendererProps) => {
     case 'radio':
       return <FormRadioInput {...props} />;
     default:
-      return <div>Default</div>;
+      return null;
   }
 };
 

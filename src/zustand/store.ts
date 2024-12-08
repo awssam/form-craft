@@ -17,6 +17,7 @@ type FormAction = {
   updateFormField: (fieldId: string, update: Partial<FieldEntity>) => void;
   addField: (pageId: string, field: FieldEntity) => void;
   duplicateField: (fieldId: string) => void;
+  deleteField: (fieldId: string) => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set) => ({
@@ -138,6 +139,38 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
               label: `Copy of ${state.formConfig.fieldEntities?.[fieldId].label}`,
             },
           },
+        },
+      };
+    }),
+
+  deleteField: (fieldId) =>
+    set((state) => {
+      const pageId = Object.values(state.formConfig?.pageEntities)?.find((p) => p.fields?.includes(fieldId))?.id;
+      if (!pageId) return state;
+
+      const fields = state.formConfig.pageEntities?.[pageId]?.fields;
+
+      const fieldEntities = state.formConfig.fieldEntities;
+
+      delete fieldEntities[fieldId];
+
+      if (fields?.includes(fieldId)) {
+        fields.splice(fields.indexOf(fieldId), 1);
+      }
+
+      useSelectedFieldStore?.getState()?.setSelectedField(null);
+
+      return {
+        formConfig: {
+          ...state.formConfig,
+          pageEntities: {
+            ...state.formConfig.pageEntities,
+            [pageId]: {
+              ...state.formConfig.pageEntities?.[pageId],
+              fields,
+            },
+          },
+          fieldEntities,
         },
       };
     }),

@@ -1,8 +1,9 @@
 import { toast } from 'sonner';
-import React, { LegacyRef } from 'react';
-import { CopyIcon, Grip, Settings } from 'lucide-react';
+import React, { LegacyRef, useMemo } from 'react';
+import { CopyIcon, Grip, MenuIcon, Settings } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+import KebabMenu from '@/components/ui/kebabmenu';
 
 import { useFormActionProperty, useSelectedFieldStore } from '@/zustand/store';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
@@ -12,6 +13,7 @@ import CustomTooltip from '@/components/ui/custom-tooltip';
 
 import { cn } from '@/lib/utils';
 import { FormFieldProps } from '@/types/common';
+import DeleteFieldModal from '@/components/builder/DeleteFieldModal';
 
 interface FormFieldLabelAndControlsProps {
   field: FormFieldProps['field'];
@@ -30,7 +32,10 @@ const FormFieldLabelAndControls = ({
 }: FormFieldLabelAndControlsProps) => {
   const setSelectedField = useSelectedFieldStore((s) => s.setSelectedField);
   const duplicateField = useFormActionProperty('duplicateField');
+  const deleteField = useFormActionProperty('deleteField');
   const { setSection, FORMSECTIONS } = useFormSectionDisplay();
+
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   const handleFieldSettingsClick = () => {
     setSelectedField(field);
@@ -44,16 +49,26 @@ const FormFieldLabelAndControls = ({
     });
   };
 
-  const renderIcon = (Icon: React.ElementType, onClick: () => void, tooltip: string) => {
-    return (
-      <CustomTooltip tooltip={tooltip}>
-        <Icon
-          onClick={onClick}
-          className="w-4 h-4 text-[#b6a2a2] cursor-pointer opacity-100 md:opacity-20 group-hover:opacity-100 hover:scale-125"
-        />
-      </CustomTooltip>
-    );
+  const handleFieldDelete = () => {
+    deleteField(field?.id);
+    toast('Field deleted successfully');
   };
+
+  const menuItems = useMemo(() => {
+    return [
+      {
+        label: 'Duplicate Field',
+        onClick: handleFieldDuplicateClick,
+        seperator: true,
+      },
+      {
+        label: 'Delete Field',
+        onClick: () => setIsDeleteModalOpen(true),
+        className: 'text-red-500',
+        seperator: false,
+      },
+    ];
+  }, [handleFieldDuplicateClick, handleFieldSettingsClick]);
 
   return (
     <div className="flex gap-3 items-center justify-between break-all break-words">
@@ -65,18 +80,33 @@ const FormFieldLabelAndControls = ({
         )}
       </FormLabel>
       <div className="flex gap-1 items-center cursor-pointer transition-all duration-200">
-        {renderIcon(CopyIcon, handleFieldDuplicateClick, 'Duplicate field')}
-        {renderIcon(Settings, handleFieldSettingsClick, 'Field settings')}
         <CustomTooltip tooltip={isDragging ? '' : 'Drag to reorder'}>
           <Grip
             className={cn(
-              'w-4 min-w-4 h-4 min-h-4 text-[#b6a2a2] cursor-grab focus:outline-none opacity-100 md:opacity-20 group-hover:opacity-100 hover:scale-125',
+              'md:w-4 md:h-4 h-5 w-5 min-h-4 min-w-4 text-[#b6a2a2] cursor-grab focus:outline-none hover:scale-125',
             )}
             {...(listeners as SyntheticListenerMap)}
             {...attributes}
             ref={setActivatorNodeRef as LegacyRef<SVGSVGElement>}
           />
         </CustomTooltip>
+
+        <CustomTooltip tooltip={'Field Settings'}>
+          <Settings
+            className={cn('md:w-4 md:h-4 h-5 w-5 min-h-4 min-w-4 text-[#b6a2a2] focus:outline-none hover:scale-125')}
+            onClick={handleFieldSettingsClick}
+          />
+        </CustomTooltip>
+
+        <KebabMenu items={menuItems} />
+
+        <DeleteFieldModal
+          showTrigger={false}
+          fieldLabel={field?.label}
+          onConfirm={handleFieldDelete}
+          open={isDeleteModalOpen}
+          setOpen={setIsDeleteModalOpen}
+        />
       </div>
     </div>
   );

@@ -6,12 +6,13 @@ import { DateTimePicker } from '@/components/ui/datepicker';
 import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Field_Type_Options } from '@/lib/form';
+import { convertFieldType, Field_Type_Options } from '@/lib/form';
 import { cn, debounce } from '@/lib/utils';
-import { FieldEntity } from '@/types/form-config';
-import { useSelectedFieldStore } from '@/zustand/store';
+import { FieldEntity, FieldType as AvailableFieldTypes } from '@/types/form-config';
+import { useFormActionProperty, useSelectedFieldStore } from '@/zustand/store';
+import { isValid } from 'date-fns';
 import { Plus, Trash } from 'lucide-react';
-import { memo } from 'react';
+import React, { memo, use, useEffect } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 const useSelectedFieldUpdate = () => {
@@ -59,8 +60,21 @@ FieldName.displayName = 'FieldName';
 
 export const FieldType = memo(() => {
   const selectedField = useSelectedField();
+  const updateSelectedField = useSelectedFieldStore((state) => state.updateSelectedField);
+  const [selectedFieldTypeOption, setSelectedFieldTypeOption] = React.useState<Option>(() => {
+    return Field_Type_Options.find((option) => option.value === selectedField?.type) ?? Field_Type_Options[0];
+  });
 
-  const selectedFieldTypeOption = Field_Type_Options?.find((type) => type?.value === selectedField?.type) as Option;
+  const updateFormField = useFormActionProperty('updateFormField');
+
+  const handleUpdateType = (v: Option[]) => {
+    setSelectedFieldTypeOption(v[0]);
+    const newField = convertFieldType(selectedField!, v[0].value as AvailableFieldTypes);
+    updateFormField(selectedField?.id!, newField);
+
+    updateSelectedField(newField);
+  };
+
   return (
     <FormFieldWrapper
       id="type"
@@ -68,7 +82,11 @@ export const FieldType = memo(() => {
       required
       helperText="Conversion of types will reset field specific settings"
     >
-      <Combobox options={Field_Type_Options} selectedValues={[selectedFieldTypeOption]} />
+      <Combobox
+        options={Field_Type_Options}
+        selectedValues={[selectedFieldTypeOption]}
+        handleChange={handleUpdateType}
+      />
     </FormFieldWrapper>
   );
 });
@@ -111,7 +129,7 @@ export const FieldHelperText = memo(() => {
 
   return (
     <FormFieldWrapper id="helperText" label="Helper Text" helperText="Any additional helper text for the field">
-      <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('helperText')} />
+      <Textarea defaultValue={selectedField?.helperText ?? ''} onChange={handlePropertyChange('helperText')} />
     </FormFieldWrapper>
   );
 });
@@ -141,7 +159,7 @@ export const FieldDefaultValue = memo(() => {
         return (
           <DateTimePicker
             granularity="day"
-            value={new Date(selectedField?.defaultValue as string)}
+            value={isValid(selectedField?.defaultValue) ? new Date(selectedField?.defaultValue as string) : undefined}
             onChange={(date) => handlePropertyChangeWithValue('defaultValue')(date!)}
           />
         );

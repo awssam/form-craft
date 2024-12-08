@@ -20,7 +20,7 @@ export default function RootLayout({
       <html lang="en">
         <body className={`bg-black antialiased dark overflow-hidden`}>
           {children}
-          <Toaster position="bottom-center" duration={2000} richColors />
+          <Toaster position="bottom-center" className="z-[99999999999999999999999]" duration={2000} richColors />
         </body>
       </html>
     </ClerkProvider>

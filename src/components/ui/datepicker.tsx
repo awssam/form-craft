@@ -3,7 +3,7 @@ import type { CalendarProps } from '@/components/ui/calendar';
 import { Input } from '@/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { cn } from '@/lib/utils';
-import { add, format } from '@/lib/datetime';
+import { add, format, isValid } from '@/lib/datetime';
 import { type Locale, enUS } from 'date-fns/locale';
 import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Clock } from 'lucide-react';
@@ -700,7 +700,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
       };
     }
 
-    const displayValue = value
+    const displayValue = isValid(value)
       ? format(value as Date, hourCycle === 24 ? initHourFormat.hour24 : initHourFormat.hour12, {
           locale: loc,
         })

@@ -12,7 +12,7 @@ const useFieldConditionalLogicCheck = (fields: string[]) => {
     fields?.forEach((fieldId) => {
       const field = fieldEntities?.[fieldId] as FieldEntity;
 
-      if (field.conditionalLogic) {
+      if (field?.conditionalLogic) {
         // conditional logic validation
 
         const { showWhen, operator } = field.conditionalLogic || {};
