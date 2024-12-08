@@ -9,15 +9,18 @@ import { useDroppable } from '@dnd-kit/core';
 import { File } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
+import DeletePageModal from '../../DeletePageModal';
 
 interface FormPageProps extends GenericProps {
   pageNumber: number;
   id: string;
+  totalPages: number;
 }
 
-const DroppableFormPage = ({ className, children, pageNumber, id }: FormPageProps) => {
+const DroppableFormPage = ({ className, children, pageNumber, id, totalPages }: FormPageProps) => {
   const bgColor = useFormConfigStore((state) => state?.formConfig?.theme?.properties?.formBackgroundColor);
   const addField = useFormActionProperty('addField');
+  const deletePage = useFormActionProperty('deletePage');
   const setSelectedField = useSelectedFieldStore((s) => s.setSelectedField);
 
   const { setNodeRef, isOver } = useDroppable({
@@ -50,18 +53,30 @@ const DroppableFormPage = ({ className, children, pageNumber, id }: FormPageProp
     });
   };
 
+  const handlePageDelete = () => {
+    deletePage(id);
+    toast(`Page ${pageNumber} deleted successfully`, {
+      description: 'Go to Settings to configure the field.',
+    });
+  };
+
   return (
-    <section className="flex flex-col gap-6 w-[95%] md:w-[min(80%,800px)]">
+    <section className="flex flex-col gap-6 w-[95%] md:w-[min(80%,800px)] mb-10">
       <div className="flex items-center justify-between gap-4">
         <h3 className="flex items-center gap-2 font-bold text-[14px] text-white">
           <File className="w-4 h-4" /> Page {pageNumber}{' '}
         </h3>
-        <Button variant="default" size="sm" onClick={handleAddField}>
-          Add Field{' '}
-        </Button>
       </div>
       <div className={classes} style={{ backgroundColor: bgColor }} ref={setNodeRef}>
         {children}
+      </div>
+      <div className="flex justify-end items-center gap-4">
+        <Button variant="default" size="sm" onClick={handleAddField}>
+          Add Field{' '}
+        </Button>
+        {totalPages > 1 && (
+          <DeletePageModal pageNo={pageNumber} onConfirm={handlePageDelete} open={false} setOpen={() => {}} />
+        )}
       </div>
     </section>
   );

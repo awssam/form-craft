@@ -18,6 +18,7 @@ type FormAction = {
   addField: (pageId: string, field: FieldEntity) => void;
   duplicateField: (fieldId: string) => void;
   deleteField: (fieldId: string) => void;
+  deletePage: (pageId: string) => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set) => ({
@@ -174,6 +175,37 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
         },
       };
     }),
+
+  deletePage(pageId) {
+    set((state) => {
+      const pages = state.formConfig.pages;
+
+      if (pages?.length <= 1) return state;
+
+      const pageEntities = state.formConfig.pageEntities;
+      const fields = state.formConfig.pageEntities?.[pageId]?.fields;
+      const fieldEntities = state.formConfig.fieldEntities;
+
+      fields?.forEach((fieldId) => {
+        delete fieldEntities?.[fieldId];
+      });
+
+      if (fields?.includes(useSelectedFieldStore?.getState()?.selectedField?.id ?? '')) {
+        useSelectedFieldStore?.getState()?.setSelectedField(null);
+      }
+
+      delete pageEntities?.[pageId];
+
+      return {
+        formConfig: {
+          ...state.formConfig,
+          pages: pages?.filter((p) => p !== pageId),
+          pageEntities,
+          fieldEntities,
+        },
+      };
+    });
+  },
 }));
 
 /**

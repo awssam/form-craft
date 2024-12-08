@@ -71,6 +71,7 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
             id={pageId}
             key={pageId}
             pageNumber={index + 1}
+            totalPages={pages?.length}
             className="relative items-start !cursor-auto"
           >
             <FormHeaderContent />
