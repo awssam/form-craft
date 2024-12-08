@@ -1,14 +1,33 @@
-import React from 'react';
-import FormLabel from './FormLabel';
+import { toast } from 'sonner';
+import React, { LegacyRef } from 'react';
 import { CopyIcon, Grip, Settings } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { FormFieldProps } from '@/types/common';
+import { useSortable } from '@dnd-kit/sortable';
+import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
+
 import { useFormActionProperty, useSelectedFieldStore } from '@/zustand/store';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
-import { toast } from 'sonner';
+
+import FormLabel from './FormLabel';
 import CustomTooltip from '@/components/ui/custom-tooltip';
 
-const FormFieldLabelAndControls = ({ field }: Pick<FormFieldProps, 'field'>) => {
+import { cn } from '@/lib/utils';
+import { FormFieldProps } from '@/types/common';
+
+interface FormFieldLabelAndControlsProps {
+  field: FormFieldProps['field'];
+  listeners?: ReturnType<typeof useSortable>['listeners'];
+  attributes?: ReturnType<typeof useSortable>['attributes'];
+  setActivatorNodeRef?: ReturnType<typeof useSortable>['setActivatorNodeRef'];
+  isDragging?: boolean;
+}
+
+const FormFieldLabelAndControls = ({
+  field,
+  listeners,
+  attributes,
+  setActivatorNodeRef,
+  isDragging,
+}: FormFieldLabelAndControlsProps) => {
   const setSelectedField = useSelectedFieldStore((s) => s.setSelectedField);
   const duplicateField = useFormActionProperty('duplicateField');
   const { setSection, FORMSECTIONS } = useFormSectionDisplay();
@@ -48,11 +67,14 @@ const FormFieldLabelAndControls = ({ field }: Pick<FormFieldProps, 'field'>) => 
       <div className="flex gap-1 items-center cursor-pointer transition-all duration-200">
         {renderIcon(CopyIcon, handleFieldDuplicateClick, 'Duplicate field')}
         {renderIcon(Settings, handleFieldSettingsClick, 'Field settings')}
-        <CustomTooltip tooltip="Drag to reorder">
+        <CustomTooltip tooltip={isDragging ? '' : 'Drag to reorder'}>
           <Grip
             className={cn(
               'w-4 min-w-4 h-4 min-h-4 text-[#b6a2a2] cursor-grab focus:outline-none opacity-100 md:opacity-20 group-hover:opacity-100 hover:scale-125',
             )}
+            {...(listeners as SyntheticListenerMap)}
+            {...attributes}
+            ref={setActivatorNodeRef as LegacyRef<SVGSVGElement>}
           />
         </CustomTooltip>
       </div>

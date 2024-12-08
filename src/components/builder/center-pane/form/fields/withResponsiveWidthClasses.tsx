@@ -10,7 +10,7 @@ const withResponsiveWidthClasses =
       <Component
         {...props}
         className={cn(
-          'lg:w-[calc(100%-12px)] w-full hover:bg-yellow-200/10 py-3 px-2 rounded-lg transition-colors duration-200 group',
+          'lg:w-[calc(100%-12px)] w-full hover:bg-yellow-200/10 py-3 px-2 rounded-lg transition-all duration-150 ease-in-out group',
           {
             'lg:w-[calc(75%-12px)] w-full': field?.width === '75%',
             'lg:w-[calc(50%-12px)] w-full': field?.width === '50%',

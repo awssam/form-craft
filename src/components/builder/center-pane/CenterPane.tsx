@@ -1,25 +1,27 @@
-"use client";
-import { cn } from "@/lib/utils";
-import { GenericProps } from "@/types/common";
-import React, { useRef } from "react";
-import { useFormProperty, useUIEventsProperty } from "@/zustand/store";
-import FormPage from "./form/FormPage";
-import FormFieldContainer from "./form/FormFieldContainer";
-import FormHeaderContent from "./form/FormHeader";
+'use client';
+import { cn } from '@/lib/utils';
+import { GenericProps } from '@/types/common';
+import React, { useRef } from 'react';
+import { useFormProperty, useUIEventsProperty } from '@/zustand/store';
+import DroppableFormPage from './form/DroppableFormPage';
+import SortableFormFieldContainer from './form/SortableFormFieldContainer';
+import FormHeaderContent from './form/FormHeader';
+import { FieldEntity } from '@/types/form-config';
 
-const CenterPane = ({ className }: GenericProps) => {
-  const isDraggingFormField = useUIEventsProperty("isDraggingFormField");
-  const pages = useFormProperty("pages");
+interface CenterPaneProps extends GenericProps {
+  activeField: FieldEntity | null;
+}
+
+const CenterPane = ({ className, activeField }: CenterPaneProps) => {
+  const isDraggingFormField = useUIEventsProperty('isDraggingFormField');
+  const pages = useFormProperty('pages');
 
   const paneRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startY = useRef(0);
   const scrollTop = useRef(0);
 
-  const classes = cn(
-    "h-full overflow-auto bg-background flex flex-col items-center py-12 px-4 center-pane",
-    className
-  );
+  const classes = cn('h-full overflow-auto bg-background flex flex-col items-center py-12 px-4 center-pane', className);
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isDraggingFormField) return (isDragging.current = false);
@@ -51,8 +53,6 @@ const CenterPane = ({ className }: GenericProps) => {
     isDragging.current = false;
   };
 
- 
-
   return (
     <div
       className={classes}
@@ -62,16 +62,24 @@ const CenterPane = ({ className }: GenericProps) => {
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseLeave}
     >
-      <div className="flex flex-col items-center gap-12 w-full min-h-[200dvh]">
+      <div
+        className="flex flex-col items-center gap-12 w-full min-h-[200dvh] transition-all ease-in-out duration-200"
+        id="form-canvas"
+      >
         {pages?.map((pageId, index) => (
-          <FormPage
+          <DroppableFormPage
+            id={pageId}
             key={pageId}
             pageNumber={index + 1}
             className="relative items-start !cursor-auto"
           >
             <FormHeaderContent />
-            <FormFieldContainer pageId={pageId} isLastPage={index === pages.length - 1} />
-          </FormPage>
+            <SortableFormFieldContainer
+              activeField={activeField}
+              pageId={pageId}
+              isLastPage={index === pages.length - 1}
+            />
+          </DroppableFormPage>
         ))}
       </div>
     </div>

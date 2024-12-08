@@ -17,16 +17,30 @@ type DraggableFieldProps = {
 };
 
 const DraggableField = ({ label, id, isOverlay, draggedOverPosition, onFieldSettingsClick }: DraggableFieldProps) => {
-  const { attributes, isDragging, isOver, isSorting, listeners, setNodeRef, setActivatorNodeRef, transform } =
-    useSortable({
-      id,
-      data: { type: 'form_field', id },
-    });
+  const {
+    attributes,
+    isDragging,
+    isOver,
+    isSorting,
+    listeners,
+    setNodeRef,
+    setActivatorNodeRef,
+    transform,
+    transition,
+  } = useSortable({
+    id,
+    data: { type: 'form_field', id },
+    transition: {
+      duration: 150, // milliseconds
+      easing: 'cubic-bezier(0.42, 0, 0.58, 1)', // Using ease-in-out
+    },
+  });
 
   const styles: React.CSSProperties = {
     transform: isSorting ? undefined : CSS.Translate.toString(transform),
     zIndex: isDragging ? 100 : undefined,
     opacity: isOver ? 0.6 : 1,
+    transition,
   };
 
   if (isDragging && !isOverlay) return null;

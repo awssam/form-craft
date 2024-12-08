@@ -2,7 +2,7 @@ import { FormControl, FormField } from '@/components/ui/form';
 import { FormFieldProps } from '@/types/common';
 import { useFieldVisibilityStore, useFormConfigStore, useSelectedFieldStore } from '@/zustand/store';
 import React, { useEffect, useRef } from 'react';
-import { ControllerRenderProps, FieldValues, useFormContext } from 'react-hook-form';
+import { Control, ControllerRenderProps, FieldValues, useFormContext } from 'react-hook-form';
 
 interface FormFieldWrapperProps extends FormFieldProps {
   render: (rhFormField: ControllerRenderProps<FieldValues, string>) => React.ReactElement;
@@ -42,7 +42,7 @@ const FormFieldWrapper = ({ control, field, render }: FormFieldWrapperProps) => 
 
   return (
     <FormField
-      control={control}
+      control={control as Control}
       name={field?.name}
       rules={field?.validation as any}
       render={({ field: rhFormField }) => <FormControl>{render(rhFormField)}</FormControl>}
