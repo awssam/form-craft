@@ -5,6 +5,9 @@ import { omitFromObject, pickFromObject } from './utils';
 export const CUSTOM_FIELD_VALIDATIONS = {
   text: {
     withValue: {
+      equals: (equals: string, msg?: string) => (val: string) => {
+        return val?.toLowerCase() === equals?.toLowerCase() || msg;
+      },
       exactLength: (exactLength: number, msg?: string) => (val: string) => {
         return val?.length === +exactLength || msg;
       },
@@ -117,7 +120,11 @@ export const CUSTOM_FIELD_VALIDATIONS = {
   },
 
   radio: {
-    withValue: {},
+    withValue: {
+      equals: (equals: string, msg?: string) => (val: string) => {
+        return val?.toLowerCase() === equals?.toLowerCase() || msg;
+      },
+    },
     binary: {
       required: (msg: string) => (val: string) => {
         return !!val || msg;
@@ -136,6 +143,9 @@ export const CUSTOM_FIELD_VALIDATIONS = {
         if (selectedField && (+maxCount < 1 || +maxCount > (selectedField?.options?.length || 0)))
           maxCount = selectedField?.options?.length || 0;
         return val?.length <= +maxCount || msg;
+      },
+      contains: (substring: string, msg?: string) => (val: string[]) => {
+        return !!val?.find((val) => val?.toLowerCase() === substring?.toLowerCase()) || msg;
       },
     },
     binary: {

@@ -9,10 +9,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { convertFieldType, Field_Type_Options } from '@/lib/form';
 import { cn, debounce } from '@/lib/utils';
 import { FieldEntity, FieldType as AvailableFieldTypes } from '@/types/form-config';
-import { useFormActionProperty, useSelectedFieldStore } from '@/zustand/store';
-import { isValid } from 'date-fns';
+import { useSelectedFieldStore } from '@/zustand/store';
+import { isValid } from '@/lib/datetime';
 import { Plus, Trash } from 'lucide-react';
-import React, { memo, use, useEffect } from 'react';
+import React, { memo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
 const useSelectedFieldUpdate = () => {
@@ -65,12 +65,9 @@ export const FieldType = memo(() => {
     return Field_Type_Options.find((option) => option.value === selectedField?.type) ?? Field_Type_Options[0];
   });
 
-  const updateFormField = useFormActionProperty('updateFormField');
-
   const handleUpdateType = (v: Option[]) => {
     setSelectedFieldTypeOption(v[0]);
     const newField = convertFieldType(selectedField!, v[0].value as AvailableFieldTypes);
-    updateFormField(selectedField?.id!, newField);
 
     updateSelectedField(newField);
   };

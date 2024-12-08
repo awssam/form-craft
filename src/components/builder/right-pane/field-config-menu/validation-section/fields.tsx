@@ -446,6 +446,26 @@ export const DateFieldRequired = createGenericBinaryValidationComponent({
   helperText: 'If Yes, this field must be filled out.',
 });
 
+export const RadioFieldEquals = createGenericSingleValueValidationComponent({
+  label: 'Equals',
+  fieldType: 'radio',
+  validatorKey: 'equals',
+  placeholder: 'Eg: yes',
+  cb: (v) => v?.trim()?.length > 0,
+  inputType: 'text',
+  helperText: 'The radio button with this value must be selected - not case sensitive.',
+});
+
+export const TextFieldEquals = createGenericSingleValueValidationComponent({
+  label: 'Equals',
+  fieldType: 'text',
+  validatorKey: 'equals',
+  placeholder: 'Eg: Yes',
+  cb: (v) => v?.trim()?.length > 0,
+  inputType: 'text',
+  helperText: 'Textbox should have this value - not case sensitive.',
+});
+
 // Checkbox type Fields
 
 export const CheckboxFieldRequired = createGenericBinaryValidationComponent({
@@ -474,4 +494,13 @@ export const CheckboxFieldMaxCount = createGenericSingleValueValidationComponent
   cb: (v) => +v > 0,
   inputType: 'number',
   helperText: 'Maximum number of checkboxes that can be selected.',
+});
+
+export const CheckboxFieldContains = createGenericSingleValueValidationComponent({
+  label: 'Contains',
+  fieldType: 'checkbox',
+  validatorKey: 'contains',
+  placeholder: 'Eg: Yes',
+  cb: (v) => v?.length > 0,
+  helperText: 'The checkbox with this value must be selected.',
 });

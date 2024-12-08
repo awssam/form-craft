@@ -47,6 +47,7 @@ const DraggableFieldWrapper = ({ id, children, isOverlay, className }: Props) =>
     zIndex: isDragging ? 100 : isOver ? 1 : 2,
     opacity: isOver ? 0.2 : 1,
     transition,
+    marginBlock: isDragging && !isOverlay ? '25px' : 0,
     width: isDraggingFormField && isFieldInPage ? '100%' : undefined, // converting the width to 100% when dragging
   };
 

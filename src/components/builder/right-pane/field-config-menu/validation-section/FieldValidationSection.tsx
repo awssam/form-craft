@@ -25,6 +25,9 @@ import {
   CheckboxFieldMinCount,
   CheckboxFieldMaxCount,
   FieldIsValidPhoneNumber,
+  RadioFieldEquals,
+  CheckboxFieldContains,
+  TextFieldEquals,
 } from './Fields';
 import { Button } from '@/components/ui/button';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -44,6 +47,7 @@ const FieldValidationSection = () => {
         FieldExactLength,
         FieldMinLength,
         FieldMaxLength,
+        TextFieldEquals,
         FieldStartsWith,
         FieldEndsWith,
         FieldContains,
@@ -69,11 +73,11 @@ const FieldValidationSection = () => {
     }
 
     if (selectedField?.type === 'radio') {
-      fields.push(FieldRequired);
+      fields.push(FieldRequired, RadioFieldEquals);
     }
 
     if (selectedField?.type === 'checkbox') {
-      fields.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount);
+      fields.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount, CheckboxFieldContains);
     }
 
     if (fields?.length > 7) {
@@ -102,6 +106,7 @@ const FieldValidationSection = () => {
       icon={<CheckCircle className="w-4 h-4 text-white/90" />}
       title="Field validation"
       key={selectedField?.id}
+      className="pb-40"
     >
       {renderFieldValidation()}
     </FormConfigSection>

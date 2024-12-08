@@ -35,7 +35,13 @@ const FieldListMenu = () => {
   };
 
   return sections.map((section) => (
-    <FormConfigSection key={section.title} icon={section.icon} title={section.title} subtitle={section.description}>
+    <FormConfigSection
+      key={section.title}
+      icon={section.icon}
+      title={section.title}
+      // @ts-expect-error ts(2322)
+      subtitle={section.description}
+    >
       {section.fields?.map((field) => (
         <FieldCard
           key={field.name}
