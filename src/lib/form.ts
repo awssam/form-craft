@@ -25,6 +25,7 @@ export const createNewFormField = ({
   switch (type) {
     case 'checkbox':
     case 'radio':
+    case 'dropdown':
       baseField.options = [
         { label: 'Option 1', value: 'option-1', helperText: '' },
         { label: 'Option 2', value: 'option-2', helperText: '' },
@@ -51,20 +52,22 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
 
   switch (newFieldType) {
     case 'checkbox':
-      break;
     case 'radio':
+    case 'dropdown':
       newField.options = field?.options ?? [{ label: 'Option 1', value: 'option-1', helperText: '' }];
       newField.value = undefined;
       newField.defaultValue = undefined;
       break;
     case 'date':
       newField.placeholder = 'Select a date...';
-      newField.defaultValue = undefined;
-      newField.value = undefined;
+      delete newField['defaultValue'];
+      delete newField['value'];
       break;
     default:
       break;
   }
+
+  console.log(newField);
 
   return newField;
 };
@@ -74,7 +77,7 @@ export const Field_Type_Options = [
   'date',
   'radio',
   'checkbox',
-  // "dropdown",
+  'dropdown',
   // "file",
   'textarea',
 ]?.map((type) => ({

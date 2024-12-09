@@ -1,12 +1,12 @@
 import FormField from '@/components/common/FormField';
-import { Combobox } from '@/components/ui/combobox';
+import { Combobox, Option } from '@/components/ui/combobox';
 import { DateTimePicker } from '@/components/ui/datepicker';
 import { Input } from '@/components/ui/input';
 import { debounce } from '@/lib/utils';
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { FieldEntity, FieldType } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
-import { ComponentProps, useMemo } from 'react';
+import { ComponentProps, useMemo, useState } from 'react';
 
 const requiredOptions = [
   {
@@ -496,11 +496,39 @@ export const CheckboxFieldMaxCount = createGenericSingleValueValidationComponent
   helperText: 'Maximum number of checkboxes that can be selected.',
 });
 
-export const CheckboxFieldContains = createGenericSingleValueValidationComponent({
-  label: 'Contains',
-  fieldType: 'checkbox',
-  validatorKey: 'contains',
-  placeholder: 'Eg: Yes',
-  cb: (v) => v?.length > 0,
-  helperText: 'The checkbox with this value must be selected.',
-});
+const createContainsValidationComponent = (type: FieldType, helperText?: string) =>
+  createGenericSingleValueValidationComponent({
+    label: 'Contains',
+    fieldType: type,
+    validatorKey: 'contains',
+    placeholder: 'Eg: Yes',
+    cb: (v) => v?.length > 0,
+    helperText,
+    renderer: ({ fieldValidationValue, handleChange, placeholder }) => {
+      const options = useSelectedFieldStore.getState().selectedField?.options;
+      const selectedOptions = options?.filter((option) => fieldValidationValue?.includes(option.value as string));
+
+      return (
+        <Combobox
+          options={options as Option[]}
+          placeholder={placeholder}
+          selectedValues={selectedOptions}
+          handleChange={(values) => {
+            handleChange({
+              target: { name: 'value', value: values?.map((d) => d?.value) },
+            } as unknown as React.ChangeEvent<HTMLInputElement>);
+          }}
+        />
+      );
+    },
+  });
+
+export const CheckboxFieldContains = createContainsValidationComponent(
+  'checkbox',
+  'Checkbox should have these values selected',
+);
+
+export const DropdownFieldContains = createContainsValidationComponent(
+  'dropdown',
+  'Dropdown should have this value selected',
+);

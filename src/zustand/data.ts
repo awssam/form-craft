@@ -61,7 +61,7 @@ export const formConfig: FormConfig = {
     page2_id: {
       id: 'page2_id',
       name: 'Feedback Section',
-      fields: ['field3_id', 'field4_id', 'field5_id'], // Fields on this page
+      fields: ['field3_id', 'field4_id', 'field5_id', 'field6_id'], // Fields on this page
     },
   },
   fieldEntities: {
@@ -94,7 +94,7 @@ export const formConfig: FormConfig = {
       type: 'date',
       label: 'Date of Birth',
       placeholder: 'Select your date of birth',
-      defaultValue: new Date('1990-01-01'),
+      // defaultValue: new Date('1990-01-01'),
       validation: {
         custom: {
           required: {
@@ -151,6 +151,32 @@ export const formConfig: FormConfig = {
       options: [
         { label: 'Yes', value: 'yes', helperText: 'You will recommend us' },
         { label: 'No', value: 'no', helperText: 'You will not recommend us' },
+      ],
+      validation: {
+        custom: {
+          required: {
+            value: true,
+            message: 'Please select an option.',
+            type: 'binary',
+          },
+        },
+      },
+      width: '50%',
+    },
+    field6_id: {
+      id: 'field6_id',
+      name: 'gender',
+      type: 'dropdown',
+      label: 'Select your gender',
+      defaultValue: [],
+      options: [
+        { label: 'Male', value: 'male', helperText: 'Gender is Male' },
+        { label: 'Female', value: 'female', helperText: 'Gender is female' },
+        {
+          label: 'Prefer not to say',
+          value: 'prefer-not-to-say',
+          helperText: 'User does not want to reveal their gender',
+        },
       ],
       validation: {
         custom: {

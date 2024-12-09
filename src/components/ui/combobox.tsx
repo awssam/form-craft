@@ -20,6 +20,11 @@ interface ComboboxProps extends GenericProps {
   selectedValues?: Option[];
   handleChange?: (values: Option[]) => void;
   placeholder?: string;
+  triggerClassName?: string;
+  placeholderClassName?: string;
+  triggerStyle?: React.CSSProperties;
+  dropdownClassName?: string;
+  dropdownStyle?: React.CSSProperties;
 }
 
 export function Combobox({
@@ -28,6 +33,11 @@ export function Combobox({
   allowMultiple,
   selectedValues = [],
   handleChange,
+  triggerClassName,
+  dropdownClassName,
+  dropdownStyle,
+  triggerStyle,
+  placeholderClassName,
 }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [values, setValues] = React.useState<Option[]>(selectedValues);
@@ -60,7 +70,7 @@ export function Combobox({
   }, [selectedValues]);
 
   const label = (
-    <span className="truncate">
+    <span className={cn('truncate', triggerClassName)}>
       {values[0]?.label}{' '}
       {allowMultiple ? (
         values.length > 1 ? (
@@ -77,12 +87,23 @@ export function Combobox({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button ref={buttonRef} variant="outline" role="combobox" aria-expanded={open} className="justify-between">
-          {values.length > 0 ? label : placeholder || 'Select...'}
+        <Button
+          ref={buttonRef}
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={cn('justify-between', triggerClassName)}
+          style={triggerStyle}
+        >
+          {values.length > 0 ? (
+            label
+          ) : (
+            <span className={placeholderClassName}>{placeholder ?? 'Select an option...'}</span>
+          )}
           <CaretSortIcon className="opacity-50 ml-2 w-4 h-4 shrink-0" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent style={{ width: popupWidth }} className={cn('p-0')}>
+      <PopoverContent style={{ width: popupWidth, ...dropdownStyle }} className={cn('p-0', dropdownClassName)}>
         <Command>
           <CommandInput placeholder="Search..." className="h-9" />
           <CommandList>

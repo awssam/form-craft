@@ -175,13 +175,14 @@ export const FieldDefaultValue = memo(() => {
           />
         );
       case 'checkbox':
+      case 'dropdown':
         return (
           <Combobox
             allowMultiple
             options={selectedField?.options as Option[]}
             selectedValues={
               (selectedField?.options as Option[]).filter((option) =>
-                (selectedField?.defaultValue as string[]).includes(option?.value as string),
+                (selectedField?.defaultValue as string[])?.includes(option?.value as string),
               ) as Option[]
             }
             handleChange={(options) => {

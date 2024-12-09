@@ -23,6 +23,7 @@ const FieldConfigSection = () => {
     switch (selectedField?.type) {
       case 'radio':
       case 'checkbox':
+      case 'dropdown':
         return <FieldOptionsForm />;
       default:
         return <FieldHelperText />;

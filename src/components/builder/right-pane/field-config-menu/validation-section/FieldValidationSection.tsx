@@ -28,6 +28,7 @@ import {
   RadioFieldEquals,
   CheckboxFieldContains,
   TextFieldEquals,
+  DropdownFieldContains,
 } from './Fields';
 import { Button } from '@/components/ui/button';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -78,6 +79,10 @@ const FieldValidationSection = () => {
 
     if (selectedField?.type === 'checkbox') {
       fields.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount, CheckboxFieldContains);
+    }
+
+    if (selectedField?.type === 'dropdown') {
+      fields?.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount, DropdownFieldContains);
     }
 
     if (fields?.length > 7) {

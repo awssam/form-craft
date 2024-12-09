@@ -144,8 +144,36 @@ export const CUSTOM_FIELD_VALIDATIONS = {
           maxCount = selectedField?.options?.length || 0;
         return val?.length <= +maxCount || msg;
       },
-      contains: (substring: string, msg?: string) => (val: string[]) => {
-        return !!val?.find((val) => val?.toLowerCase() === substring?.toLowerCase()) || msg;
+      contains: (substringArray: string[] | string, msg?: string) => (val: string[]) => {
+        if (!Array.isArray(substringArray)) substringArray = [substringArray];
+
+        const hasSubstring = substringArray?.every((s) => !!val?.find((v) => v?.toLowerCase() === s?.toLowerCase()));
+        return hasSubstring || msg;
+      },
+    },
+    binary: {
+      required: (msg: string) => (val: string | string[]) => {
+        return val?.length > 0 || msg;
+      },
+    },
+  },
+
+  dropdown: {
+    withValue: {
+      minCount: (minCount: number, msg?: string, selectedField?: FieldEntity | null) => (val: string[]) => {
+        if (selectedField && +minCount > (selectedField?.options?.length || 0))
+          minCount = selectedField?.options?.length || 0;
+        return val?.length >= +minCount || msg;
+      },
+      maxCount: (maxCount: number, msg?: string, selectedField?: FieldEntity | null) => (val: string[]) => {
+        if (selectedField && (+maxCount < 1 || +maxCount > (selectedField?.options?.length || 0)))
+          maxCount = selectedField?.options?.length || 0;
+        return val?.length <= +maxCount || msg;
+      },
+      contains: (substringArray: string[] | string, msg?: string) => (val: string[]) => {
+        if (!Array.isArray(substringArray)) substringArray = [substringArray];
+        const hasSubstring = substringArray?.every((s) => !!val?.find((v) => v?.toLowerCase() === s?.toLowerCase()));
+        return hasSubstring || msg;
       },
     },
     binary: {

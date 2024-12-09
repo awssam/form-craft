@@ -5,6 +5,7 @@ import FormRadioInput from './fields/RadioInput';
 import FormCheckboxInput from './fields/CheckboxInput';
 import FormTextareaInput from './fields/TextareaInput';
 import FormDateInput from './fields/DateInput';
+import FormDropdown from './fields/DropdownInput';
 import { Control } from 'react-hook-form';
 
 interface FieldRendererProps {
@@ -25,6 +26,9 @@ const FieldRenderer = (props: FieldRendererProps) => {
       return <FormCheckboxInput {...props} />;
     case 'radio':
       return <FormRadioInput {...props} />;
+    case 'dropdown':
+      return <FormDropdown {...props} />;
+
     default:
       return null;
   }

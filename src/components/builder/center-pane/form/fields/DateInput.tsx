@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { FormFieldProps } from '@/types/common';
 import { useFormConfigStore } from '@/zustand/store';
 import { DateTimePicker } from '@/components/ui/datepicker';
@@ -8,6 +8,7 @@ import FormFieldWrapper from './FormFieldWrapper';
 import { FormMessage } from '@/components/ui/form';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
+import { useFormContext } from 'react-hook-form';
 
 const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
@@ -15,6 +16,12 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
   const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
+
+  const { setValue } = useFormContext();
+
+  useEffect(() => {
+    setValue(field?.name, field?.value ?? field?.defaultValue);
+  }, [field?.defaultValue, field?.value, field?.name, setValue]);
 
   return (
     <FormFieldWrapper
@@ -40,7 +47,7 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
               <DateTimePicker
                 granularity="day"
                 style={{ color: primaryColor, borderColor: inputBorderColor }}
-                value={rhFormField.value ?? field?.defaultValue}
+                value={typeof rhFormField.value !== 'object' ? rhFormField.value ?? field?.defaultValue : undefined}
                 onChange={rhFormField.onChange}
                 className={className}
                 placeholder={field.placeholder ?? 'Pick a date'}
