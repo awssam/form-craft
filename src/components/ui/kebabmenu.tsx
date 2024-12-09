@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import {
   Menubar,
@@ -35,13 +35,13 @@ const Menu = ({ items, renderTrigger }: KebabMenuProps) => {
           )}
         </MenubarTrigger>
         <MenubarContent>
-          {items.map((item) => (
-            <>
-              <MenubarItem key={item.value} onClick={item.onClick} disabled={item.disabled} className={item?.className}>
-                {item.label}
+          {items?.map((item) => (
+            <Fragment key={item?.value}>
+              <MenubarItem onClick={item?.onClick} disabled={item?.disabled} className={item?.className}>
+                {item?.label}
               </MenubarItem>
-              {item.seperator && <MenubarSeparator />}
-            </>
+              {item?.seperator && <MenubarSeparator />}
+            </Fragment>
           ))}
         </MenubarContent>
       </MenubarMenu>

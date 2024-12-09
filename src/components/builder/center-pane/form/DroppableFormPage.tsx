@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button';
-import Menu from '@/components/ui/kebabmenu';
 import { createNewFormField } from '@/lib/form';
 import { cn, generateId } from '@/lib/utils';
 import { GenericProps } from '@/types/common';
@@ -22,6 +21,8 @@ const DroppableFormPage = ({ className, children, pageNumber, id, totalPages }: 
   const addField = useFormActionProperty('addField');
   const deletePage = useFormActionProperty('deletePage');
   const setSelectedField = useSelectedFieldStore((s) => s.setSelectedField);
+
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const { setNodeRef, isOver } = useDroppable({
     id,
@@ -75,7 +76,7 @@ const DroppableFormPage = ({ className, children, pageNumber, id, totalPages }: 
           Add Field{' '}
         </Button>
         {totalPages > 1 && (
-          <DeletePageModal pageNo={pageNumber} onConfirm={handlePageDelete} open={false} setOpen={() => {}} />
+          <DeletePageModal pageNo={pageNumber} onConfirm={handlePageDelete} open={isOpen} setOpen={setIsOpen} />
         )}
       </div>
     </section>

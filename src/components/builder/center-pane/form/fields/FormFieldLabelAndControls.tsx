@@ -1,6 +1,6 @@
 import { toast } from 'sonner';
-import React, { LegacyRef, useMemo } from 'react';
-import { CopyIcon, Grip, MenuIcon, Settings } from 'lucide-react';
+import React, { LegacyRef, useCallback, useMemo } from 'react';
+import { Grip, Settings } from 'lucide-react';
 import { useSortable } from '@dnd-kit/sortable';
 import { SyntheticListenerMap } from '@dnd-kit/core/dist/hooks/utilities';
 import KebabMenu from '@/components/ui/kebabmenu';
@@ -42,12 +42,12 @@ const FormFieldLabelAndControls = ({
     setSection(FORMSECTIONS.Settings);
   };
 
-  const handleFieldDuplicateClick = () => {
+  const handleFieldDuplicateClick = useCallback(() => {
     duplicateField(field?.id);
     toast('Field duplicated successfully', {
       description: 'Go to Settings to configure the field.',
     });
-  };
+  }, [duplicateField, field?.id]);
 
   const handleFieldDelete = () => {
     deleteField(field?.id);
@@ -68,7 +68,7 @@ const FormFieldLabelAndControls = ({
         seperator: false,
       },
     ];
-  }, [handleFieldDuplicateClick, handleFieldSettingsClick]);
+  }, [handleFieldDuplicateClick]);
 
   return (
     <div className="flex gap-3 items-center justify-between break-all break-words">
