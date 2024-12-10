@@ -1,7 +1,8 @@
-import { FieldEntity, FormConfig } from '@/types/form-config';
+import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
 import { create } from 'zustand';
 import { formConfig } from './data';
 import { generateId } from '@/lib/utils';
+import { createNewFormField } from '@/lib/form';
 
 type FormState = {
   formConfig: FormConfig;
@@ -19,6 +20,7 @@ type FormAction = {
   duplicateField: (fieldId: string) => void;
   deleteField: (fieldId: string) => void;
   deletePage: (pageId: string) => void;
+  addPage: () => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set) => ({
@@ -202,6 +204,37 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
           pages: pages?.filter((p) => p !== pageId),
           pageEntities,
           fieldEntities,
+        },
+      };
+    });
+  },
+
+  addPage() {
+    set((state) => {
+      const pageId = generateId();
+
+      const field = createNewFormField({
+        type: 'text' as FieldType,
+        name: generateId(),
+        label: 'Text field',
+      });
+
+      return {
+        formConfig: {
+          ...state.formConfig,
+          pages: [...state.formConfig.pages, pageId],
+          pageEntities: {
+            ...state.formConfig.pageEntities,
+            [pageId]: {
+              id: pageId,
+              name: `Page ${state.formConfig.pages?.length + 1}`,
+              fields: [field.id],
+            },
+          },
+          fieldEntities: {
+            ...state.formConfig.fieldEntities,
+            [field.id]: field,
+          },
         },
       };
     });

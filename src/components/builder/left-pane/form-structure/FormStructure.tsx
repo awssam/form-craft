@@ -31,12 +31,15 @@ import {
 import { FieldEntity } from '@/types/form-config';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
 import AddFieldModal from '../../AddFieldModal';
+import { toast } from 'sonner';
 
 const FormStructure = () => {
   const pages = useFormProperty('pages');
   const pageEntities = useFormProperty('pageEntities');
   const fieldEntities = useFormProperty('fieldEntities');
   const setPageFields = useFormActionProperty('setPageFields');
+  const addPage = useFormActionProperty('addPage');
+
   const [activeField, setActiveField] = React.useState<FieldEntity | null>(null);
   const setSelectedField = useSelectedFieldStore((s) => s.setSelectedField);
 
@@ -146,6 +149,11 @@ const FormStructure = () => {
     setSection(FORMSECTIONS.Settings);
   };
 
+  const handleAddPage = () => {
+    addPage();
+    toast('New page added with successfully');
+  };
+
   return (
     <FormConfigSection
       icon={<List className="w-4 h-4 text-white/90" />}
@@ -205,7 +213,10 @@ const FormStructure = () => {
             }
           </DndContext>
         </section>
-        <Button className="bg-zinc-900 hover:bg-zinc-800 mt-3 w-full text-foreground transition-colors">
+        <Button
+          className="bg-zinc-900 hover:bg-zinc-800 mt-3 w-full text-foreground transition-colors"
+          onClick={handleAddPage}
+        >
           Add Page
         </Button>
       </div>

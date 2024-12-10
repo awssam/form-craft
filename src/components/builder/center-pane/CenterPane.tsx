@@ -1,12 +1,14 @@
 'use client';
-import { cn } from '@/lib/utils';
-import { GenericProps } from '@/types/common';
+
 import React, { useRef } from 'react';
 import { useFormProperty, useUIEventsProperty } from '@/zustand/store';
 import DroppableFormPage from './form/DroppableFormPage';
-import SortableFormFieldContainer from './form/SortableFormFieldContainer';
-import FormHeaderContent from './form/FormHeader';
+import NewPagePlaceholder from './form/NewPagePlaceholder';
+
+import { cn } from '@/lib/utils';
+import { GenericProps } from '@/types/common';
 import { FieldEntity } from '@/types/form-config';
+import FormContent from './form/FormContent';
 
 interface CenterPaneProps extends GenericProps {
   activeField: FieldEntity | null;
@@ -63,7 +65,7 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="flex flex-col items-center gap-12 w-full min-h-[200dvh] transition-all ease-in-out duration-200"
+        className="flex flex-col items-center gap-12 w-full min-h-[200dvh] h-max transition-all ease-in-out duration-200"
         id="form-canvas"
       >
         {pages?.map((pageId, index) => (
@@ -74,14 +76,10 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
             totalPages={pages?.length}
             className="relative items-start !cursor-auto"
           >
-            <FormHeaderContent />
-            <SortableFormFieldContainer
-              activeField={activeField}
-              pageId={pageId}
-              isLastPage={index === pages.length - 1}
-            />
+            <FormContent activeField={activeField} pageId={pageId} isLastPage={index === pages.length - 1} />
           </DroppableFormPage>
         ))}
+        <NewPagePlaceholder />
       </div>
     </div>
   );

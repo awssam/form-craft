@@ -11,15 +11,10 @@ import usePopulateFieldValidation from '@/hooks/usePopulateFieldValidation';
 
 import { FieldEntity } from '@/types/form-config';
 import useFieldConditionalLogicCheck from '@/hooks/useFieldConditionalLogicCheck';
-import {
-  rectSortingStrategy,
-  rectSwappingStrategy,
-  SortableContext,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { DragOverlay } from '@dnd-kit/core';
 
-interface FormFieldsProps {
+export interface FormFieldsProps {
   pageId: string;
   isLastPage: boolean;
   activeField: FieldEntity | null;
@@ -29,8 +24,8 @@ const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFie
   const fieldEntities = useFormProperty('fieldEntities');
   const pageEntities = useFormProperty('pageEntities');
 
-  const form = useForm({});
   const fields = useMemo(() => pageEntities?.[pageId]?.fields, [pageEntities, pageId]);
+  const form = useForm({});
 
   // unregister fields that are no longer in the form - this is important for multipage forms with drag and drop
   useFieldUnregister(pageId, form);
@@ -58,6 +53,13 @@ const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFie
               </Fragment>
             ))}
           </div>
+
+          {fields?.length === 0 && (
+            <div className="flex items-center justify-center w-full h-full mt-7">
+              <h2 className="text-xl font-semibold text-muted-foreground">No fields found</h2>
+            </div>
+          )}
+
           {fields && fields?.length > 0 && (
             <Button className="mt-8 ml-2" type="submit">
               {isLastPage ? 'Submit' : 'Next'}
