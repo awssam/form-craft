@@ -21,11 +21,11 @@ const FormDropdownInput = ({ field, className, control, isOverlay }: FormFieldPr
   const { setValue } = useFormContext();
 
   const handleChange = (values: Option[]) => {
-    setValues(values);
     setValue(field.name, Array.from(new Set(values.map((d) => d.value))), { shouldValidate: true });
   };
 
   const fieldDefaultValueString = useMemo(() => JSON.stringify(field?.defaultValue), [field?.defaultValue]);
+  const fieldValueString = useMemo(() => JSON.stringify(field?.value), [field?.value]);
 
   // To keep the selected state in sync with the default value
   useEffect(() => {
@@ -37,6 +37,14 @@ const FormDropdownInput = ({ field, className, control, isOverlay }: FormFieldPr
       setValue(field.name, JSON.parse(fieldDefaultValueString));
     }
   }, [fieldDefaultValueString, field.name, setValue, field?.options]);
+
+  // doing it this way to keep be able to automatically reset from config pane when allowMultiSelect is changed.
+  useEffect(() => {
+    if (fieldValueString) {
+      const selected = field?.options?.filter((d) => JSON.parse(fieldValueString)?.includes(d.value)) as Option[];
+      setValues(selected);
+    }
+  }, [fieldValueString, field?.name, field?.options]);
 
   return (
     <FormFieldWrapper
@@ -62,7 +70,7 @@ const FormDropdownInput = ({ field, className, control, isOverlay }: FormFieldPr
 
                 <Combobox
                   placeholder={field?.placeholder ?? 'Select an option...'}
-                  allowMultiple
+                  allowMultiple={field?.allowMultiSelect}
                   options={field.options as Option[]}
                   selectedValues={values}
                   handleChange={(values) => {

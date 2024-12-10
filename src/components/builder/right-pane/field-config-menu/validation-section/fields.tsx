@@ -496,7 +496,7 @@ export const CheckboxFieldMaxCount = createGenericSingleValueValidationComponent
   helperText: 'Maximum number of checkboxes that can be selected.',
 });
 
-const createContainsValidationComponent = (type: FieldType, helperText?: string) =>
+const createContainsValidationComponent = (type: FieldType, helperText?: string, multiSelect = true) =>
   createGenericSingleValueValidationComponent({
     label: 'Contains',
     fieldType: type,
@@ -506,10 +506,13 @@ const createContainsValidationComponent = (type: FieldType, helperText?: string)
     helperText,
     renderer: ({ fieldValidationValue, handleChange, placeholder }) => {
       const options = useSelectedFieldStore.getState().selectedField?.options;
+      const allowMultiple =
+        type === 'dropdown' ? useSelectedFieldStore.getState().selectedField?.allowMultiSelect : multiSelect;
       const selectedOptions = options?.filter((option) => fieldValidationValue?.includes(option.value as string));
 
       return (
         <Combobox
+          allowMultiple={allowMultiple}
           options={options as Option[]}
           placeholder={placeholder}
           selectedValues={selectedOptions}
@@ -526,6 +529,7 @@ const createContainsValidationComponent = (type: FieldType, helperText?: string)
 export const CheckboxFieldContains = createContainsValidationComponent(
   'checkbox',
   'Checkbox should have these values selected',
+  true,
 );
 
 export const DropdownFieldContains = createContainsValidationComponent(

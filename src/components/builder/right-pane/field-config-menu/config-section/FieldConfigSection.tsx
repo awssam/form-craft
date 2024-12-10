@@ -9,6 +9,7 @@ import {
   FieldDefaultValue,
   FieldOptionsForm,
   FieldWidth,
+  FieldAllowMultiSelect,
 } from './Fields';
 import { Tag } from 'lucide-react';
 import FormConfigSection from '@/components/common/FormConfigSection';
@@ -23,8 +24,16 @@ const FieldConfigSection = () => {
     switch (selectedField?.type) {
       case 'radio':
       case 'checkbox':
-      case 'dropdown':
         return <FieldOptionsForm />;
+      case 'dropdown':
+        return (
+          <>
+            <FieldHelperText />
+            <FieldAllowMultiSelect />
+            <FieldOptionsForm />
+          </>
+        );
+
       default:
         return <FieldHelperText />;
     }
@@ -37,10 +46,10 @@ const FieldConfigSection = () => {
       subtitle="Basic details about the form field"
       key={selectedField?.id}
     >
-      <FieldType />
       <FieldName />
-      <FieldLabel />
+      <FieldType />
       <FieldWidth />
+      <FieldLabel />
       <FieldPlaceholder />
       <FieldDefaultValue />
       {renderFieldSpecificConfig()}

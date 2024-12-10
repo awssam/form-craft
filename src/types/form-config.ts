@@ -54,6 +54,7 @@ export interface FieldEntity {
   conditionalLogic?: ConditionalLogic; // Conditional logic for showing/hiding the field (optional)
   width: FormFieldWidth;
   value?: ValueType;
+  allowMultiSelect?: boolean;
 }
 
 export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'file' | 'textarea';

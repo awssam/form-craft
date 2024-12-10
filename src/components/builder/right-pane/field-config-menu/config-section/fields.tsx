@@ -178,7 +178,7 @@ export const FieldDefaultValue = memo(() => {
       case 'dropdown':
         return (
           <Combobox
-            allowMultiple
+            allowMultiple={selectedField?.type === 'dropdown' ? selectedField?.allowMultiSelect : true}
             options={selectedField?.options as Option[]}
             selectedValues={
               (selectedField?.options as Option[]).filter((option) =>
@@ -229,7 +229,13 @@ export const FieldWidth = memo(() => {
       id="width"
       label="Field Width"
       required
-      helperText="The width of the field (Responsive by default)"
+      helperText={
+        (
+          <span>
+            The width of the field - <strong className="text-yellow-200/70"> Responsive by default</strong>
+          </span>
+        ) as unknown as string
+      }
     >
       <Combobox
         options={widthOptions}
@@ -280,7 +286,7 @@ export const FieldOptionsForm = memo(() => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit((data) => console.log(data))}>
-        <FormFieldWrapper id="options" label="Options" required className="flex flex-col gap-3">
+        <FormFieldWrapper id="options" label="Options" helperText="Add options for the field (Label, Value)" required>
           {fields?.map((field, index) => (
             <div className="flex items-start gap-3 mb-3" key={field.id}>
               <FormField
@@ -328,7 +334,7 @@ export const FieldOptionsForm = memo(() => {
             </div>
           ))}
           {fields?.length === 0 && <div className="flex items-center gap-3 ">No Options</div>}
-          <Button type="submit" variant="default" onClick={() => append(defaultOptions[0])}>
+          <Button className="mb-2" type="submit" variant="default" onClick={() => append(defaultOptions[0])}>
             Add Option
           </Button>
           <Button
@@ -345,3 +351,40 @@ export const FieldOptionsForm = memo(() => {
 });
 
 FieldOptionsForm.displayName = 'FieldOptions';
+
+const YES_NO_OPTIONS = [
+  { label: 'Yes', value: 'true' },
+  { label: 'No', value: 'false' },
+];
+
+export const FieldAllowMultiSelect = memo(() => {
+  const selectedField = useSelectedField();
+  const updateSelectedField = useSelectedFieldStore((state) => state.updateSelectedField);
+
+  return (
+    <FormFieldWrapper
+      id="allowMultiSelect"
+      label="Allow Multi Select"
+      helperText='If "No" then only one option can be selected at a time'
+    >
+      <Combobox
+        options={YES_NO_OPTIONS}
+        selectedValues={[
+          {
+            label: selectedField?.allowMultiSelect ? 'Yes' : 'No',
+            value: selectedField?.allowMultiSelect ? 'true' : 'false',
+          },
+        ]}
+        handleChange={(values) => {
+          updateSelectedField({
+            value: [],
+            defaultValue: [],
+            allowMultiSelect: values[0].value === 'true',
+          });
+        }}
+      />
+    </FormFieldWrapper>
+  );
+});
+
+FieldAllowMultiSelect.displayName = 'FieldAllowMultiSelect';
