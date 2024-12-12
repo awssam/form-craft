@@ -21,12 +21,14 @@ type FormAction = {
   deleteField: (fieldId: string) => void;
   deletePage: (pageId: string) => void;
   addPage: () => void;
+  batchUpdateFields: (fields: Record<FieldEntity['id'], Partial<FieldEntity>>) => void;
 };
 
-export const useFormConfigStore = create<FormState & FormAction>((set) => ({
+export const useFormConfigStore = create<FormState & FormAction>((set, get) => ({
   formConfig,
   setFormConfig: (formConfig) => set({ formConfig }),
   updateFormConfig: (config) => {
+    console.log('updateFormConfig', config);
     set((state) => ({
       formConfig: {
         ...state.formConfig,
@@ -238,6 +240,26 @@ export const useFormConfigStore = create<FormState & FormAction>((set) => ({
         },
       };
     });
+  },
+
+  batchUpdateFields(fields: Record<FieldEntity['id'], Partial<FieldEntity>>) {
+    const update = {
+      formConfig: {
+        ...get().formConfig,
+        fieldEntities: {
+          ...get().formConfig.fieldEntities,
+        },
+      },
+    };
+
+    Object.entries(fields).forEach(([fieldId, fieldUpdate]) => {
+      update.formConfig.fieldEntities[fieldId] = {
+        ...get().formConfig.fieldEntities[fieldId],
+        ...fieldUpdate,
+      };
+    });
+
+    set(update);
   },
 }));
 

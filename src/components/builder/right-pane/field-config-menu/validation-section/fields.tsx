@@ -1,12 +1,14 @@
+import { ComponentProps, useMemo } from 'react';
+import { useSelectedFieldStore } from '@/zustand/store';
+
 import FormField from '@/components/common/FormField';
 import { Combobox, Option } from '@/components/ui/combobox';
 import { DateTimePicker } from '@/components/ui/datepicker';
 import { Input } from '@/components/ui/input';
+
 import { debounce } from '@/lib/utils';
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { FieldEntity, FieldType } from '@/types/form-config';
-import { useSelectedFieldStore } from '@/zustand/store';
-import { ComponentProps, useMemo, useState } from 'react';
 
 const requiredOptions = [
   {
@@ -89,6 +91,8 @@ export const createGenericSingleValueValidationComponent = ({
           },
         },
       });
+
+      console.log('Selected field validation', selectedField?.label, '::', getUpdatedField(name, value));
 
       updateSelectedField(getUpdatedField(name, value) as unknown as FieldEntity);
     };

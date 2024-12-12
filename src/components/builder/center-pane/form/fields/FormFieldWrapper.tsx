@@ -29,6 +29,8 @@ const FormFieldWrapper = ({ control, field, render }: FormFieldWrapperProps) => 
     // console.log(field?.id, typeof formFieldValue, formFieldValue);
     if (formFieldValue == undefined || formFieldValue == null) return;
     if (timerRef.current) clearTimeout(timerRef.current);
+
+    
     timerRef.current = setTimeout(() => {
       const value = { value: formFieldValue };
       updateFormField(field?.id, value);

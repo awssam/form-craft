@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { FormFieldProps } from '@/types/common';
 import React from 'react';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
-import { useFormConfigStore } from '@/zustand/store';
+import { useFormConfigStore, useUIEventsActionProperty } from '@/zustand/store';
 import { FormMessage } from '@/components/ui/form';
 import FormFieldWrapper from './FormFieldWrapper';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
@@ -14,6 +14,8 @@ const TextareaInput = ({ field, className, control, isOverlay }: FormFieldProps)
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
   const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
+
+  const setIsDraggingField = useUIEventsActionProperty('setIsDraggingFormField');
 
   return (
     <FormFieldWrapper
@@ -36,6 +38,10 @@ const TextareaInput = ({ field, className, control, isOverlay }: FormFieldProps)
                 isDragging={isOverlay}
               />
               <Textarea
+                onMouseDown={() => setIsDraggingField(true)}
+                onMouseUp={() => setIsDraggingField(false)}
+                onTouchStart={() => setIsDraggingField(true)}
+                onTouchEnd={() => setIsDraggingField(false)}
                 placeholder={field?.placeholder}
                 id={field?.id}
                 style={{ color: primaryColor, borderColor: inputBorderColor }}

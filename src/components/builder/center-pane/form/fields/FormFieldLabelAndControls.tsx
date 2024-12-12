@@ -38,6 +38,7 @@ const FormFieldLabelAndControls = ({
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   const handleFieldSettingsClick = () => {
+    console.log('handleFieldSettingsClick', field);
     setSelectedField(field);
     setSection(FORMSECTIONS.Settings);
   };

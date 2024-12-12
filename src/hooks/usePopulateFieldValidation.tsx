@@ -10,7 +10,7 @@ const usePopulateFieldValidation = (pageId: string) => {
   const fields = useMemo(() => pageEntities?.[pageId]?.fields, [pageEntities, pageId]);
 
   useEffect(() => {
-    const updateFieldWithCorrectValidationType = (
+    const getFieldUpdateWithCorrectValidationType = (
       fieldId: string,
       fieldType: FieldType,
       validationType: CustomValidationType,
@@ -40,24 +40,31 @@ const usePopulateFieldValidation = (pageId: string) => {
 
       validationFn = validationFunctor?.(...args);
 
-      updateFormField(fieldId, {
-        validation: {
-          ...field?.validation,
-          validate: {
-            ...field?.validation?.validate,
-            [validatorKey]: validationFn ?? (() => true),
-          },
-        },
-      });
+      return {
+        [validatorKey]: validationFn ?? (() => true),
+      };
     };
 
     fields?.forEach((fieldId) => {
       const field = fieldEntities?.[fieldId];
+      const fieldUpdates = {
+        validation: {
+          ...field?.validation,
+          validate: {
+            ...field?.validation?.validate,
+          },
+        },
+      };
+
       Object.entries(field?.validation?.custom || {})?.forEach(([key, value]) => {
         const fieldType = field?.type as FieldType;
-        // console.log(fieldType, value);
-        updateFieldWithCorrectValidationType(fieldId, fieldType, value?.type, key);
+        fieldUpdates.validation.validate = {
+          ...fieldUpdates.validation.validate,
+          ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key),
+        };
       });
+
+      updateFormField(fieldId, fieldUpdates);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fields, updateFormField]);

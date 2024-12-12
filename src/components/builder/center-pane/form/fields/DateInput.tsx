@@ -20,8 +20,8 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
   const { setValue } = useFormContext();
 
   useEffect(() => {
-    setValue(field?.name, field?.value ?? field?.defaultValue);
-  }, [field?.defaultValue, field?.value, field?.name, setValue]);
+    setValue(field?.name, field?.defaultValue);
+  }, [field?.defaultValue, field?.name, setValue]);
 
   return (
     <FormFieldWrapper
@@ -47,8 +47,8 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
               <DateTimePicker
                 granularity="day"
                 style={{ color: primaryColor, borderColor: inputBorderColor }}
-                value={typeof rhFormField.value !== 'object' ? rhFormField.value ?? field?.defaultValue : undefined}
-                onChange={rhFormField.onChange}
+                value={!Array.isArray(rhFormField.value) ? rhFormField.value ?? field?.defaultValue : undefined}
+                onChange={(d) => setValue(field?.name, d, { shouldValidate: true })}
                 className={className}
                 placeholder={field.placeholder ?? 'Pick a date'}
                 placeHolderClasses={cn({

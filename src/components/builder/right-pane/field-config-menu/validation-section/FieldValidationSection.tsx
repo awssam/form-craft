@@ -1,6 +1,6 @@
 import FormConfigSection from '@/components/common/FormConfigSection';
 import { CheckCircle } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { memo, useMemo, useState } from 'react';
 import {
   FieldExactLength,
   FieldStartsWith,
@@ -37,61 +37,76 @@ const FieldValidationSection = () => {
   const [showMore, setShowMore] = useState(false);
   const selectedField = useSelectedFieldStore((s) => s?.selectedField);
 
-  const renderFieldValidation = () => {
-    if (!selectedField) return;
+  const fields = useMemo(() => {
+    if (!selectedField) return [];
 
-    const fields = [];
+    const fieldComponents = [];
 
-    if (selectedField?.type === 'text' || selectedField?.type === 'textarea') {
-      fields.push(
-        FieldRequired,
-        FieldExactLength,
-        FieldMinLength,
-        FieldMaxLength,
-        TextFieldEquals,
-        FieldStartsWith,
-        FieldEndsWith,
-        FieldContains,
-        FieldMatchesRegex,
-        FieldNoWhitespace,
-        FieldIsValidPhoneNumber,
-        FieldIsEmail,
-        FieldIsURL,
-        FieldIsNumeric,
-        FieldIsAlpha,
-        FieldNoSpecialCharacters,
-      );
+    switch (selectedField.type) {
+      case 'text':
+      case 'textarea':
+        fieldComponents.push(
+          FieldRequired,
+          FieldExactLength,
+          FieldMinLength,
+          FieldMaxLength,
+          TextFieldEquals,
+          FieldStartsWith,
+          FieldEndsWith,
+          FieldContains,
+          FieldMatchesRegex,
+          FieldNoWhitespace,
+          FieldIsValidPhoneNumber,
+          FieldIsEmail,
+          FieldIsURL,
+          FieldIsNumeric,
+          FieldIsAlpha,
+          FieldNoSpecialCharacters,
+        );
+        break;
+      case 'date':
+        fieldComponents.push(
+          DateFieldRequired,
+          DateFieldRestrictPastDate,
+          DateFieldRestrictFutureDate,
+          DateFieldIsBefore,
+          DateFieldIsAfter,
+        );
+        break;
+      case 'radio':
+        fieldComponents.push(FieldRequired, RadioFieldEquals);
+        break;
+      case 'checkbox':
+        fieldComponents.push(
+          CheckboxFieldRequired,
+          CheckboxFieldMinCount,
+          CheckboxFieldMaxCount,
+          CheckboxFieldContains,
+        );
+        break;
+      case 'dropdown':
+        fieldComponents.push(
+          CheckboxFieldRequired,
+          CheckboxFieldMinCount,
+          CheckboxFieldMaxCount,
+          DropdownFieldContains,
+        );
+        break;
+      default:
+        break;
     }
 
-    if (selectedField?.type === 'date') {
-      fields.push(
-        DateFieldRequired,
-        DateFieldRestrictPastDate,
-        DateFieldRestrictFutureDate,
-        DateFieldIsBefore,
-        DateFieldIsAfter,
-      );
-    }
+    return fieldComponents;
+  }, [selectedField]);
 
-    if (selectedField?.type === 'radio') {
-      fields.push(FieldRequired, RadioFieldEquals);
-    }
-
-    if (selectedField?.type === 'checkbox') {
-      fields.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount, CheckboxFieldContains);
-    }
-
-    if (selectedField?.type === 'dropdown') {
-      fields?.push(CheckboxFieldRequired, CheckboxFieldMinCount, CheckboxFieldMaxCount, DropdownFieldContains);
-    }
-
-    if (fields?.length > 7) {
+  const renderFields = () => {
+    if (fields.length > 7) {
       return (
         <>
-          {fields?.slice(0, 4).map((Field, idx) => (
+          {fields.slice(0, 4).map((Field, idx) => (
             <Field key={idx} />
           ))}
-          {showMore && fields?.slice(4, fields?.length).map((Field, idx) => <Field key={idx} />)}
+          {showMore && fields.slice(4).map((Field, idx) => <Field key={idx} />)}
           <div className="flex justify-center">
             <Button variant={'secondary'} onClick={() => setShowMore(!showMore)}>
               {showMore ? 'Show less...' : 'Show more...'}
@@ -100,7 +115,7 @@ const FieldValidationSection = () => {
         </>
       );
     }
-    return fields?.map((Field, idx) => <Field key={idx} />);
+    return fields.map((Field, idx) => <Field key={idx} />);
   };
 
   if (!selectedField) return null;
@@ -113,9 +128,9 @@ const FieldValidationSection = () => {
       key={selectedField?.id}
       className="pb-40"
     >
-      {renderFieldValidation()}
+      {renderFields()}
     </FormConfigSection>
   );
 };
 
-export default FieldValidationSection;
+export default memo(FieldValidationSection);

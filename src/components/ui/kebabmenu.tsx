@@ -36,7 +36,7 @@ const Menu = ({ items, renderTrigger }: KebabMenuProps) => {
         </MenubarTrigger>
         <MenubarContent>
           {items?.map((item) => (
-            <Fragment key={item?.value}>
+            <Fragment key={item?.value || item?.label}>
               <MenubarItem onClick={item?.onClick} disabled={item?.disabled} className={item?.className}>
                 {item?.label}
               </MenubarItem>
