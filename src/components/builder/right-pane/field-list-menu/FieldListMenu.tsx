@@ -41,6 +41,7 @@ const FieldListMenu = () => {
       title={section.title}
       // @ts-expect-error ts(2322)
       subtitle={section.description}
+      className="gap-4"
     >
       {section.fields?.map((field) => (
         <FieldCard

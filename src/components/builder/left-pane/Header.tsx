@@ -35,7 +35,7 @@ const FormName = () => {
     <Input
       onChange={handleNameChange}
       value={name}
-      className="border-0 p-0 border-b-[1px] border-b-greyBorder rounded-none focus-visible:ring-0 font-bold text-white/80 text-xl"
+      className="border-0 p-0 border-b-[1px] border-b-greyBorder rounded-none focus-visible:ring-0 font-bold tracking-tight text-white/80 text-lg"
     />
   );
 };

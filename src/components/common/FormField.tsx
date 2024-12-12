@@ -23,7 +23,10 @@ const FormField = ({
   return (
     <Label className={classes} htmlFor={id}>
       <span
-        className={cn('font-bold text-white/80 text-[15px] flex items-center tracking-tight', helperText ? '' : 'mb-1')}
+        className={cn(
+          'font-[700] text-white/80 text-[15px] flex items-center tracking-tight',
+          helperText ? '' : 'mb-1',
+        )}
       >
         {label}
         {required && <sup className="top-[-0.1em] ml-[1px] font-bold text-red-500 text-sm">*</sup>}

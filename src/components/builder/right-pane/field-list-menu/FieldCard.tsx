@@ -1,8 +1,5 @@
 import CustomTooltip from '@/components/ui/custom-tooltip';
-import { createNewFormField } from '@/lib/form';
-import { FieldType } from '@/types/form-config';
-import { useFormActionProperty, useFormProperty } from '@/zustand/store';
-import { CirclePlus, Grip, Plus } from 'lucide-react';
+import { CirclePlus } from 'lucide-react';
 
 interface FieldCardProps {
   icon: React.ReactNode;
