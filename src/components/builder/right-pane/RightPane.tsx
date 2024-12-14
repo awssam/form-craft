@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import FieldConfigMenu from './field-config-menu/FieldConfigMenu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -10,14 +10,10 @@ import FieldListMenu from './field-list-menu/FieldListMenu';
 const RightPane = ({ className }: GenericProps) => {
   const classes = cn('h-full bg-background p-4 flex flex-col gap-6 overflow-auto', className);
   const selectedField = useSelectedFieldStore((s) => s?.selectedField);
-  const [selected, setSelected] = React.useState('fields');
+  const [selected, setSelected] = useState('fields');
 
   useEffect(() => {
-    if (selectedField) {
-      setSelected('settings');
-    } else {
-      setSelected('fields');
-    }
+    setSelected(selectedField ? 'settings' : 'fields');
   }, [selectedField]);
 
   return (

@@ -718,7 +718,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
             ref={buttonRef}
             style={style}
           >
-            <CalendarIcon className="mr-2 min-h-4 min-w-4 h-4 w-4 md:inline-block hidden" />
+            <CalendarIcon className={cn('mr-2 min-h-4 min-w-4 h-4 w-4 md:inline-block hidden', placeHolderClasses)} />
             {value ? (
               <span className="text-ellipsis overflow-hidden" title={displayValue}>
                 {displayValue}

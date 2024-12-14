@@ -28,6 +28,8 @@ export const FieldDuplicateAction = memo(() => {
   );
 });
 
+FieldDuplicateAction.displayName = 'FieldDuplicateAction';
+
 export const FieldDeleteAction = () => {
   const deleteField = useFormActionProperty('deleteField');
   const [open, setOpen] = React.useState(false);
@@ -35,7 +37,7 @@ export const FieldDeleteAction = () => {
   const selectedField = useSelectedFieldStore((s) => s?.selectedField);
 
   const handleFieldDelete = () => {
-    deleteField(selectedField?.id!);
+    deleteField(selectedField?.id as string);
     toast('Field deleted successfully');
   };
 
