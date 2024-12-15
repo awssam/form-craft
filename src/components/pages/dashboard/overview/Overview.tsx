@@ -57,7 +57,7 @@ const Overview = () => {
             <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
               <span className="text-xs text-green-500">✅</span>
               <p className="text-xs font-medium">
-                Form <span className="font-bold">'Contact Us'</span> is now live.
+                Form <span className="font-bold">Contact Us</span> is now live.
               </p>
             </div>
 
@@ -89,7 +89,7 @@ const Overview = () => {
             <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
               <span className="text-xs text-green-500">✅</span>
               <p className="text-xs font-medium">
-                Form <span className="font-bold">'Feedback Survey'</span> is now live.
+                Form <span className="font-bold">Feedback Survey</span> is now live.
               </p>
             </div>
 
@@ -105,7 +105,7 @@ const Overview = () => {
             <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
               <span className="text-xs text-green-500">✅</span>
               <p className="text-xs font-medium">
-                Form <span className="font-bold">'Event Feedback'</span> is now live.
+                Form <span className="font-bold">Event Feedback</span> is now live.
               </p>
             </div>
 
