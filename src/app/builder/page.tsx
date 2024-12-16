@@ -1,4 +1,4 @@
-import SectionDisplay from '@/components/builder/SectionDisplay';
+import SectionDisplay from '@/components/pages/builder/SectionDisplay';
 import { FormSectionDisplayProvider } from '@/hooks/useFormSectionDisplay';
 import React from 'react';
 

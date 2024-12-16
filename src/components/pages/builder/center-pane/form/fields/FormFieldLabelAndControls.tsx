@@ -13,7 +13,7 @@ import CustomTooltip from '@/components/ui/custom-tooltip';
 
 import { cn } from '@/lib/utils';
 import { FormFieldProps } from '@/types/common';
-import DeleteFieldModal from '@/components/builder/DeleteFieldModal';
+import DeleteFieldModal from '@/components/pages/builder/DeleteFieldModal';
 
 interface FormFieldLabelAndControlsProps {
   field: FormFieldProps['field'];

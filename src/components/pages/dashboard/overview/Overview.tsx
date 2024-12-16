@@ -10,7 +10,7 @@ const Overview = () => {
   return (
     <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-4 ">
       <InfoCard
-        className="col-span-full sm:col-span-3 md:col-span-3 max-h-[300px] "
+        className="col-span-full sm:col-span-3 md:col-span-3 max-h-[230px] "
         title="Total Submissions"
         icon={ClipboardList}
         description={'Total submissions received across all forms.'}
@@ -18,7 +18,7 @@ const Overview = () => {
       />
 
       <InfoCard
-        className="col-span-full sm:col-span-3 md:col-span-3  max-h-[300px]"
+        className="col-span-full sm:col-span-3 md:col-span-3  max-h-[230px]"
         title="Average Completion Rate"
         icon={CirclePercent}
         description={'Percentage of users who completed forms.'}
@@ -26,7 +26,7 @@ const Overview = () => {
       />
 
       <InfoCard
-        className="col-span-full md:col-span-6 [grid-row:2/span-1]  max-h-[300px]"
+        className="col-span-full md:col-span-6 [grid-row:2/span-1]  max-h-[230px]"
         title={'Most Active Form'}
         icon={StarFilledIcon}
         description={'Form with the highest number of submissions received.'}

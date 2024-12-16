@@ -1,6 +1,8 @@
 import Header from '@/components/pages/dashboard/common/Header';
 import TabsContainer from '@/components/pages/dashboard/common/TabsContainer';
+import Forms from '@/components/pages/dashboard/forms/Forms';
 import Overview from '@/components/pages/dashboard/overview/Overview';
+
 import { TabsContent } from '@/components/ui/tabs';
 
 export default function Home() {
@@ -13,7 +15,7 @@ export default function Home() {
             <Overview />
           </TabsContent>
           <TabsContent value="forms">
-            <h3 className="font-bold text-white text-xl">My Forms</h3>
+            <Forms />
           </TabsContent>
           <TabsContent value="templates">
             <h3 className="font-bold text-white text-xl">Templates</h3>

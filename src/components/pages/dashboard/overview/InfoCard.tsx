@@ -4,7 +4,9 @@ import { cn } from '@/lib/utils';
 const TitleWithIcon = ({ title, icon: Icon }: { title: string; icon: React.ElementType }) => {
   return (
     <div className="flex items-center justify-between gap-3">
-      <CardTitle className="text-sm">{title}</CardTitle>
+      <CardTitle>
+        <h2>{title}</h2>
+      </CardTitle>
       <Icon className="w-4 h-4 text-muted-foreground" />
     </div>
   );
@@ -21,7 +23,12 @@ interface InfoCardProps {
 }
 const InfoCard = ({ className, title, icon, description, data, renderData, contentClassName }: InfoCardProps) => {
   return (
-    <Card className={cn('border-[#212326] shadow-lg', className)}>
+    <Card
+      className={cn(
+        'border-[#212326] shadow-lg border-dashed hover:transform-gpu hover:-translate-y-2 hover:border-yellow-200/30 transition-all duration-300',
+        className,
+      )}
+    >
       <CardHeader className="space-y-0.5">
         <TitleWithIcon title={title} icon={icon} />
         <CardDescription className="text-xs">{description}</CardDescription>

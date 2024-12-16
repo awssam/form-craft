@@ -92,7 +92,7 @@ export function Combobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('justify-between', triggerClassName)}
+          className={cn('justify-between overflow-hidden', triggerClassName)}
           style={triggerStyle}
         >
           {values.length > 0 ? (

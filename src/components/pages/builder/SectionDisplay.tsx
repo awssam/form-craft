@@ -5,11 +5,11 @@ import React from 'react';
 import LeftPane from './left-pane/LeftPane';
 import RightPane from './right-pane/RightPane';
 import CenterPane from './center-pane/CenterPane';
-import MobileSectionDisplayer from '../common/MobileSectionDisplayer';
+import MobileSectionDisplayer from '@/components/common/MobileSectionDisplayer';
 
 import { cn } from '@/lib/utils';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
-import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '../ui/resizable';
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from '@/components/ui/resizable';
 import useMediaQuery from '@/hooks/useMediaQuery';
 import {
   closestCenter,

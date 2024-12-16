@@ -25,9 +25,13 @@ interface KebabMenuProps {
 
 const Menu = ({ items, renderTrigger }: KebabMenuProps) => {
   return (
-    <Menubar className="border-none p-0 bg-transparent hover:bg-transparent">
+    <Menubar className="border-none p-0 bg-transparent hover:bg-transparent data-[state=open]:bg-transparent focus:bg-transparent">
       <MenubarMenu>
-        <MenubarTrigger asChild className="border-0 bg-transparent p-0">
+        <MenubarTrigger
+          onClick={(e) => e.stopPropagation()}
+          asChild
+          className="border-0 bg-transparent p-0 data-[state=open]:bg-transparent focus:bg-transparent"
+        >
           {renderTrigger ? (
             renderTrigger()
           ) : (
