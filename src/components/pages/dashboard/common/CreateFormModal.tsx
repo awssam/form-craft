@@ -10,6 +10,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { LucideBuilding, PuzzleIcon, Sparkles } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface CreateFormModalProps {
@@ -18,9 +19,20 @@ interface CreateFormModalProps {
   className?: string;
 }
 
-const FormCreationOption = ({ icon: Icon, title }: { icon: React.ElementType; title: string }) => {
+const FormCreationOption = ({
+  icon: Icon,
+  title,
+  onClick,
+}: {
+  icon: React.ElementType;
+  title: string;
+  onClick?: () => void;
+}) => {
   return (
-    <div className="rounded-lg cursor-pointer border-dashed border hover:border-yellow-200/30 px-2 py-6 grid place-items-center bg-card group">
+    <div
+      onClick={onClick}
+      className="rounded-lg cursor-pointer border-dashed border hover:border-yellow-200/30 px-2 py-6 grid place-items-center bg-card group"
+    >
       <Icon className="w-6 h-6 text-muted-foreground group-hover:text-yellow-200" />
       <p className="mt-2 text-center text-sm group-hover:text-yellow-200">{title}</p>
     </div>
@@ -28,6 +40,13 @@ const FormCreationOption = ({ icon: Icon, title }: { icon: React.ElementType; ti
 };
 
 const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => {
+  const router = useRouter();
+
+  const handleWithTemplateOption = () => {
+    setOpen(false);
+    router.push('/templates');
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className={className}>
@@ -44,7 +63,7 @@ const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => 
         <div className="grid md:grid-cols-3 gap-4 my-8">
           <FormCreationOption icon={PuzzleIcon} title="Build from scratch" />
           <FormCreationOption icon={Sparkles} title="Build with AI ✨" />
-          <FormCreationOption icon={LucideBuilding} title="Start with a template" />
+          <FormCreationOption onClick={handleWithTemplateOption} icon={LucideBuilding} title="Start with a template" />
         </div>
 
         <DialogFooter>

@@ -1,18 +1,28 @@
 'use client';
 
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUser } from '@clerk/nextjs';
+import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 
 const TabsContainer = ({ children }: { children: React.ReactNode }) => {
   const { isLoaded, isSignedIn, user } = useUser();
+  const pathname = usePathname();
+  const router = useRouter();
 
   if (!isLoaded || !isSignedIn) {
     return null;
   }
 
   return (
-    <Tabs defaultValue="forms" className="flex-1">
+    <Tabs
+      defaultValue="/"
+      value={pathname}
+      onValueChange={(value) => {
+        router.push(value, { scroll: false });
+      }}
+      className="flex-1"
+    >
       <div className="flex justify-between gap-6 md:items-center sm:flex-row flex-col">
         <div className="div text-center md:text-left">
           <h2 className="font-bold text-white md:text-2xl text-lg">Hey {user?.firstName}!! 👋</h2>
@@ -24,13 +34,13 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
           {/* <DateTimePicker className="md:w-[200px]" placeHolderClasses="text-white" granularity="day" /> */}
           {/* <Button variant={'default'}>Download</Button> */}
           <TabsList className="">
-            <TabsTrigger value="overview" className="text-xs md:text-sm">
+            <TabsTrigger value="/" className="text-xs md:text-sm">
               Overview
             </TabsTrigger>
-            <TabsTrigger value="forms" className="text-xs md:text-sm">
+            <TabsTrigger value="/forms" className="text-xs md:text-sm">
               My Forms
             </TabsTrigger>
-            <TabsTrigger value="templates" className="text-xs md:text-sm">
+            <TabsTrigger value="/templates" className="text-xs md:text-sm">
               Templates
             </TabsTrigger>
             <TabsTrigger value="analytics" className="text-xs md:text-sm">
@@ -40,7 +50,9 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
         </div>
       </div>
 
-      {children}
+      <TabsContent value={pathname} className="mt-6">
+        {children}
+      </TabsContent>
     </Tabs>
   );
 };

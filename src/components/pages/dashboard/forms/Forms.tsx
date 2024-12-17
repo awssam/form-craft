@@ -77,7 +77,7 @@ const forms = [
 
 const Forms = () => {
   return (
-    <div className="flex flex-col gap-6 mt-6">
+    <div className="flex flex-col gap-6">
       <div className="flex justify-between gap-4 items-center">
         <Input className="md:w-[500px] h-11" placeholder="Quickly find your forms from here." type="search" />
       </div>
