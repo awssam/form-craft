@@ -9,9 +9,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
+import { useCreateFormMutation } from '@/data-fetching/client/form';
+import { useFormActionProperty } from '@/zustand/store';
 import { LucideBuilding, PuzzleIcon, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import React from 'react';
+import { toast } from 'sonner';
 
 interface CreateFormModalProps {
   open: boolean;
@@ -41,10 +44,33 @@ const FormCreationOption = ({
 
 const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => {
   const router = useRouter();
+  const setFormConfig = useFormActionProperty('setFormConfig');
+
+  const mutate = useCreateFormMutation({
+    onMutate: () => {
+      setOpen(false);
+      const toastId = toast.loading('Creating form...');
+      return toastId as string;
+    },
+    onSuccess: (data, context) => {
+      toast.dismiss(context as string);
+      if (data?.id) {
+        setFormConfig(data);
+        toast.success('Form created successfully!', {
+          style: { background: '#000', color: '#fff' },
+        });
+        setTimeout(() => router.push('/builder'), 1000);
+      }
+    },
+  });
 
   const handleWithTemplateOption = () => {
     setOpen(false);
     router.push('/templates');
+  };
+
+  const handleBuildFromScratch = () => {
+    mutate(void null);
   };
 
   return (
@@ -61,7 +87,7 @@ const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => 
         </DialogHeader>
 
         <div className="grid md:grid-cols-3 gap-4 my-8">
-          <FormCreationOption icon={PuzzleIcon} title="Build from scratch" />
+          <FormCreationOption onClick={handleBuildFromScratch} icon={PuzzleIcon} title="Build from scratch" />
           <FormCreationOption icon={Sparkles} title="Build with AI ✨" />
           <FormCreationOption onClick={handleWithTemplateOption} icon={LucideBuilding} title="Start with a template" />
         </div>

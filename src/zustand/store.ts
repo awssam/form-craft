@@ -9,7 +9,7 @@ type FormState = {
 };
 
 type FormAction = {
-  setFormConfig: (formConfig: FormConfig) => void;
+  setFormConfig: (formConfig: FormConfig | null) => void;
   updateFormConfig: (formConfig: Partial<FormConfig>) => void;
   resetFormConfig: () => void;
   updateFormStyles: (styles: Partial<FormConfig['styles']>) => void;
@@ -26,7 +26,7 @@ type FormAction = {
 
 export const useFormConfigStore = create<FormState & FormAction>((set, get) => ({
   formConfig,
-  setFormConfig: (formConfig) => set({ formConfig }),
+  setFormConfig: (formConfig) => set({ formConfig: formConfig || ({} as FormConfig) }),
   updateFormConfig: (config) => {
     console.log('updateFormConfig', config);
     set((state) => ({
@@ -320,15 +320,19 @@ export const useFieldVisibilityStore = create<FieldVisibilityState & FieldVisibi
 
 type UIState = {
   isDraggingFormField: boolean;
+  isCreatingNewForm: boolean;
 };
 
 type UIAction = {
   setIsDraggingFormField: (isDragging: boolean) => void;
+  setIsCreatingNewForm: (isCreating: boolean) => void;
 };
 
 export const useUIEventsStore = create<UIState & UIAction>((set) => ({
   isDraggingFormField: false,
   setIsDraggingFormField: (isDragging) => set({ isDraggingFormField: isDragging }),
+  isCreatingNewForm: false,
+  setIsCreatingNewForm: (isCreating) => set({ isCreatingNewForm: isCreating }),
 }));
 
 export const useUIEventsProperty = <T extends keyof UIState>(key: T): UIState[T] => {

@@ -1,6 +1,7 @@
 import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
 import { generateId } from './utils';
 import { formThemes } from '@/zustand/data';
+import { format } from '@/lib/datetime';
 
 export const createNewFormField = ({
   type,
@@ -26,11 +27,16 @@ export const createNewFormField = ({
   switch (type) {
     case 'checkbox':
     case 'radio':
+      baseField.helperText = '';
     case 'dropdown':
       baseField.options = [
         { label: 'Option 1', value: 'option-1', helperText: '' },
         { label: 'Option 2', value: 'option-2', helperText: '' },
       ];
+      if (type === 'dropdown') {
+        baseField.placeholder = 'Select an option...';
+      }
+
       break;
 
     case 'date':
@@ -63,9 +69,16 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
   switch (newFieldType) {
     case 'checkbox':
     case 'radio':
+      newField.helperText = '';
+      newField.options = field?.options ?? [{ label: 'Option 1', value: 'option-1', helperText: '' }];
+      newField.value = undefined;
+      newField.defaultValue = undefined;
+      break;
+
     case 'dropdown':
       newField.options = field?.options ?? [{ label: 'Option 1', value: 'option-1', helperText: '' }];
       newField.value = undefined;
+      newField.placeholder = 'Select an option...';
       newField.defaultValue = undefined;
       break;
     case 'date':
@@ -76,8 +89,6 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
     default:
       break;
   }
-
-  console.log(newField);
 
   return newField;
 };
@@ -96,9 +107,6 @@ export const Field_Type_Options = [
 }));
 
 export const createNewForm = (userId: string | null): FormConfig | null => {
-
-
-
   const defaultField = createNewFormField({
     type: 'text',
     name: generateId(),
@@ -110,9 +118,9 @@ export const createNewForm = (userId: string | null): FormConfig | null => {
 
   return {
     id: generateId(),
-    name: 'Untitled Form',
+    name: 'Form - ' + format(new Date(), 'dd-MM-yyyy hh:mm'),
     createdBy: userId!,
-    description: '',
+    description: 'Your form description goes here',
     image: '',
     status: 'draft',
     tags: [],

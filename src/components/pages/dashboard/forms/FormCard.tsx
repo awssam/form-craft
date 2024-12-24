@@ -4,59 +4,81 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import Menu from '@/components/ui/kebabmenu';
 
 import { formatDistanceToNow } from '@/lib/datetime';
-import { ArrowRight } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { cn } from '@/lib/utils';
+import { ArrowRight, LoaderCircle } from 'lucide-react';
 import React from 'react';
+
 interface FormCardProps {
+  id: string;
   title: string;
   description: string;
   status: string;
   submissions: number;
   lastModified: Date | string;
+  isPreview?: boolean;
+  onEdit?: (id: string, name: string) => void;
+  onDelete?: (id: string, name: string) => void;
 }
 
-const FormCard = ({ title, description, status, submissions, lastModified }: FormCardProps) => {
-  const router = useRouter();
-
+const FormCard = ({
+  id,
+  title,
+  description,
+  status,
+  submissions,
+  lastModified,
+  isPreview,
+  onEdit,
+  onDelete,
+}: FormCardProps) => {
   const formActions = [
     {
       label: 'Edit',
-      onClick: () => {
-        router.push('/builder');
-      },
+      onClick: () => onEdit?.(id, title),
     },
     {
       label: 'Delete',
-      onClick: () => {
-        console.log('Delete form');
-      },
+      onClick: () => onDelete?.(id, title),
     },
   ];
+
   return (
-    <Card
-      onClick={() => router.push('/builder')}
-      className="w-full border-[#212326] border-dashed shadow-xl hover:border-yellow-200/30 transition-all duration-300 transform-gpu hover:-translate-y-2 cursor-pointer"
-    >
-      <CardHeader className="space-y-0.5">
-        <CardTitle className="flex items-center justify-between w-full gap-4">
-          <h2 className="hover:font-extrabold hover:text-yellow-200 flex items-center group transition-all duration-300">
-            {title}
-            <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0 transition-all duration-300" />
-          </h2>
-          <Menu items={formActions} />
-        </CardTitle>
-        <CardDescription className="-mt-6 text-xs text-ellipsis">{description}</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <h3 className="font-semibold">
-          <span className="font-bold text-2xl">{submissions}</span> submissions
-        </h3>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between w-full gap-4 text-ellipsis">
-        <p className="text-muted-foreground text-xs">Last modified: {formatDistanceToNow(new Date(lastModified))}</p>
-        <FormStatusTag status={status} />
-      </CardFooter>
-    </Card>
+    <>
+      <Card
+        className={cn(
+          'w-full border-[#212326] border-dashed shadow-xl hover:border-yellow-200/30 transition-all transform-gpu hover:-translate-y-2',
+          {
+            'cursor-pointer duration-300': !isPreview,
+            'cursor-not-allowed animate-pulse': isPreview,
+          },
+        )}
+      >
+        <CardHeader className="space-y-0.5">
+          <CardTitle className="flex items-center justify-between w-full gap-4">
+            <h2
+              className="hover:font-extrabold hover:text-yellow-200 flex items-center group transition-all duration-300"
+              onClick={() => onEdit?.(id, title)}
+            >
+              {title}
+              <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0 transition-all duration-300" />
+            </h2>
+            {!isPreview && <Menu items={formActions} />}
+          </CardTitle>
+          <CardDescription className="-mt-6 text-xs text-ellipsis">{description}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <h3 className="font-semibold">
+            <span className="font-bold text-2xl">{submissions}</span> submissions
+          </h3>
+        </CardContent>
+        <CardFooter className="flex items-center justify-between w-full gap-4 text-ellipsis">
+          <p className="text-muted-foreground text-xs">
+            Last modified: {formatDistanceToNow(new Date(lastModified ?? Date.now()))}
+          </p>
+          <FormStatusTag status={isPreview ? 'creating-new' : status} />
+        </CardFooter>
+      </Card>
+    </>
   );
 };
 
@@ -72,6 +94,10 @@ const FormStatusTag = ({ status }: { status: string }) => {
       label: 'Published',
       color: 'bg-green-800',
     },
+    'creating-new': {
+      label: 'Creating...',
+      color: 'bg-gray-800',
+    },
   };
 
   return (
@@ -80,7 +106,10 @@ const FormStatusTag = ({ status }: { status: string }) => {
         statusConfig[status as keyof typeof statusConfig].color
       }`}
     >
-      <span className="text-white font-normal text-xs">{statusConfig[status as keyof typeof statusConfig].label}</span>
+      <span className="text-white font-normal text-xs flex items-center gap-1">
+        {statusConfig[status as keyof typeof statusConfig].label}
+        {status === 'creating-new' && <LoaderCircle className="w-4 h-4 inline animate-spin" />}
+      </span>
     </div>
   );
 };

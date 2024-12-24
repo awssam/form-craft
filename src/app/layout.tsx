@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/sonner';
 
 import { CLERK_APPEARANCE_CONFIG } from '@/config/clerk';
 import './globals.css';
+import ReactQueryProvider from '@/providers/react-query';
 
 export const metadata: Metadata = {
   title: 'VI Forms',
@@ -19,8 +20,10 @@ export default function RootLayout({
     <ClerkProvider appearance={CLERK_APPEARANCE_CONFIG}>
       <html lang="en">
         <body className={`bg-black antialiased dark overflow-hidden`}>
-          {children}
-          <Toaster position="bottom-center" className="z-[99999999999999999999999]" duration={2000} richColors />
+          <ReactQueryProvider>
+            {children}
+            <Toaster position="bottom-center" className="z-[99999999999999999999999]" duration={2000} richColors />
+          </ReactQueryProvider>
         </body>
       </html>
     </ClerkProvider>
