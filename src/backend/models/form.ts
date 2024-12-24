@@ -122,83 +122,88 @@ const formStylesSchema = new mongoose.Schema<FormStyles>({
   fontSecondaryColor: String,
 });
 
-const formSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    default: generateId,
-    unique: true,
-    index: true,
+const formSchema = new mongoose.Schema(
+  {
+    id: {
+      type: String,
+      default: generateId,
+      unique: true,
+      index: true,
+    },
+    createdBy: {
+      type: String,
+      required: true,
+      index: true,
+    },
+    name: {
+      type: String,
+      required: true,
+      default: 'Untitled Form ' + new Date()?.toDateString(),
+      index: 'text',
+    },
+    description: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    image: {
+      type: String,
+      required: false,
+      default: '',
+    },
+    status: {
+      type: String,
+      enum: ['draft', 'published', 'archived'], // Use enum for status
+      default: 'draft',
+      index: 'descending',
+    },
+    tags: {
+      type: [String],
+      required: false,
+      default: [],
+    },
+    multiPage: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
+    pages: {
+      type: [String],
+      required: true,
+      default: [],
+    },
+    pageEntities: {
+      type: Map,
+      of: pageEntitySchema,
+      required: true,
+      default: {},
+    },
+    fieldEntities: {
+      type: Map,
+      of: fieldEntitySchema,
+      required: true,
+      default: {},
+    },
+    settings: {
+      type: formSettingsSchema,
+      required: false,
+      default: {},
+    },
+    styles: {
+      type: formStylesSchema,
+      required: true,
+      default: {},
+    },
+    theme: {
+      type: Object,
+      required: false,
+      default: {},
+    },
   },
-  createdBy: {
-    type: String,
-    required: true,
-    index: true,
+  {
+    timestamps: true,
   },
-  name: {
-    type: String,
-    required: true,
-    default: 'Untitled Form ' + new Date()?.toDateString(),
-    index: 'text',
-  },
-  description: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  image: {
-    type: String,
-    required: false,
-    default: '',
-  },
-  status: {
-    type: String,
-    enum: ['draft', 'published', 'archived'], // Use enum for status
-    default: 'draft',
-    index: 'descending',
-  },
-  tags: {
-    type: [String],
-    required: false,
-    default: [],
-  },
-  multiPage: {
-    type: Boolean,
-    required: true,
-    default: false,
-  },
-  pages: {
-    type: [String],
-    required: true,
-    default: [],
-  },
-  pageEntities: {
-    type: Map,
-    of: pageEntitySchema,
-    required: true,
-    default: {},
-  },
-  fieldEntities: {
-    type: Map,
-    of: fieldEntitySchema,
-    required: true,
-    default: {},
-  },
-  settings: {
-    type: formSettingsSchema,
-    required: false,
-    default: {},
-  },
-  styles: {
-    type: formStylesSchema,
-    required: true,
-    default: {},
-  },
-  theme: {
-    type: Object,
-    required: false,
-    default: {},
-  },
-});
+);
 
 type FormModel = InferSchemaType<typeof formSchema>;
 

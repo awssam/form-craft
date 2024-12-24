@@ -12,3 +12,11 @@ export const verifyAuth = async () => {
 
   return auth()?.userId;
 };
+
+export const convertToPlainObject = (obj: any) => {
+  try {
+    return JSON.parse(JSON.stringify(obj));
+  } catch {
+    return obj;
+  }
+};
