@@ -46,6 +46,7 @@ export const formThemes: Record<Theme, ThemeProperties> = {
 export const formConfig: FormConfig = {
   id: 'form_123', // Unique identifier for the form
   name: 'Customer Feedback Form',
+  createdBy: 'John Doe',
   description: 'A form to collect feedback from our valued customers.',
   image: 'https://example.com/form-image.png', // URL of an image to display in the form
   tags: ['feedback', 'customer', 'survey'],

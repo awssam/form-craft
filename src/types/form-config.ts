@@ -1,6 +1,7 @@
 export interface FormConfig {
   id: string; // Unique identifier for the form
   name: string; // Name of the form
+  createdBy: string;
   description: string; // Description of the form
   image?: string; // URL of an image to display in the form
   status: FormStatus; // Status of the form
@@ -32,7 +33,7 @@ interface FormTheme {
 
 type FormStatus = 'draft' | 'published';
 
-interface PageEntity {
+export interface PageEntity {
   id: string; // Unique identifier for the page
   name: string; // Name of the page
   fields: string[]; // Array of field IDs to maintain the order of appearance of fields
@@ -61,7 +62,7 @@ export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'f
 
 export type CustomValidationType = 'withValue' | 'binary';
 
-interface FieldValidation {
+export interface FieldValidation {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
   validate?: Record<string, Function>;
 
@@ -101,7 +102,7 @@ export interface ConditionalLogic {
 
 export type ConditionalLogicOperator = string;
 
-interface FormSettings {
+export interface FormSettings {
   submission: {
     emailNotifications: boolean; // Whether email notifications are enabled on submission
     redirectURL: string; // URL to redirect to after submission
@@ -109,7 +110,7 @@ interface FormSettings {
   fileUploadLimit: string; // File upload limit, e.g., "5MB"
 }
 
-interface FormStyles {
+export interface FormStyles {
   fontFamily?: string;
   backgroundColor?: string;
   fontPrimaryColor?: string;

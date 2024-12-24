@@ -1,5 +1,6 @@
-import { FieldEntity, FieldType } from '@/types/form-config';
+import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
 import { generateId } from './utils';
+import { formThemes } from '@/zustand/data';
 
 export const createNewFormField = ({
   type,
@@ -44,6 +45,15 @@ export const createNewFormField = ({
   return baseField;
 };
 
+export const createNewPageEntity = () => {
+  const pageId = generateId();
+  return {
+    id: pageId,
+    name: `Page`,
+    fields: [],
+  };
+};
+
 export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): FieldEntity => {
   const newField: FieldEntity = {
     ...field,
@@ -84,3 +94,52 @@ export const Field_Type_Options = [
   label: type?.replace(type?.charAt(0), type?.charAt(0)?.toUpperCase()),
   value: type,
 }));
+
+export const createNewForm = (userId: string | null): FormConfig | null => {
+
+
+
+  const defaultField = createNewFormField({
+    type: 'text',
+    name: generateId(),
+    label: 'Text field',
+  });
+
+  const defaultPage = createNewPageEntity();
+  const defaultPageId = defaultPage.id;
+
+  return {
+    id: generateId(),
+    name: 'Untitled Form',
+    createdBy: userId!,
+    description: '',
+    image: '',
+    status: 'draft',
+    tags: [],
+    multiPage: false,
+    pages: [defaultPageId],
+    pageEntities: {
+      [defaultPageId]: {
+        ...defaultPage,
+        fields: [defaultField.id],
+        name: 'Page 1',
+      },
+    },
+    fieldEntities: {
+      [defaultField.id as string]: defaultField,
+    },
+    settings: {
+      submission: {
+        emailNotifications: true,
+        redirectURL: '/thank-you',
+      },
+      fileUploadLimit: '10MB',
+    },
+    styles: {},
+    theme: {
+      type: 'charcoal-black',
+      id: 'charcoal-black',
+      properties: formThemes['charcoal-black'],
+    },
+  };
+};
