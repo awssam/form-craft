@@ -1,3 +1,13 @@
+export type FormConfigWithMeta = {
+  meta: {
+    title: string;
+    description: string;
+    status: string;
+    submissions: number;
+    lastModified: string;
+  };
+} & FormConfig;
+
 export interface FormConfig {
   id: string; // Unique identifier for the form
   name: string; // Name of the form

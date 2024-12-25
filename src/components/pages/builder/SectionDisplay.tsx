@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import LeftPane from './left-pane/LeftPane';
 import RightPane from './right-pane/RightPane';
@@ -24,8 +24,9 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { FieldEntity } from '@/types/form-config';
-import { useFormActionProperty, useFormProperty, useUIEventsActionProperty } from '@/zustand/store';
+import { useFormActionProperty, useFormConfigStore, useFormProperty, useUIEventsActionProperty } from '@/zustand/store';
 import { arrayMove } from '@dnd-kit/sortable';
+import { useAutoSaveFormConfig } from '@/data-fetching/client/form';
 
 const SectionDisplay = () => {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor));
@@ -120,6 +121,8 @@ const SectionDisplay = () => {
       setPageFields(overContainerId, newOverFields);
     }
   };
+
+  useAutoSaveFormConfig();
 
   return (
     <DndContext

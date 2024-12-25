@@ -136,6 +136,10 @@ export const FieldDefaultValue = memo(() => {
   const { handlePropertyChange, handlePropertyChangeWithValue } = useSelectedFieldUpdate();
   const selectedField = useSelectedField();
 
+  const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
+    return typeof formValue === 'string' ? new Date(formValue) : (formValue as Date);
+  };
+
   const renderDefaultValueInput = () => {
     switch (selectedField?.type) {
       case 'text':
@@ -156,7 +160,7 @@ export const FieldDefaultValue = memo(() => {
         return (
           <DateTimePicker
             granularity="day"
-            value={isValid(selectedField?.defaultValue) ? new Date(selectedField?.defaultValue as string) : undefined}
+            value={getDatePickerValue(selectedField?.defaultValue as string)}
             onChange={(date) => handlePropertyChangeWithValue('defaultValue')(date!)}
           />
         );

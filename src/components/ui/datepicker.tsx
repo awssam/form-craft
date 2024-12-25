@@ -657,6 +657,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
   ) => {
     const [month, setMonth] = React.useState<Date>(value ?? new Date());
     const buttonRef = useRef<HTMLButtonElement>(null);
+
     /**
      * carry over the current time when a user clicks a new day
      * instead of resetting to 00:00
@@ -668,6 +669,9 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
         setMonth(newDay);
         return;
       }
+
+      value = new Date(value);
+
       const diff = newDay.getTime() - value.getTime();
       const diffInDays = diff / (1000 * 60 * 60 * 24);
       const newDateFull = add(value, { days: Math.ceil(diffInDays) });

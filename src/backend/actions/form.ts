@@ -92,3 +92,26 @@ export const deleteFormAction = async (id: string) => {
     };
   }
 };
+
+export const updateFormConfigAction = async (id: string, update: Partial<FormConfig>) => {
+  try {
+    const userId = await verifyAuth();
+    await connectDb();
+    const res = await Form.updateOne(
+      { id, createdBy: userId },
+      { ...update, createdBy: userId, id },
+      { new: true, upsert: true },
+    );
+
+    return {
+      success: true,
+      data: convertToPlainObject(res),
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      error: error,
+    };
+  }
+};

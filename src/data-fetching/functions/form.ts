@@ -1,15 +1,10 @@
-import { createFormConfigAction, deleteFormAction, getAllUserFormsAction } from '@/backend/actions/form';
-import { FormConfig } from '@/types/form-config';
-
-type FormConfigWithMeta = {
-  meta: {
-    title: string;
-    description: string;
-    status: string;
-    submissions: number;
-    lastModified: string;
-  };
-} & FormConfig;
+import {
+  createFormConfigAction,
+  deleteFormAction,
+  getAllUserFormsAction,
+  updateFormConfigAction,
+} from '@/backend/actions/form';
+import { FormConfig, FormConfigWithMeta } from '@/types/form-config';
 
 export const fetchAllForms = async () => {
   const res = await getAllUserFormsAction();
@@ -41,4 +36,12 @@ export const deleteForm = async (id: string) => {
   }
 };
 
-export const updateForm = async (id: string) => {};
+export const updateForm = async (id: string, update: Partial<FormConfig>) => {
+  const res = await updateFormConfigAction(id, update);
+
+  if (res?.success) return res?.data;
+
+  if (res?.error) {
+    throw new Error(res?.error as string);
+  }
+};

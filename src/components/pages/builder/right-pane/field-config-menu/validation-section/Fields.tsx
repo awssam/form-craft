@@ -377,6 +377,10 @@ export const createSingleValueValidationComponentForDate = (
   helperText?: string,
 ) => {
   // eslint-disable-next-line react/display-name
+  const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
+    return typeof formValue === 'string' ? new Date(formValue) : (formValue as Date);
+  };
+
   return () => {
     // Use the generic single value validation component
     return createGenericSingleValueValidationComponent({
@@ -390,7 +394,7 @@ export const createSingleValueValidationComponentForDate = (
         <DateTimePicker
           granularity="day"
           placeholder={placeholder}
-          value={fieldValidationValue ? new Date(fieldValidationValue) : undefined}
+          value={getDatePickerValue(fieldValidationValue)}
           onChange={(date: Date | undefined) => {
             handleChange({
               target: { name: 'value', value: date?.toISOString() },

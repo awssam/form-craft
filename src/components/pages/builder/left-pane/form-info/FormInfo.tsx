@@ -12,7 +12,7 @@ const FormInfo = () => {
       subtitle="These are some basic details about your form."
     >
       <FormDescription />
-      <FormTags />
+      {/* <FormTags /> */}
       <FormCover />
       <FormStatus />
     </FormConfigSection>

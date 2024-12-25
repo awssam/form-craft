@@ -17,7 +17,6 @@ async function connectDb() {
     const dbClient = await mongoose.connect(uri, {
       serverApi: {
         version: '1',
-        strict: true,
         deprecationErrors: true,
       },
     });

@@ -34,13 +34,15 @@ const customValidationSchema = new mongoose.Schema({
 });
 
 const conditionalLogicSchema = new mongoose.Schema({
-  showWhen: new mongoose.Schema({
-    fieldId: String,
-    operatorType: String,
-    label: String,
-    operator: String,
-    value: String,
-  }),
+  showWhen: [
+    new mongoose.Schema({
+      fieldId: String,
+      operatorType: String,
+      label: String,
+      operator: String,
+      value: String,
+    }),
+  ],
   operator: {
     type: String,
     enum: ['AND', 'OR'],
@@ -54,6 +56,7 @@ const fieldValidationSchema = new mongoose.Schema<FieldValidation>({
     of: {
       type: customValidationSchema,
     },
+    default: {},
   },
 });
 
@@ -82,7 +85,7 @@ const fieldEntitySchema = new mongoose.Schema<FieldEntity>({
     type: String,
   },
   defaultValue: {
-    type: String,
+    type: {},
   },
   readonly: {
     type: Boolean,
@@ -95,6 +98,13 @@ const fieldEntitySchema = new mongoose.Schema<FieldEntity>({
   },
   conditionalLogic: {
     type: conditionalLogicSchema,
+  },
+  width: {
+    type: String,
+    default: '100%',
+  },
+  allowMultiSelect: {
+    type: Boolean,
   },
 });
 

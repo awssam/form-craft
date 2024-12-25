@@ -42,7 +42,7 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
     const pane = paneRef.current;
     if (pane) {
       const y = e.pageY - pane.offsetTop; // Get the new Y position
-      const walk = (y - startY.current) * 2; // Multiply by 2 for faster scrolling
+      const walk = (y - startY.current) * 1.2; // Multiply by 2 for faster scrolling
       pane.scrollTop = scrollTop.current - walk; // Update scrollTop
     }
   };

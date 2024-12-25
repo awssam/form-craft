@@ -95,7 +95,7 @@ export const formConfig: FormConfig = {
       type: 'date',
       label: 'Date of Birth',
       placeholder: 'Select your date of birth',
-      // defaultValue: new Date('1990-01-01'),
+      defaultValue: new Date('1990-01-01').toISOString(),
       validation: {
         custom: {
           required: {

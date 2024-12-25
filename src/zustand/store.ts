@@ -2,7 +2,7 @@ import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
 import { create } from 'zustand';
 import { formConfig } from './data';
 import { generateId } from '@/lib/utils';
-import { createNewFormField } from '@/lib/form';
+import { createNewFormField, loadFormConfigFromLocalStorage } from '@/lib/form';
 
 type FormState = {
   formConfig: FormConfig;
@@ -25,10 +25,9 @@ type FormAction = {
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set, get) => ({
-  formConfig,
+  formConfig: loadFormConfigFromLocalStorage() || formConfig,
   setFormConfig: (formConfig) => set({ formConfig: formConfig || ({} as FormConfig) }),
   updateFormConfig: (config) => {
-    console.log('updateFormConfig', config);
     set((state) => ({
       formConfig: {
         ...state.formConfig,
@@ -234,7 +233,7 @@ export const useFormConfigStore = create<FormState & FormAction>((set, get) => (
             },
           },
           fieldEntities: {
-            ...state.formConfig.fieldEntities,
+            ...state.formConfig?.fieldEntities,
             [field.id]: field,
           },
         },
@@ -269,7 +268,7 @@ export const useFormConfigStore = create<FormState & FormAction>((set, get) => (
  * @returns The value of the property if it exists, null otherwise.
  */
 export const useFormProperty = <K extends keyof FormConfig>(key: K): FormConfig[K] | null => {
-  return useFormConfigStore((state) => state.formConfig[key] ?? null);
+  return useFormConfigStore((state) => state?.formConfig?.[key] ?? null);
 };
 
 /**

@@ -23,6 +23,20 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
     setValue(field?.name, field?.defaultValue);
   }, [field?.defaultValue, field?.name, setValue]);
 
+  const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
+    if (Array.isArray(formValue)) {
+      return undefined;
+    }
+
+    if (!formValue) {
+      return typeof field?.defaultValue !== 'object'
+        ? new Date(field?.defaultValue as string)
+        : (field?.defaultValue as Date);
+    }
+
+    return typeof formValue === 'string' ? new Date(formValue) : (formValue as Date);
+  };
+
   return (
     <FormFieldWrapper
       control={control}
@@ -47,7 +61,7 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
               <DateTimePicker
                 granularity="day"
                 style={{ color: primaryColor, borderColor: inputBorderColor }}
-                value={!Array.isArray(rhFormField.value) ? rhFormField.value ?? field?.defaultValue : undefined}
+                value={getDatePickerValue(rhFormField?.value)}
                 onChange={(d) => setValue(field?.name, d, { shouldValidate: true })}
                 className={className}
                 placeholder={field.placeholder ?? 'Pick a date'}

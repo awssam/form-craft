@@ -154,7 +154,7 @@ const FieldConditionalLogicSection = () => {
       case 'date':
         return (
           <DateTimePicker
-            value={condition?.value ? new Date(condition?.value as string) : undefined}
+            value={typeof condition?.value !== 'object' ? new Date(condition?.value as string) : condition?.value}
             placeholder="Enter a value"
             className="w-full"
             granularity="day"

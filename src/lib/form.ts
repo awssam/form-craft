@@ -151,3 +151,13 @@ export const createNewForm = (userId: string | null): FormConfig | null => {
     },
   };
 };
+
+export const saveFormConfigToLocalStorage = (formConfig: FormConfig) => {
+  localStorage.setItem('formConfig', JSON.stringify(formConfig));
+};
+
+export const loadFormConfigFromLocalStorage = () => {
+  if (typeof window === 'undefined') return null;
+  const formConfig = localStorage.getItem('formConfig');
+  return formConfig ? JSON.parse(formConfig) : null;
+};
