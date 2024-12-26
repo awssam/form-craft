@@ -17,6 +17,7 @@ const Forms = () => {
   const setFormConfig = useFormActionProperty('setFormConfig');
 
   const { data: forms, isLoading, isError } = useFormsQuery();
+
   const deleteFormMutation = useDeleteFormMutation({
     onMutate: () => {
       const toastId = toast.loading('Deleting form...');

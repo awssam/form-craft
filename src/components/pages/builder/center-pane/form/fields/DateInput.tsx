@@ -24,9 +24,7 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
   }, [field?.defaultValue, field?.name, setValue]);
 
   const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
-    if (Array.isArray(formValue)) {
-      return undefined;
-    }
+    if (!formValue && !field?.defaultValue) return undefined;
 
     if (!formValue) {
       return typeof field?.defaultValue !== 'object'
