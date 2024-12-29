@@ -132,7 +132,7 @@ const formStylesSchema = new mongoose.Schema<FormStyles>({
   fontSecondaryColor: String,
 });
 
-const formSchema = new mongoose.Schema(
+export const formSchema = new mongoose.Schema(
   {
     id: {
       type: String,
