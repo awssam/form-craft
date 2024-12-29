@@ -4,7 +4,7 @@ import { useAuth } from '@clerk/nextjs';
 import { FieldEntity, FormConfig, FormConfigWithMeta } from '@/types/form-config';
 import { useFormConfigStore } from '@/zustand/store';
 import { toast } from 'sonner';
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { saveFormConfigToLocalStorage } from '@/lib/form';
 
 export const useFormsQuery = () => {
@@ -99,8 +99,6 @@ export const useUpdateFormConfigMutation = () => {
         return prev;
       });
     },
-    onSuccess: (data, vars, context) => {},
-    onError: (error) => {},
   });
 
   return {
@@ -134,7 +132,7 @@ export const useAutoSaveFormConfig = () => {
       );
       const toastId = toast.loading('Saving changes...');
       const updatedFormConfig = { ...formConfig, fieldEntities: fieldEntitiesWithoutValidationFns };
-      formConfig &&
+      if (formConfig)
         updateFormMutation({
           id: formConfig.id,
           update: updatedFormConfig,
@@ -144,18 +142,16 @@ export const useAutoSaveFormConfig = () => {
             saveFormConfigToLocalStorage(updatedFormConfig);
             toast.success('Auto save successful', { style: { background: '#000', color: '#fff' } });
           })
-          .catch(() => {
+          .catch((error) => {
+            console.error(error);
             toast.dismiss(toastId);
             toast.error('Auto save failed', { style: { background: '#000', color: '#fff' } });
           });
     }, 3000);
-  }, [formConfig]);
+  }, [formConfig, updateFormMutation]);
 
   return {
     isPending,
     error,
   };
 };
-
-
-

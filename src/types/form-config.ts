@@ -94,7 +94,7 @@ export interface FieldValidation {
 interface FieldOption {
   label: string; // Display label for the option
   value: string | number; // Value associated with the option
-  helperText: string;
+  helperText?: string;
 }
 
 type FormFieldWidth = '25%' | '50%' | '75%' | '100%';
