@@ -20,7 +20,7 @@ const TemplateCard = ({ template }: TemplateCardProps) => {
     <Card
       className={cn(
         'w-full relative border-[#212326] border-dashed shadow-xl hover:border-yellow-200/30 transition-all transform-gpu hover:-translate-y-2',
-        'cursor-pointer duration-300 md:max-w-[300px] group',
+        'cursor-pointer duration-300 group',
       )}
     >
       {/* Image or Fallback */}

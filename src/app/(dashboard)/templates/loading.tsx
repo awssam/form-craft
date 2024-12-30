@@ -6,7 +6,7 @@ import React from 'react';
 
 const TemplateCardSkeleton = () => {
   return (
-    <Card className="w-full relative border-[#212326] border-dashed shadow-xl group md:max-w-[300px]">
+    <Card className="w-full relative border-[#212326] border-dashed shadow-xl group">
       {/* Image Skeleton */}
       <div className="relative w-full h-[200px] overflow-hidden bg-black rounded-t-lg">
         <Skeleton className="w-full h-full" />
