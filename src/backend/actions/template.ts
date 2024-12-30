@@ -5,6 +5,7 @@ import FormTemplate, { TemplateModel } from '../models/template';
 import { generateId } from '@/lib/utils';
 import { convertToPlainObject } from '../util';
 import connectDb from '../db/connection';
+import { FormTemplate as FormTemplateType } from '@/types/template';
 
 export const createNewTemplateAction = async (meta: TemplateModel['meta'], templateConfig: FormConfig) => {
   try {
@@ -15,8 +16,8 @@ export const createNewTemplateAction = async (meta: TemplateModel['meta'], templ
     await connectDb();
 
     const newTemplate = new FormTemplate({
+      id: generateId(),
       meta: {
-        id: generateId(),
         name: meta?.name?.trim(),
         description: meta?.description?.trim(),
         image: meta?.image?.trim(),
@@ -48,8 +49,17 @@ export const getAllTemplatesAction = async (
       .select({ ...(pick?.meta && { meta: 1 }), ...(pick?.templateConfig && { templateConfig: 1 }) })
       ?.lean();
 
-    console.log(templates);
-    return { success: true, data: convertToPlainObject(templates) };
+    return { success: true, data: convertToPlainObject(templates) as FormTemplateType[] };
+  } catch (error) {
+    return { success: false, error: error };
+  }
+};
+
+export const deleteAllTemplatesAction = async () => {
+  try {
+    await connectDb();
+    const res = await FormTemplate.deleteMany({ 'templateConfig.createdBy': 'SYSTEM' });
+    return { success: true, data: convertToPlainObject(res) };
   } catch (error) {
     return { success: false, error: error };
   }

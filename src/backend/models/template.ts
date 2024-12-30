@@ -3,11 +3,6 @@ import { formSchema } from './form';
 import { generateId } from '@/lib/utils';
 
 const templateMetaSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    default: generateId,
-    unique: true,
-  },
   name: {
     type: String,
     required: true,
@@ -25,6 +20,12 @@ const templateMetaSchema = new mongoose.Schema({
 });
 
 const templateSchema = new mongoose.Schema({
+  id: {
+    type: String,
+    default: generateId,
+    unique: true,
+  },
+
   templateConfig: {
     type: formSchema,
     required: true,

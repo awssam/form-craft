@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import React from 'react';
 import FormCard from './FormCard';
 import { useDeleteFormMutation, useFormsQuery } from '@/data-fetching/client/form';
-import { useFormActionProperty, useUIEventsProperty } from '@/zustand/store';
+import { useFormActionProperty } from '@/zustand/store';
 import DeleteFormModal from './DeleteFormModal';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
@@ -16,7 +16,7 @@ const Forms = () => {
   const router = useRouter();
   const setFormConfig = useFormActionProperty('setFormConfig');
 
-  const { data: forms, isLoading, isError } = useFormsQuery();
+  const { data: forms } = useFormsQuery();
 
   const deleteFormMutation = useDeleteFormMutation({
     onMutate: () => {
