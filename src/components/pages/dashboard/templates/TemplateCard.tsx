@@ -8,6 +8,7 @@ import Image from 'next/image';
 
 import FormTemplatePlaceholderImage from '../../../../../public/images/form-template-placeholder.jpg';
 import { Button } from '@/components/ui/button';
+import { ArrowRight } from 'lucide-react';
 
 interface TemplateCardProps {
   template: FormTemplate;
@@ -34,10 +35,14 @@ const TemplateCard = ({ template, onPreview }: TemplateCardProps) => {
             className="rounded-md -hue-rotate-60 transition-all duration-300 group-hover:scale-105 w-full h-full object-cover"
           />
         </div>
-        <CardTitle className="flex items-center justify-between w-full gap-4">
+        <CardTitle
+          className="flex group/title items-center justify-between w-full gap-4"
+          onClick={() => onPreview?.(template)}
+        >
           <h2 className="md:text-lg text-base max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300">
             {meta.name}
           </h2>
+          <ArrowRight className="w-4 h-4 ml-2 opacity-0 group-hover/title:opacity-100 group-hover/title:text-yellow-200" />
         </CardTitle>
 
         <CardDescription className="text-xs">{meta.description?.slice(0, 150) + '...'}</CardDescription>

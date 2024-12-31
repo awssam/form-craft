@@ -10,6 +10,7 @@ import { useFormActionProperty } from '@/zustand/store';
 import { FormConfig } from '@/types/form-config';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
+import { Info } from 'lucide-react';
 
 // const handleInsertTemplates = async () => {
 //   for (let i = 0; i < templates?.length; i++) {
@@ -37,12 +38,25 @@ const Templates = () => {
     setFormConfig(template?.templateConfig || ({} as FormConfig));
     router.push('/builder');
     setTimeout(() => {
-      toast.info('If you like this template, you can click on the "Use template" button to make it yours.', {
-        style: { background: '#000', color: '#fff', border: '1px solid #1f1d1d' },
-        duration: 3000,
-        dismissible: true,
-      });
-    }, 1000);
+      toast.info(
+        <div className="flex items-center gap-2">
+          <Info className="w-5 h-5" />
+          <div>
+            <h4 className="font-bold text-sm">Previewing {template?.meta?.name}</h4>
+            <p className="text-sm">
+              Click on <span className="text-yellow-200 font-bold">Use template</span> button if you like it.
+            </p>
+            <p className="text-xs text-muted-foreground">
+              You can also edit this as you want before you choose to use it.
+            </p>
+          </div>
+        </div>,
+        {
+          duration: 3000,
+          dismissible: true,
+        },
+      );
+    }, 500);
   };
 
   return (

@@ -22,7 +22,7 @@ const FormHeaderContent = () => {
   };
 
   return (
-    <div className="flex flex-col gap-1 px-2 w-full">
+    <div className="flex flex-col gap-1 px-2 w-full break-all">
       {!isEditingFormName ? (
         <h3
           className="font-bold text-xl tracking-tight border-b border-b-transparent cursor-pointer"
