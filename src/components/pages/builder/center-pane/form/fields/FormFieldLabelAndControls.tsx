@@ -45,14 +45,14 @@ const FormFieldLabelAndControls = ({
 
   const handleFieldDuplicateClick = useCallback(() => {
     duplicateField(field?.id);
-    toast('Field duplicated successfully', {
+    toast.info('Field duplicated successfully', {
       description: 'Go to Settings to configure the field.',
     });
   }, [duplicateField, field?.id]);
 
   const handleFieldDelete = () => {
     deleteField(field?.id);
-    toast('Field deleted successfully');
+    toast.info('Field deleted successfully');
   };
 
   const menuItems = useMemo(() => {

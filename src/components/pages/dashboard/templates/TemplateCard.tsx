@@ -11,11 +11,11 @@ import { Button } from '@/components/ui/button';
 
 interface TemplateCardProps {
   template: FormTemplate;
+  onPreview?: (template: FormTemplate) => void;
 }
 
-const TemplateCard = ({ template }: TemplateCardProps) => {
-  const { meta } = template;
-
+const TemplateCard = ({ template, onPreview }: TemplateCardProps) => {
+  const { meta, id } = template;
   return (
     <Card
       className={cn(
@@ -23,20 +23,19 @@ const TemplateCard = ({ template }: TemplateCardProps) => {
         'cursor-pointer duration-300 group',
       )}
     >
-      {/* Image or Fallback */}
-      <div className="relative w-full h-[200px] overflow-hidden rounded-t-lg">
-        <Image
-          src={FormTemplatePlaceholderImage}
-          alt={meta.name}
-          className="rounded-t-md grayscale group-hover:grayscale-0 group-hover:-hue-rotate-60 transition-all duration-300 group-hover:scale-105 w-full h-full object-cover"
-        />
-      </div>
-
       {/* Card Content */}
 
       <CardHeader className="space-y-0.5 px-4 py-2">
+        {/* Image or Fallback */}
+        <div className="relative w-full h-[200px] overflow-hidden my-2">
+          <Image
+            src={FormTemplatePlaceholderImage}
+            alt={meta.name}
+            className="rounded-md -hue-rotate-60 transition-all duration-300 group-hover:scale-105 w-full h-full object-cover"
+          />
+        </div>
         <CardTitle className="flex items-center justify-between w-full gap-4">
-          <h2 className="text-base max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300">
+          <h2 className="md:text-lg text-base max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300">
             {meta.name}
           </h2>
         </CardTitle>
@@ -49,9 +48,10 @@ const TemplateCard = ({ template }: TemplateCardProps) => {
         <TemplateTag label="Subscription and Memberships" />
 
         <Button
+          onClick={() => onPreview?.(template)}
           variant="secondary"
           size="sm"
-          className="rounded-full bg-black border hover:border-yellow-200/30 absolute top-3 right-3 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:-translate-x-0 md:group-hover:rotate-0 md:group-hover:scale-100 transition-all duration-300"
+          className="rounded-full bg-black border hover:border-yellow-200/30 absolute top-3 right-3 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:-translate-x-0 scale-0 md:group-hover:scale-100 hover:scale-110 transition-all duration-300"
         >
           <span>Preview</span>
           {/* <ArrowRight className="w-4 h-4 ml-2" /> */}

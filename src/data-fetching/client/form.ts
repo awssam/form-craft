@@ -114,9 +114,13 @@ export const useAutoSaveFormConfig = () => {
   const timer = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    if (timer?.current) clearTimeout(timer.current);
+    if (formConfig?.createdBy === 'SYSTEM') return; // Don't auto save templates
 
-    timer.current = setTimeout(() => {
+    let timerId = timer?.current as NodeJS.Timeout;
+
+    if (timerId) clearTimeout(timerId);
+
+    timer.current = timerId = setTimeout(() => {
       const fieldEntitiesWithoutValidationFns = Object.entries(formConfig?.fieldEntities)?.reduce(
         (acc, [id, field]) => {
           acc[id] = {
@@ -148,6 +152,8 @@ export const useAutoSaveFormConfig = () => {
             toast.error('Auto save failed', { style: { background: '#000', color: '#fff' } });
           });
     }, 3000);
+
+    return () => clearTimeout(timerId);
   }, [formConfig, updateFormMutation]);
 
   return {

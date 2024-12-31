@@ -24,7 +24,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { FieldEntity } from '@/types/form-config';
-import { useFormActionProperty, useFormConfigStore, useFormProperty, useUIEventsActionProperty } from '@/zustand/store';
+import { useFormActionProperty, useFormProperty, useUIEventsActionProperty } from '@/zustand/store';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useAutoSaveFormConfig } from '@/data-fetching/client/form';
 

@@ -6,6 +6,8 @@ import LeftPaneBreadCrumbs from './BreadCrumbs';
 import { Input } from '@/components/ui/input';
 
 import { useFormActionProperty, useFormProperty } from '@/zustand/store';
+import { Button } from '@/components/ui/button';
+import { useUser } from '@clerk/nextjs';
 
 const links = [
   { href: '/', label: 'Dashboard' },
@@ -13,9 +15,28 @@ const links = [
 ];
 
 const Header = () => {
+  const createdBy = useFormProperty('createdBy');
+  const isTemplate = createdBy === 'SYSTEM';
+  const { user } = useUser();
+
+  const updateFormConfig = useFormActionProperty('updateFormConfig');
+
+  const handleUseTemplate = () => {
+    updateFormConfig({
+      createdBy: user?.id || 'SYSTEM',
+    });
+  };
+
   return (
-    <header className="flex flex-col gap-2">
-      <LeftPaneBreadCrumbs links={links} />
+    <header className="flex flex-col gap-2 sticky pt-4 -top-1 bg-[#0c0a0a] z-20">
+      <div className="flex justify-between items-center gap-2">
+        <LeftPaneBreadCrumbs links={links} />
+        {isTemplate && (
+          <Button size="sm" variant="default" onClick={handleUseTemplate}>
+            Use template
+          </Button>
+        )}
+      </div>
       <div className="flex justify-between items-center gap-2">
         <FormName />
       </div>

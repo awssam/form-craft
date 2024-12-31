@@ -22,7 +22,17 @@ export default function RootLayout({
         <body className={`bg-black antialiased dark overflow-hidden`}>
           <ReactQueryProvider>
             {children}
-            <Toaster position="bottom-center" className="z-[99999999999999999999999]" duration={2000} richColors />
+            <Toaster
+              position="bottom-center"
+              className="z-[99999999999999999999999] mt-3"
+              duration={2000}
+              toastOptions={{
+                classNames: {
+                  success: 'bg-[#000] border border-input text-white',
+                  info: 'bg-[#000] border border-input text-white',
+                },
+              }}
+            />
           </ReactQueryProvider>
         </body>
       </html>

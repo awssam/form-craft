@@ -29,7 +29,7 @@ const FieldListMenu = () => {
 
     setSection(FORMSECTIONS.Settings);
 
-    toast(`${field?.name} added successfully`, {
+    toast.info(`${field?.name} added successfully`, {
       description: 'Go to Settings to configure the field.',
     });
   };

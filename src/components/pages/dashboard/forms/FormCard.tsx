@@ -56,7 +56,7 @@ const FormCard = ({
         <CardHeader className="space-y-0.5">
           <CardTitle className="flex items-center justify-between w-full gap-4">
             <h2
-              className="text-base max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300"
+              className="text-base md:text-lg max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300"
               onClick={() => onEdit?.(id, title)}
             >
               {title}

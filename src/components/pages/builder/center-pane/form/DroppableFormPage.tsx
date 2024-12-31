@@ -49,14 +49,14 @@ const DroppableFormPage = ({ className, children, pageNumber, id, totalPages }: 
 
     addField(id, newField);
     setSelectedField(newField);
-    toast(`New Text field added to page ${pageNumber}`, {
+    toast.info(`New Text field added to page ${pageNumber}`, {
       description: 'Go to Settings to configure the field.',
     });
   };
 
   const handlePageDelete = () => {
     deletePage(id);
-    toast(`Page ${pageNumber} deleted successfully`, {
+    toast.info(`Page ${pageNumber} deleted successfully`, {
       description: 'Go to Settings to configure the field.',
     });
   };

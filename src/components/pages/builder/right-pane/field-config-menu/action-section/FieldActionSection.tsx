@@ -16,7 +16,7 @@ export const FieldDuplicateAction = memo(() => {
 
   const handleDuplicateField = () => {
     duplicateField(selectedFieldId);
-    toast('Field duplicated successfully', {
+    toast.info('Field duplicated successfully', {
       description: 'Go to Settings to configure the field.',
     });
   };
@@ -38,7 +38,7 @@ export const FieldDeleteAction = () => {
 
   const handleFieldDelete = () => {
     deleteField(selectedField?.id as string);
-    toast('Field deleted successfully');
+    toast.info('Field deleted successfully');
   };
 
   if (!selectedField?.id) return null;

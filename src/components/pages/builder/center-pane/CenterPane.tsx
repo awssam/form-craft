@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
 import { GenericProps } from '@/types/common';
 import { FieldEntity } from '@/types/form-config';
 import FormContent from './form/FormContent';
+import { Button } from '@/components/ui/button';
 
 interface CenterPaneProps extends GenericProps {
   activeField: FieldEntity | null;
@@ -23,7 +24,10 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
   const startY = useRef(0);
   const scrollTop = useRef(0);
 
-  const classes = cn('h-full overflow-auto bg-background flex flex-col items-center py-12 px-4 center-pane', className);
+  const classes = cn(
+    'h-full relative overflow-auto bg-background flex flex-col items-center py-12 px-4 center-pane',
+    className,
+  );
 
   const handleMouseDown = (e: React.MouseEvent) => {
     if (isDraggingFormField) return (isDragging.current = false);

@@ -10,7 +10,7 @@ const NewPagePlaceholder = () => {
 
   const handleAddPage = () => {
     addPage();
-    toast('New page added with successfully');
+    toast.info('New page added with successfully');
   };
 
   return (

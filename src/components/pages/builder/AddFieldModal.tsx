@@ -61,7 +61,7 @@ const AddFieldModal = () => {
     setSection(FORMSECTIONS.Settings);
 
     setOpen(false);
-    toast('Field added successfully', {
+    toast.info('Field added successfully', {
       description: 'Go to Settings to configure the field.',
     });
   };
