@@ -5,15 +5,14 @@ import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import { FormFieldProps } from '@/types/common';
 import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
-import { FormMessage } from '@/components/ui/form';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
+import EditableHelperText from './EditableHelperText';
 
 const FormTextInput = ({ field, control, className, isOverlay = false }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
 
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
-  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
 
   return (
@@ -53,7 +52,7 @@ const FormTextInput = ({ field, control, className, isOverlay = false }: FormFie
                 {...rhFormField}
                 value={rhFormField.value ?? field?.defaultValue ?? ''}
               />
-              <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
+              <EditableHelperText field={field} />
             </div>
           )}
         </DraggableFieldWrapper>

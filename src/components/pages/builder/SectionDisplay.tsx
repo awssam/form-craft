@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import LeftPane from './left-pane/LeftPane';
 import RightPane from './right-pane/RightPane';

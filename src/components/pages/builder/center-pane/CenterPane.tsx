@@ -9,7 +9,6 @@ import { cn } from '@/lib/utils';
 import { GenericProps } from '@/types/common';
 import { FieldEntity } from '@/types/form-config';
 import FormContent from './form/FormContent';
-import { Button } from '@/components/ui/button';
 
 interface CenterPaneProps extends GenericProps {
   activeField: FieldEntity | null;

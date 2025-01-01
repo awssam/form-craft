@@ -6,15 +6,14 @@ import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import FormLabel from './FormLabel';
 import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
-import { FormMessage } from '@/components/ui/form';
 import { useFormContext } from 'react-hook-form';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
+import EditableHelperText from './EditableHelperText';
 
 const CheckboxInput = ({ field, className, control, isOverlay }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
-  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
 
   const formState = useFormContext();
   const { setValue } = formState;
@@ -81,7 +80,7 @@ const CheckboxInput = ({ field, className, control, isOverlay }: FormFieldProps)
                   </div>
                 ))}
               </div>
-              <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
+              <EditableHelperText field={field} />
             </div>
           )}
         </DraggableFieldWrapper>

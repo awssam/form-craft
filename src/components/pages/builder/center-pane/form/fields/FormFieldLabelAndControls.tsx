@@ -14,6 +14,7 @@ import CustomTooltip from '@/components/ui/custom-tooltip';
 import { cn } from '@/lib/utils';
 import { FormFieldProps } from '@/types/common';
 import DeleteFieldModal from '@/components/pages/builder/DeleteFieldModal';
+import EditableText from '@/components/common/EditableText';
 
 interface FormFieldLabelAndControlsProps {
   field: FormFieldProps['field'];
@@ -34,11 +35,12 @@ const FormFieldLabelAndControls = ({
   const duplicateField = useFormActionProperty('duplicateField');
   const deleteField = useFormActionProperty('deleteField');
   const { setSection, FORMSECTIONS } = useFormSectionDisplay();
+  const selectedField = useSelectedFieldStore((s) => s.selectedField);
+  const updateFormField = useFormActionProperty('updateFormField');
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
 
   const handleFieldSettingsClick = () => {
-    console.log('handleFieldSettingsClick', field);
     setSelectedField(field);
     setSection(FORMSECTIONS.Settings);
   };
@@ -71,15 +73,38 @@ const FormFieldLabelAndControls = ({
     ];
   }, [handleFieldDuplicateClick]);
 
+  const handleFormLabelChange = (value: string) => {
+    updateFormField(field?.id, {
+      id: field?.id,
+      label: value,
+    });
+    console.log('selectedField?.id', selectedField?.id, field?.id);
+    if (selectedField?.id === field?.id) {
+      setSelectedField({
+        ...selectedField,
+        label: value,
+      });
+    }
+  };
+
   return (
     <div className="flex gap-3 items-center justify-between break-all break-words">
-      <FormLabel htmlFor={field?.id} className="relative flex">
-        <span>{field.label}</span>
-        <span className="sr-only">{field?.helperText}</span>
-        {field?.validation?.custom?.required?.value && (
-          <sup className="top-[-0.1em] ml-[1px] font-bold text-red-500 text-sm">*</sup>
+      <EditableText
+        tooltipBtnClassName="self-center"
+        value={field?.label || ''}
+        renderText={(_, onClick) => (
+          <FormLabel htmlFor={field?.id} className="relative flex " onClick={onClick}>
+            <span>{field.label || <span className="text-muted-foreground">{"What's this field called?"}</span>}</span>
+            <span className="sr-only">{field?.helperText}</span>
+            {field?.validation?.custom?.required?.value && (
+              <sup className="top-[-0.1em] ml-[1px] font-bold text-red-500 text-sm">*</sup>
+            )}
+          </FormLabel>
         )}
-      </FormLabel>
+        inputClassName="text-xs md:text-[12px]"
+        onChange={handleFormLabelChange}
+        inputPlaceholder="What's this field called?"
+      />
       <div className="flex gap-1 items-center cursor-pointer transition-all duration-200">
         <CustomTooltip tooltip={isDragging ? '' : 'Drag to reorder'}>
           <Grip

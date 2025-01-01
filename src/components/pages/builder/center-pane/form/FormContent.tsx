@@ -5,7 +5,7 @@ import SortableFormFieldContainer, { FormFieldsProps } from './SortableFormField
 const FormContent = (props: FormFieldsProps) => {
   return (
     <>
-      <FormHeaderContent />
+      <FormHeaderContent pageId={props.pageId} />
       <SortableFormFieldContainer {...props} />
     </>
   );

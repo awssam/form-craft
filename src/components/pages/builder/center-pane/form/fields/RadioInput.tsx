@@ -6,13 +6,12 @@ import { cn } from '@/lib/utils';
 import FormLabel from './FormLabel';
 import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
-import { FormMessage } from '@/components/ui/form';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
+import EditableHelperText from './EditableHelperText';
 
 const FormRadioInput = ({ field, className, control, isOverlay }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
-  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
 
   return (
     <FormFieldWrapper
@@ -51,7 +50,7 @@ const FormRadioInput = ({ field, className, control, isOverlay }: FormFieldProps
                   </div>
                 ))}
               </RadioGroup>
-              <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
+              <EditableHelperText field={field} />
             </div>
           )}
         </DraggableFieldWrapper>

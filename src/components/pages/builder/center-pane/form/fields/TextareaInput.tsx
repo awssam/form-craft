@@ -4,15 +4,14 @@ import { FormFieldProps } from '@/types/common';
 import React from 'react';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import { useFormConfigStore, useUIEventsActionProperty } from '@/zustand/store';
-import { FormMessage } from '@/components/ui/form';
 import FormFieldWrapper from './FormFieldWrapper';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
+import EditableHelperText from './EditableHelperText';
 
 const TextareaInput = ({ field, className, control, isOverlay }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
-  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
 
   const setIsDraggingField = useUIEventsActionProperty('setIsDraggingFormField');
@@ -55,7 +54,7 @@ const TextareaInput = ({ field, className, control, isOverlay }: FormFieldProps)
                 {...rhFormField}
                 value={value ?? (field?.defaultValue as string)}
               />
-              <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
+              <EditableHelperText field={field} />
             </div>
           )}
         </DraggableFieldWrapper>

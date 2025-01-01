@@ -1,7 +1,5 @@
 'use client';
 
-import FormHeaderContent from '@/components/pages/builder/center-pane/form/FormHeader';
-import Header from '@/components/pages/builder/left-pane/Header';
 import SectionDisplay from '@/components/pages/builder/SectionDisplay';
 import { FormSectionDisplayProvider } from '@/hooks/useFormSectionDisplay';
 import React from 'react';

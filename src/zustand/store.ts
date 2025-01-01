@@ -21,6 +21,7 @@ type FormAction = {
   deleteField: (fieldId: string) => void;
   deletePage: (pageId: string) => void;
   addPage: () => void;
+  updatePageName: (pageId: string, name: string) => void;
   batchUpdateFields: (fields: Record<FieldEntity['id'], Partial<FieldEntity>>) => void;
 };
 
@@ -235,6 +236,23 @@ export const useFormConfigStore = create<FormState & FormAction>((set, get) => (
           fieldEntities: {
             ...state.formConfig?.fieldEntities,
             [field.id]: field,
+          },
+        },
+      };
+    });
+  },
+
+  updatePageName(pageId: string, name: string) {
+    set((state) => {
+      return {
+        formConfig: {
+          ...state.formConfig,
+          pageEntities: {
+            ...state.formConfig.pageEntities,
+            [pageId]: {
+              ...state.formConfig.pageEntities?.[pageId],
+              name,
+            },
           },
         },
       };

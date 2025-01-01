@@ -15,12 +15,12 @@ import { Plus, Trash } from 'lucide-react';
 import React, { memo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 
-const useSelectedFieldUpdate = () => {
+const useSelectedFieldUpdate = (debounceDuration = 500) => {
   const updateSelectedField = useSelectedFieldStore((state) => state.updateSelectedField);
 
   const debouncedSelectedFieldUpdate = debounce((property, value) => {
     updateSelectedField({ [property as keyof FieldEntity]: value });
-  }, 500);
+  }, debounceDuration);
 
   const handlePropertyChange =
     (property: keyof FieldEntity) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -108,12 +108,12 @@ export const FieldPlaceholder = memo(() => {
 FieldPlaceholder.displayName = 'FieldPlaceholder';
 
 export const FieldLabel = memo(() => {
-  const { handlePropertyChange } = useSelectedFieldUpdate();
+  const { handlePropertyChange } = useSelectedFieldUpdate(100);
   const selectedField = useSelectedField();
 
   return (
-    <FormFieldWrapper id="label" label="Field Label" required helperText="What the field is called?">
-      <Textarea defaultValue={selectedField?.label ?? ''} onChange={handlePropertyChange('label')} />
+    <FormFieldWrapper id="label" label="Field Label" required helperText="What's this field called?">
+      <Textarea value={selectedField?.label} onChange={handlePropertyChange('label')} />
     </FormFieldWrapper>
   );
 });
@@ -121,12 +121,12 @@ export const FieldLabel = memo(() => {
 FieldLabel.displayName = 'FieldLabel';
 
 export const FieldHelperText = memo(() => {
-  const { handlePropertyChange } = useSelectedFieldUpdate();
+  const { handlePropertyChange } = useSelectedFieldUpdate(0);
   const selectedField = useSelectedField();
 
   return (
     <FormFieldWrapper id="helperText" label="Helper Text" helperText="Any additional helper text for the field">
-      <Textarea defaultValue={selectedField?.helperText ?? ''} onChange={handlePropertyChange('helperText')} />
+      <Textarea value={selectedField?.helperText} onChange={handlePropertyChange('helperText')} />
     </FormFieldWrapper>
   );
 });

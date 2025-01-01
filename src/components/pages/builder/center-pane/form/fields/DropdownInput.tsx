@@ -4,16 +4,15 @@ import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import { cn } from '@/lib/utils';
 import { useFormConfigStore } from '@/zustand/store';
 import FormFieldWrapper from './FormFieldWrapper';
-import { FormMessage } from '@/components/ui/form';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
 import { Combobox, Option } from '@/components/ui/combobox';
 import { useFormContext } from 'react-hook-form';
+import EditableHelperText from './EditableHelperText';
 
 const FormDropdownInput = ({ field, className, control, isOverlay }: FormFieldProps) => {
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
-  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
 
   const [values, setValues] = React.useState<Option[]>([]);
@@ -86,7 +85,7 @@ const FormDropdownInput = ({ field, className, control, isOverlay }: FormFieldPr
                     'text-[#BDC3C7]': theme === 'night-sky',
                   })}
                 />
-                <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
+                <EditableHelperText field={field} />
               </div>
             );
           }}

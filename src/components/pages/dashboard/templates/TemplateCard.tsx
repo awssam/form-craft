@@ -16,7 +16,7 @@ interface TemplateCardProps {
 }
 
 const TemplateCard = ({ template, onPreview }: TemplateCardProps) => {
-  const { meta, id } = template;
+  const { meta } = template;
   return (
     <Card
       className={cn(

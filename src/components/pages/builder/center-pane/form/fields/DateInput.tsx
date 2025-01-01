@@ -5,16 +5,15 @@ import { DateTimePicker } from '@/components/ui/datepicker';
 import { cn } from '@/lib/utils';
 import withResponsiveWidthClasses from './withResponsiveWidthClasses';
 import FormFieldWrapper from './FormFieldWrapper';
-import { FormMessage } from '@/components/ui/form';
 import FormFieldLabelAndControls from './FormFieldLabelAndControls';
 import DraggableFieldWrapper from './DraggableFieldWrapper';
 import { useFormContext } from 'react-hook-form';
+import EditableHelperText from './EditableHelperText';
 
 const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => {
   const theme = useFormConfigStore((s) => s.formConfig.theme?.type);
 
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
-  const secondaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.secondaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
 
   const { setValue } = useFormContext();
@@ -71,7 +70,7 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
                   'text-[#BDC3C7]': theme === 'night-sky',
                 })}
               />
-              <FormMessage style={{ color: secondaryColor }}>{field?.helperText}</FormMessage>
+              <EditableHelperText field={field} />
             </div>
           )}
         </DraggableFieldWrapper>
