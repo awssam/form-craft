@@ -9,6 +9,7 @@ export type FormConfigWithMeta = {
 } & FormConfig;
 
 export interface FormConfig {
+  _id?: string;
   id: string; // Unique identifier for the form
   name: string; // Name of the form
   createdBy: string;

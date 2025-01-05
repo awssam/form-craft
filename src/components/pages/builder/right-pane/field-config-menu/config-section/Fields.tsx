@@ -10,7 +10,6 @@ import { convertFieldType, Field_Type_Options } from '@/lib/form';
 import { cn, debounce } from '@/lib/utils';
 import { FieldEntity, FieldType as AvailableFieldTypes } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
-import { isValid } from '@/lib/datetime';
 import { Plus, Trash } from 'lucide-react';
 import React, { memo } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';

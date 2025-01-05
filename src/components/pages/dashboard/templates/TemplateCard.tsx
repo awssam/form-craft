@@ -56,7 +56,7 @@ const TemplateCard = ({ template, onPreview }: TemplateCardProps) => {
           onClick={() => onPreview?.(template)}
           variant="secondary"
           size="sm"
-          className="rounded-full bg-black border hover:border-yellow-200/30 absolute top-3 right-3 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:-translate-x-0 scale-0 md:group-hover:scale-100 hover:scale-110 transition-all duration-300"
+          className="rounded-full bg-black border hover:border-yellow-200/30 absolute top-2 right-2 md:top-3 md:right-3 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:-translate-x-0 md:scale-0 opacity-100 scale-100 md:group-hover:scale-100 hover:scale-110 transition-all duration-300"
         >
           <span>Preview</span>
           {/* <ArrowRight className="w-4 h-4 ml-2" /> */}

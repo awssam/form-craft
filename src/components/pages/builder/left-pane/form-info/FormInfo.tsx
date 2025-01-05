@@ -2,7 +2,7 @@ import React, { memo } from 'react';
 import { Info } from 'lucide-react';
 
 import FormConfigSection from '@/components/common/FormConfigSection';
-import { FormCover, FormDescription, FormStatus, FormTags } from './fields';
+import { FormCover, FormDescription } from './fields';
 
 const FormInfo = () => {
   return (
@@ -14,7 +14,7 @@ const FormInfo = () => {
       <FormDescription />
       {/* <FormTags /> */}
       <FormCover />
-      <FormStatus />
+      {/* <FormStatus /> */}
     </FormConfigSection>
   );
 };

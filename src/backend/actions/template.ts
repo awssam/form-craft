@@ -39,15 +39,11 @@ export const createNewTemplateAction = async (meta: TemplateModel['meta'], templ
   }
 };
 
-export const getAllTemplatesAction = async (
-  pick: { meta: boolean; templateConfig: boolean } = { meta: true, templateConfig: true },
-) => {
+export const getAllTemplatesAction = async () => {
   try {
     await connectDb();
     // select all templates where templateConfig.createdBy = 'SYSTEM'
-    const templates = await FormTemplate.find({ 'templateConfig.createdBy': 'SYSTEM' })
-      .select({ ...(pick?.meta && { meta: 1 }), ...(pick?.templateConfig && { templateConfig: 1 }) })
-      ?.lean();
+    const templates = await FormTemplate.find({ 'templateConfig.createdBy': 'SYSTEM' })?.lean();
 
     return { success: true, data: convertToPlainObject(templates) as FormTemplateType[] };
   } catch (error) {

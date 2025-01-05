@@ -1,7 +1,7 @@
 import FormConfigSection from '@/components/common/FormConfigSection';
 import FieldCard from './FieldCard';
 
-import sections from './config';
+import sections, { SectionField } from './config';
 import { useFormActionProperty, useFormProperty, useSelectedFieldStore } from '@/zustand/store';
 import { createNewFormField } from '@/lib/form';
 import { generateId } from '@/lib/utils';
@@ -16,11 +16,11 @@ const FieldListMenu = () => {
 
   const { FORMSECTIONS, setSection } = useFormSectionDisplay();
 
-  const handleAddField = (field: (typeof sections)[0]['fields'][0]) => {
+  const handleAddField = (field: Partial<SectionField>) => {
     const newField = createNewFormField({
       type: field?.type as FieldType,
       name: generateId(),
-      label: field?.name,
+      label: field?.name as string,
     });
 
     addField(Object.values(pageEntities || {})[0].id, newField);

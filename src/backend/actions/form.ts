@@ -115,3 +115,23 @@ export const updateFormConfigAction = async (id: string, update: Partial<FormCon
     };
   }
 };
+
+export const publishFormAction = async (id: string) => {
+  try {
+    const userId = await verifyAuth();
+    await connectDb();
+    const res = await Form.findOneAndUpdate({ id, createdBy: userId }, { status: 'published' }, { new: true });
+
+    if (!res) throw new Error('Form not found');
+
+    return {
+      success: true,
+      data: convertToPlainObject(res),
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error,
+    };
+  }
+};

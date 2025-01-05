@@ -42,6 +42,8 @@ const FormCard = ({
     },
   ];
 
+  console.log('form name', title, status);
+
   return (
     <>
       <Card
@@ -103,7 +105,7 @@ const FormStatusTag = ({ status }: { status: string }) => {
   return (
     <div
       className={`flex items-center gap-1 h-6 px-3 rounded-full ${
-        statusConfig[status as keyof typeof statusConfig].color
+        statusConfig[status as keyof typeof statusConfig]?.color
       }`}
     >
       <span className="text-white font-normal text-xs flex items-center gap-1">

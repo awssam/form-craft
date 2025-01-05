@@ -1,7 +1,6 @@
 'use client';
 
 import { Input } from '@/components/ui/input';
-import { useTemplatesQuery } from '@/data-fetching/client/template';
 import React from 'react';
 import TemplateCard from './TemplateCard';
 import { Combobox } from '@/components/ui/combobox';
@@ -29,10 +28,11 @@ import { Info } from 'lucide-react';
 //   console.log('res', res);
 // };
 
-const Templates = () => {
-  const { data: templates } = useTemplatesQuery();
+const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => {
   const router = useRouter();
   const setFormConfig = useFormActionProperty('setFormConfig');
+
+  console.log('templates', templates);
 
   const handleTemplatePreview = (template: FormTemplate) => {
     setFormConfig(template?.templateConfig || ({} as FormConfig));

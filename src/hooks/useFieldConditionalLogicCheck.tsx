@@ -31,8 +31,10 @@ const useFieldConditionalLogicCheck = (fields: string[]) => {
             CUSTOM_FIELD_VALIDATIONS.text;
           const availableFieldValidations = validationMap?.[operatorType as keyof typeof validationMap];
 
-          const functor = availableFieldValidations?.[operator as keyof typeof availableFieldValidations] as Function;
-          const validationFn = functor ? functor(value) : () => true;
+          const functor = availableFieldValidations?.[operator as keyof typeof availableFieldValidations] as (
+            v: unknown,
+          ) => (val: string) => boolean;
+          const validationFn = functor ? functor?.(value) : () => true;
 
           const isValid = validationFn(conditionalFieldValue);
 

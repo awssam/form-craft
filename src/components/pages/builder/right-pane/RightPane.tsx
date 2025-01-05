@@ -8,7 +8,7 @@ import { useSelectedFieldStore } from '@/zustand/store';
 import FieldListMenu from './field-list-menu/FieldListMenu';
 
 const RightPane = ({ className }: GenericProps) => {
-  const classes = cn('h-full bg-background p-4 flex flex-col gap-6 overflow-auto', className);
+  const classes = cn('h-full bg-background p-4 pt-0 flex flex-col gap-6 overflow-auto', className);
   const selectedField = useSelectedFieldStore((s) => s?.selectedField);
   const [selected, setSelected] = useState('fields');
 
@@ -19,7 +19,7 @@ const RightPane = ({ className }: GenericProps) => {
   return (
     <div className={classes}>
       <Tabs value={selected} className="w-full">
-        <TabsList className="w-full flex justify-between sticky -top-3 z-10">
+        <TabsList className="w-full flex justify-between sticky top-1 z-10 backdrop:blur-md">
           <TabsTrigger value="fields" className="basis-1/2" onClick={() => setSelected('fields')}>
             Fields
           </TabsTrigger>

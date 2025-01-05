@@ -2,6 +2,7 @@ import {
   createFormConfigAction,
   deleteFormAction,
   getAllUserFormsAction,
+  publishFormAction,
   updateFormConfigAction,
 } from '@/backend/actions/form';
 import { FormConfig, FormConfigWithMeta } from '@/types/form-config';
@@ -38,6 +39,16 @@ export const deleteForm = async (id: string) => {
 
 export const updateForm = async (id: string, update: Partial<FormConfig>) => {
   const res = await updateFormConfigAction(id, update);
+
+  if (res?.success) return res?.data;
+
+  if (res?.error) {
+    throw new Error(res?.error as string);
+  }
+};
+
+export const publishForm = async (id: string) => {
+  const res = await publishFormAction(id);
 
   if (res?.success) return res?.data;
 

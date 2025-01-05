@@ -1,7 +1,7 @@
 import { FormControl, FormField } from '@/components/ui/form';
 import { FormFieldProps } from '@/types/common';
 import { useFieldVisibilityStore, useFormConfigStore, useSelectedFieldStore } from '@/zustand/store';
-import React, { useEffect, useRef } from 'react';
+import React, { ComponentProps, useEffect, useRef } from 'react';
 import { Control, ControllerRenderProps, FieldValues, useFormContext } from 'react-hook-form';
 
 interface FormFieldWrapperProps extends FormFieldProps {
@@ -30,7 +30,6 @@ const FormFieldWrapper = ({ control, field, render }: FormFieldWrapperProps) => 
     if (formFieldValue == undefined || formFieldValue == null) return;
     if (timerRef.current) clearTimeout(timerRef.current);
 
-    
     timerRef.current = setTimeout(() => {
       const value = { value: formFieldValue };
       updateFormField(field?.id, value);
@@ -46,7 +45,7 @@ const FormFieldWrapper = ({ control, field, render }: FormFieldWrapperProps) => 
     <FormField
       control={control as Control}
       name={field?.name}
-      rules={field?.validation as any}
+      rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => <FormControl>{render(rhFormField)}</FormControl>}
     />
   );

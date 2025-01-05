@@ -19,7 +19,7 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={CLERK_APPEARANCE_CONFIG}>
       <html lang="en">
-        <body className={`bg-black antialiased dark overflow-hidden`}>
+        <body className={`bg-black antialiased dark overflow-x-hidden overflow-y-auto`}>
           <ReactQueryProvider>
             {children}
             <Toaster

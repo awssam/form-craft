@@ -23,6 +23,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
+
 import { FieldEntity } from '@/types/form-config';
 import { useFormActionProperty, useFormProperty, useUIEventsActionProperty } from '@/zustand/store';
 import { arrayMove } from '@dnd-kit/sortable';
@@ -125,45 +126,47 @@ const SectionDisplay = () => {
   useAutoSaveFormConfig();
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      id="form-preview"
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-      onDragOver={handleDragOver}
-      // onDragMove={handleDragMove}
-    >
-      {isLargeScreen && (
-        <ResizablePanelGroup direction="horizontal">
-          <ResizablePanel defaultSize={23} minSize={20} maxSize={28}>
+    <main className="flex md:flex-row flex-col flex-nowrap bg-background w-[100dvw] h-[100dvh]">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        id="form-preview"
+        onDragStart={handleDragStart}
+        onDragEnd={handleDragEnd}
+        onDragOver={handleDragOver}
+        // onDragMove={handleDragMove}
+      >
+        {isLargeScreen && (
+          <ResizablePanelGroup direction="horizontal">
+            <ResizablePanel defaultSize={23} minSize={20} maxSize={28}>
+              {leftpane}
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel minSize={40} maxSize={80}>
+              {centerpane}
+            </ResizablePanel>
+            <ResizableHandle withHandle />
+            <ResizablePanel defaultSize={23} minSize={20} maxSize={28}>
+              {rightpane}
+            </ResizablePanel>
+          </ResizablePanelGroup>
+        )}
+
+        {!isLargeScreen && (
+          <>
             {leftpane}
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel minSize={40} maxSize={80}>
             {centerpane}
-          </ResizablePanel>
-          <ResizableHandle withHandle />
-          <ResizablePanel defaultSize={23} minSize={20} maxSize={28}>
             {rightpane}
-          </ResizablePanel>
-        </ResizablePanelGroup>
-      )}
+          </>
+        )}
 
-      {!isLargeScreen && (
-        <>
-          {leftpane}
-          {centerpane}
-          {rightpane}
-        </>
-      )}
-
-      <MobileSectionDisplayer
-        options={Object.values(FORMSECTIONS)}
-        selectedOption={section}
-        setSelectedOption={setSection}
-      />
-    </DndContext>
+        <MobileSectionDisplayer
+          options={Object.values(FORMSECTIONS)}
+          selectedOption={section}
+          setSelectedOption={setSection}
+        />
+      </DndContext>
+    </main>
   );
 };
 

@@ -13,7 +13,7 @@ export const verifyAuth = async () => {
   return auth()?.userId;
 };
 
-export const convertToPlainObject = (obj: any) => {
+export const convertToPlainObject = (obj: object) => {
   try {
     return JSON.parse(JSON.stringify(obj));
   } catch {

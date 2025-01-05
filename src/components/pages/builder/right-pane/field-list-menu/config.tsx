@@ -7,7 +7,8 @@ const sections = [
     title: 'Basic Fields',
     description: (
       <p>
-        Choose from the most common field types. <strong className="text-yellow-200">Click</strong> on a field to add it to the form.
+        Choose from the most common field types. <strong className="text-yellow-200">Click</strong> on a field to add it
+        to the form.
       </p>
     ),
     icon: <FormInputIcon className="w-4 h-4 text-white/90" />,
@@ -51,5 +52,9 @@ const sections = [
     ],
   },
 ];
+
+export type Section = (typeof sections)[0];
+
+export type SectionField = Section['fields'][0];
 
 export default sections;

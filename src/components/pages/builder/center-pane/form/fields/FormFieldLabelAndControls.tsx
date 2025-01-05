@@ -90,7 +90,7 @@ const FormFieldLabelAndControls = ({
   return (
     <div className="flex gap-3 items-center justify-between break-all break-words">
       <EditableText
-        tooltipBtnClassName="self-center"
+        tooltipBtnClassName="self-center -mb-3"
         value={field?.label || ''}
         renderText={(_, onClick) => (
           <FormLabel htmlFor={field?.id} className="relative flex " onClick={onClick}>
@@ -101,7 +101,7 @@ const FormFieldLabelAndControls = ({
             )}
           </FormLabel>
         )}
-        inputClassName="text-xs md:text-[12px]"
+        inputClassName="text-xs md:text-[12px] focus-visible:border-b-0 focus-visible:ring-0"
         onChange={handleFormLabelChange}
         inputPlaceholder="What's this field called?"
       />

@@ -1,5 +1,5 @@
 import { MutationFunction, useMutation, UseMutationOptions, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createForm, deleteForm, fetchAllForms, updateForm } from '../functions/form';
+import { createForm, deleteForm, fetchAllForms, publishForm, updateForm } from '../functions/form';
 import { useAuth } from '@clerk/nextjs';
 import { FieldEntity, FormConfig, FormConfigWithMeta } from '@/types/form-config';
 import { useFormConfigStore } from '@/zustand/store';
@@ -63,7 +63,7 @@ export const useDeleteFormMutation = ({
       });
     },
     onSuccess: (data, vars, context) => {
-      onSuccess?.(data, vars as any, context);
+      onSuccess?.(data, void vars, context);
     },
   });
 
@@ -134,8 +134,14 @@ export const useAutoSaveFormConfig = () => {
         },
         {} as Record<FieldEntity['id'], FieldEntity>,
       );
+
       const toastId = toast.loading('Saving changes...');
       const updatedFormConfig = { ...formConfig, fieldEntities: fieldEntitiesWithoutValidationFns };
+
+      console.info({
+        updatedFormConfig,
+      });
+
       if (formConfig)
         updateFormMutation({
           id: formConfig.id,
@@ -157,6 +163,47 @@ export const useAutoSaveFormConfig = () => {
   }, [formConfig, updateFormMutation]);
 
   return {
+    isPending,
+    error,
+  };
+};
+
+export const usePublishFormMutation = () => {
+  const queryClient = useQueryClient();
+  const { userId } = useAuth();
+
+  const { mutateAsync, isPending, error } = useMutation({
+    mutationFn: async ({ id }: { id: string }) => publishForm(id),
+    onMutate: ({ id }) => {
+      queryClient.setQueryData(['all-forms', userId], (prev: FormConfigWithMeta[]) => {
+        if (prev) {
+          return prev.map((form) => {
+            if (form.id === id) {
+              return {
+                ...form,
+                meta: {
+                  ...form.meta,
+                  status: 'published',
+                  lastModified: new Date().toISOString(),
+                },
+                status: 'published',
+              };
+            }
+            return form;
+          });
+        }
+        return prev;
+      });
+    },
+    onSettled: (data, error, vars, context) => {
+      if (error) {
+        queryClient.setQueryData(['all-forms', userId], context);
+      }
+    },
+  });
+
+  return {
+    mutateAsync,
     isPending,
     error,
   };

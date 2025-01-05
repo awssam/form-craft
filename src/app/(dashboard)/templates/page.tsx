@@ -1,15 +1,12 @@
 import React from 'react';
 import Templates from '@/components/pages/dashboard/templates/Templates';
-import { prefetchTemplatesServer } from '@/data-fetching/server/template';
-import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
+import { getAllTemplatesAction } from '@/backend/actions/template';
 
 const TemplatesPage = async () => {
-  const queryClient = await prefetchTemplatesServer();
+  const templates = await getAllTemplatesAction()
+    .then((res) => res?.data)
+    .catch(() => []);
 
-  return (
-    <HydrationBoundary state={dehydrate(queryClient)}>
-      <Templates />
-    </HydrationBoundary>
-  );
+  return <Templates templates={templates} />;
 };
 export default TemplatesPage;

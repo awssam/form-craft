@@ -33,7 +33,7 @@ const DeleteFieldModal = ({
       )}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete field "{fieldLabel || 'Field'}"?</DialogTitle>
+          <DialogTitle>Delete field - {fieldLabel || 'Field'}?</DialogTitle>
           <DialogDescription>
             Are you sure you want to delete this field? This action cannot be undone.
           </DialogDescription>
