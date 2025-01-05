@@ -19,7 +19,7 @@ const chartData = [
   { month: 'September', submissions: 20 },
   { month: 'October', submissions: 30 },
   { month: 'November', submissions: 10 },
-  { month: 'December', submissions: 0 },
+  { month: 'December', submissions: 50 },
 ];
 
 const chartConfig = {

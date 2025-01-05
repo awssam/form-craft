@@ -7,13 +7,9 @@ import { BarChart as BarChartIcon } from 'lucide-react';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-const chartData = [
-  { form: 'Feedback', completionRate: 75 }, // Example completion rate
-  { form: 'Registration form with a long ass name', completionRate: 85 },
-  { form: 'Inquiry', completionRate: 60 },
-  { form: 'Survey', completionRate: 90 },
-  { form: 'Newsletter', completionRate: 70 },
-];
+import { useSuspenseQuery } from '@tanstack/react-query';
+import { useAuth } from '@clerk/nextjs';
+import { fetchAllForms } from '@/data-fetching/functions/form';
 
 const chartConfig = {
   completionRate: {
@@ -23,6 +19,17 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export function Component() {
+  // TODO:replace with actual data
+  const { data } = useSuspenseQuery({
+    queryFn: () => fetchAllForms(),
+    queryKey: ['all-forms', useAuth()?.userId],
+  });
+
+  const chartData = data?.map((form) => ({
+    form: form.name,
+    completionRate: Math.floor(Math.random() * 100),
+  }));
+
   return (
     <ChartContainer config={chartConfig} className="w-full h-full min-h-[200px] max-h-[230px]">
       <BarChart

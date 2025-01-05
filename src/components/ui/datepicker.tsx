@@ -239,7 +239,7 @@ function Calendar({
       };
     }
     return genMonths(locale);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -652,6 +652,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
       placeholder = 'Pick a date',
       placeHolderClasses,
       style,
+      className: _className,
       ...props
     },
     ref,

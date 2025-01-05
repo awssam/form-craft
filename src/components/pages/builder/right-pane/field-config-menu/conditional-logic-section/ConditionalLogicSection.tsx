@@ -150,11 +150,16 @@ const FieldConditionalLogicSection = () => {
 
     const fieldType = fieldEntities?.[condition?.fieldId]?.type;
 
+    const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
+      console.log('formValue', formValue, typeof formValue);
+      return typeof formValue === 'string' && formValue?.length > 2 ? new Date(formValue) : undefined;
+    };
+
     switch (fieldType) {
       case 'date':
         return (
           <DateTimePicker
-            value={typeof condition?.value !== 'object' ? new Date(condition?.value as string) : condition?.value}
+            value={getDatePickerValue(condition?.value as string)}
             placeholder="Enter a value"
             className="w-full"
             granularity="day"

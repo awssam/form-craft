@@ -32,8 +32,6 @@ const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => 
   const router = useRouter();
   const setFormConfig = useFormActionProperty('setFormConfig');
 
-  console.log('templates', templates);
-
   const handleTemplatePreview = (template: FormTemplate) => {
     setFormConfig(template?.templateConfig || ({} as FormConfig));
     router.push('/builder');
@@ -77,7 +75,7 @@ const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => 
             type="search"
           />
         </div>
-        <div className="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 rounded-lg">
+        <div className="w-full grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-6 rounded-lg">
           {templates?.map((template) => (
             <TemplateCard key={template.id || template._id} template={template} onPreview={handleTemplatePreview} />
           ))}

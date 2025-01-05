@@ -43,7 +43,7 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
             <TabsTrigger value="/templates" className="text-xs md:text-sm">
               Templates
             </TabsTrigger>
-            <TabsTrigger value="analytics" className="text-xs md:text-sm">
+            <TabsTrigger value="/analytics" className="text-xs md:text-sm">
               Analytics
             </TabsTrigger>
           </TabsList>
