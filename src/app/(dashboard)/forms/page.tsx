@@ -1,4 +1,4 @@
-import Forms from '@/components/pages/dashboard/forms/Forms';
+import Forms from '@/app/(dashboard)/forms/_components/Forms';
 import { prefetchFormsServer } from '@/data-fetching/server/form';
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 import React from 'react';

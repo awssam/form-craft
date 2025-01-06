@@ -42,8 +42,6 @@ const FormCard = ({
     },
   ];
 
-  console.log('form name', title, status);
-
   return (
     <>
       <Card
