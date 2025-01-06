@@ -1,6 +1,6 @@
 import React from 'react';
-import Header from '@/components/pages/dashboard/common/Header';
-import TabsContainer from '@/components/pages/dashboard/common/TabsContainer';
+import Header from '@/app/(dashboard)/_components/Header';
+import TabsContainer from '@/app/(dashboard)/_components/TabsContainer';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

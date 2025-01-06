@@ -1,5 +1,22 @@
 import { FormConfig } from '@/types/form-config';
 
+// const handleInsertTemplates = async () => {
+//   for (let i = 0; i < templates?.length; i++) {
+//     const template = templates[i];
+//     const meta = templateMeta[i];
+
+//     const res = await createNewTemplateAction(meta, template);
+
+//     console.log('res', res);
+//     console.log('=====================================');
+//   }
+// };
+
+// const handleDeleteTemplates = async () => {
+//   const res = await deleteAllTemplatesAction();
+//   console.log('res', res);
+// };
+
 export const formThemes = {
   'midnight-black': {
     formBackgroundColor: '#0B0B0B', // Deep black background

@@ -1,5 +1,5 @@
 import React from 'react';
-import Templates from '@/components/pages/dashboard/templates/Templates';
+import Templates from '@/app/(dashboard)/templates/_components/Templates';
 import { getAllTemplatesAction } from '@/backend/actions/template';
 
 const TemplatesPage = async () => {
