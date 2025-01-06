@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import LeftPaneBreadCrumbs from '../pages/builder/left-pane/BreadCrumbs';
+
 import { Button } from '../ui/button';
 import { useFormActionProperty, useFormConfigStore, useFormProperty } from '@/zustand/store';
 import { useUser } from '@clerk/nextjs';
@@ -11,6 +11,7 @@ import { copyToClipboard, generateId, getAppOriginUrl } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
+import LeftPaneBreadCrumbs from '@/app/builder/_components/left-pane/BreadCrumbs';
 
 const links = [
   { href: '/', label: 'Dashboard' },

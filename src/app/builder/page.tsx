@@ -1,5 +1,5 @@
 import TopHeader from '@/components/common/TopHeader';
-import SectionDisplay from '@/components/pages/builder/SectionDisplay';
+import SectionDisplay from '@/app/builder/_components/SectionDisplay';
 import { FormSectionDisplayProvider } from '@/hooks/useFormSectionDisplay';
 import React from 'react';
 

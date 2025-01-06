@@ -30,7 +30,7 @@ import {
 } from '@dnd-kit/core';
 import { FieldEntity } from '@/types/form-config';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
-import AddFieldModal from '../../AddFieldModal';
+import AddFieldModal from '../../../../../app/builder/_components/AddFieldModal';
 import { toast } from 'sonner';
 
 const FormStructure = () => {

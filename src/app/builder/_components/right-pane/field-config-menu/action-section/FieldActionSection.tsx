@@ -1,4 +1,4 @@
-import DeleteFieldModal from '@/components/pages/builder/DeleteFieldModal';
+import DeleteFieldModal from '@/app/builder/_components/DeleteFieldModal';
 import FormConfigSection from '@/components/common/FormConfigSection';
 import { Button } from '@/components/ui/button';
 import { useFormActionProperty, useSelectedFieldStore } from '@/zustand/store';

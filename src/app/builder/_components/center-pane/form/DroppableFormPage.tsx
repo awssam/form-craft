@@ -8,7 +8,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { File } from 'lucide-react';
 import React from 'react';
 import { toast } from 'sonner';
-import DeletePageModal from '../../DeletePageModal';
+import DeletePageModal from '../../../../../app/builder/_components/DeletePageModal';
 
 interface FormPageProps extends GenericProps {
   pageNumber: number;
