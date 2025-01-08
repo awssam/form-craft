@@ -135,3 +135,24 @@ export const publishFormAction = async (id: string) => {
     };
   }
 };
+
+export const getFormConfigWithIdAction = async (id: string) => {
+  try {
+    await connectDb();
+    const res = await Form.findOne({ id })?.lean();
+
+    if (res?.status !== 'published') throw new Error('This form is not published yet. Please contact its owner.');
+
+    return {
+      success: true,
+      data: convertToPlainObject(res) as unknown as FormConfig,
+    };
+  } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+
+    return {
+      success: false,
+      error,
+    };
+  }
+};

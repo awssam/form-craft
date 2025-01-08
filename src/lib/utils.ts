@@ -54,6 +54,6 @@ export const generateId = () => uuid();
 export const copyToClipboard = async (text: string) => navigator.clipboard.writeText(text);
 
 export const getAppOriginUrl = () => {
-  // if (typeof window === 'undefined') return 'http://localhost:3000';
+  if (typeof window === 'undefined') return 'http://localhost:3000';
   return window.location.origin;
 };

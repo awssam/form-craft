@@ -7,11 +7,13 @@ import { useFormActionProperty, useFormConfigStore, useFormProperty } from '@/zu
 import { useUser } from '@clerk/nextjs';
 import { Check, Copy, Lock, Share } from 'lucide-react';
 import { usePublishFormMutation } from '@/data-fetching/client/form';
-import { copyToClipboard, generateId, getAppOriginUrl } from '@/lib/utils';
+import { generateId, getAppOriginUrl } from '@/lib/utils';
 import { toast } from 'sonner';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog';
 import { Input } from '../ui/input';
 import LeftPaneBreadCrumbs from '@/app/builder/_components/left-pane/BreadCrumbs';
+import useCopyInfo from '@/hooks/useCopyInfo';
+import CustomTooltip from '../ui/custom-tooltip';
 
 const links = [
   { href: '/', label: 'Dashboard' },
@@ -21,6 +23,9 @@ const links = [
 const TopHeader = () => {
   const { user } = useUser();
   const setFormConfig = useFormActionProperty('setFormConfig');
+
+  const formLink = `${getAppOriginUrl()}/${useFormProperty('id')}`;
+  const { handleCopy, hasCopied } = useCopyInfo();
 
   const [isPublishedFormModalOpen, setIsPublishedFormModalOpen] = React.useState(false);
 
@@ -79,7 +84,7 @@ const TopHeader = () => {
 
   return (
     <>
-      <header className="w-full  z-[9999999] px-4 pt-4 mb-2 center-pane">
+      <header className="w-full z-[9999999] px-4 pt-4 mb-2 center-pane bg-[#0c0a0a]">
         <div className="flex justify-between items-center gap-2">
           <LeftPaneBreadCrumbs links={links} />
           {isTemplate ? (
@@ -87,17 +92,30 @@ const TopHeader = () => {
               Use template
             </Button>
           ) : (
-            <Button
-              size="sm"
-              variant="default"
-              type="button"
-              className="flex items-center"
-              onClick={() => handleFormPublishUnPublish(formId as string)}
-              disabled={isPending}
-            >
-              {formConfig?.status === 'draft' ? <Share className="mr-2 h-4 w-4" /> : <Lock className="mr-2 h-4 w-4" />}
-              {formConfig?.status === 'draft' ? 'Publish' : 'Mark as draft'}
-            </Button>
+            <div className="flex items-center gap-2">
+              {formConfig?.status === 'published' && (
+                <CustomTooltip tooltip={'Copy form link'}>
+                  <Button size="icon" variant="secondary" type="button" onClick={() => handleCopy(formLink)}>
+                    {hasCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                  </Button>
+                </CustomTooltip>
+              )}
+              <Button
+                size="sm"
+                variant="default"
+                type="button"
+                className="flex items-center"
+                onClick={() => handleFormPublishUnPublish(formId as string)}
+                disabled={isPending}
+              >
+                {formConfig?.status === 'draft' ? (
+                  <Share className="mr-2 h-4 w-4" />
+                ) : (
+                  <Lock className="mr-2 h-4 w-4" />
+                )}
+                {formConfig?.status === 'draft' ? 'Publish' : 'Mark as draft'}
+              </Button>
+            </div>
           )}
         </div>
       </header>
@@ -111,21 +129,8 @@ export default TopHeader;
 
 const PublishedFormModal = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) => {
   const formLink = `${getAppOriginUrl()}/${useFormProperty('id')}`;
+  const { handleCopy, hasCopied } = useCopyInfo();
 
-  const [hasCopied, setHasCopied] = React.useState(false);
-
-  const handleCopyLink = () => {
-    copyToClipboard(formLink)
-      .then(() => {
-        setHasCopied(true);
-        setTimeout(() => {
-          setHasCopied(false);
-        }, 3000);
-      })
-      .catch(() => {
-        toast.error('Something went wrong, please copy manually.');
-      });
-  };
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent>
@@ -136,7 +141,11 @@ const PublishedFormModal = ({ open, setOpen }: { open: boolean; setOpen: (open: 
 
         <div className="flex flex-col md:flex-row gap-2 items-center">
           <Input placeholder="Form name" readOnly value={formLink} disabled />
-          <Button variant={'default'} size={'sm'} onClick={handleCopyLink}>
+          <Button
+            variant={'default'}
+            size={'sm'}
+            onClick={() => handleCopy(formLink, () => toast.error('Failed to copy'))}
+          >
             {hasCopied ? <Check className="h-4 w-4 mr-2" /> : <Copy className="h-4 w-4 mr-2" />}
             {hasCopied ? 'Copied' : 'Copy link'}
           </Button>
