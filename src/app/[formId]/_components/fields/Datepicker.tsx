@@ -5,12 +5,27 @@ import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/f
 import React, { ComponentProps } from 'react';
 import { FieldProps } from './FieldRenderer';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { DateTimePicker } from '@/components/ui/datepicker';
+import { useFormContext } from 'react-hook-form';
 
-const FormTextField = ({ field, className, formConfig, control }: FieldProps) => {
+const FormDatePickerField = ({ field, className, formConfig, control }: FieldProps) => {
   const theme = formConfig?.theme?.type;
   const { inputBorderColor, primaryTextColor, secondaryTextColor } = formConfig?.theme?.properties ?? {};
+
+  const { setValue } = useFormContext();
+
+  const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
+    if (!formValue && !field?.defaultValue) return undefined;
+
+    if (!formValue) {
+      return typeof field?.defaultValue !== 'object'
+        ? new Date(field?.defaultValue as string)
+        : (field?.defaultValue as Date);
+    }
+
+    return typeof formValue === 'string' ? new Date(formValue) : (formValue as Date);
+  };
 
   return (
     <FormField
@@ -30,19 +45,19 @@ const FormTextField = ({ field, className, formConfig, control }: FieldProps) =>
             </span>
           </Label>
           <FormControl>
-            <Input
-              placeholder={field.placeholder}
-              id={field.id}
-              className={cn('focus-visible:![border-color:rgba(255,255,255,0.5)]', {
-                'placeholder:text-[#7F7F7F]': theme === 'midnight-black',
-                'placeholder:text-[#A1A1A1]': theme === 'deep-space',
-                'placeholder:text-[#8C8C8C]': theme === 'charcoal-black',
-                'placeholder:text-[#A77BCA]': theme === 'deep-violet',
-                'placeholder:text-[#BDC3C7]': theme === 'night-sky',
-              })}
+            <DateTimePicker
+              granularity="day"
               style={{ color: primaryTextColor, borderColor: inputBorderColor }}
-              {...rhFormField}
-              value={rhFormField.value ?? field?.defaultValue ?? ''}
+              value={getDatePickerValue(rhFormField?.value)}
+              onChange={(d) => setValue(field?.name, d, { shouldValidate: true })}
+              placeholder={field.placeholder ?? 'Pick a date'}
+              placeHolderClasses={cn({
+                'text-[#7F7F7F]': theme === 'midnight-black',
+                'text-[#A1A1A1]': theme === 'deep-space',
+                'text-[#8C8C8C]': theme === 'charcoal-black',
+                'text-[#A77BCA]': theme === 'deep-violet',
+                'text-[#BDC3C7]': theme === 'night-sky',
+              })}
             />
           </FormControl>
           <FormMessage style={{ color: secondaryTextColor }}>{field?.helperText}</FormMessage>
@@ -52,4 +67,4 @@ const FormTextField = ({ field, className, formConfig, control }: FieldProps) =>
   );
 };
 
-export default withResponsiveWidthClasses(FormTextField);
+export default withResponsiveWidthClasses(FormDatePickerField);

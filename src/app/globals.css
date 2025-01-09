@@ -93,14 +93,19 @@
     /* border: 2px solid #262525; */
   }
 
+  .background-dots,
   .center-pane {
     background-size: 1.2rem 1.2rem;
     background-image: radial-gradient(hsla(0, 0%, 100%, 0.1) 1px, transparent 0);
     background-position: 0 -1.2rem;
+  }
+
+  .center-pane {
     cursor: grab;
   }
 
-  .center-pane::-webkit-scrollbar {
+  .center-pane::-webkit-scrollbar,
+  .background-dots::-webkit-scrollbar {
     display: none;
   }
 

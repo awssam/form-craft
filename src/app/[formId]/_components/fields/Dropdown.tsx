@@ -7,7 +7,7 @@ import { FieldProps } from './FieldRenderer';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Combobox, Option } from '@/components/ui/combobox';
-import { useFormContext } from 'react-hook-form';
+import { useFormContext, useWatch } from 'react-hook-form';
 
 const FormDropdownField = ({ field, className, formConfig, control }: FieldProps) => {
   const [values, setValues] = useState<Option[]>([]);
@@ -16,6 +16,15 @@ const FormDropdownField = ({ field, className, formConfig, control }: FieldProps
   const { setValue } = useFormContext();
 
   const fieldDefaultValueString = useMemo(() => JSON.stringify(field?.defaultValue), [field?.defaultValue]);
+
+  const fieldWatcher = useWatch({ control, name: field.name });
+
+  useEffect(() => {
+    if (fieldWatcher) {
+      const selected = field?.options?.filter((d) => fieldWatcher.includes(d.value)) as Option[];
+      setValues(selected);
+    }
+  }, [field.name, fieldWatcher, field?.options]);
 
   // To keep the selected state in sync with the default value
   useEffect(() => {

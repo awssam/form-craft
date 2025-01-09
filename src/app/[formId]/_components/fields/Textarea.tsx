@@ -19,7 +19,7 @@ const FormTextarea = ({ field, className, formConfig, control }: FieldProps) => 
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
         <FormItem className={cn('flex flex-col gap-2 space-y-0', className)}>
-          <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]">
+          <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]" style={{ color: primaryTextColor }}>
             <span className="relative">
               {field.label}
               {field?.validation?.custom?.required?.value && (

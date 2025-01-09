@@ -5,11 +5,10 @@ import { FormControl, FormField, FormItem, FormMessage } from '@/components/ui/f
 import React, { ComponentProps } from 'react';
 import { FieldProps } from './FieldRenderer';
 import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
-const FormTextField = ({ field, className, formConfig, control }: FieldProps) => {
-  const theme = formConfig?.theme?.type;
+const FormRadioField = ({ field, className, formConfig, control }: FieldProps) => {
   const { inputBorderColor, primaryTextColor, secondaryTextColor } = formConfig?.theme?.properties ?? {};
 
   return (
@@ -30,20 +29,25 @@ const FormTextField = ({ field, className, formConfig, control }: FieldProps) =>
             </span>
           </Label>
           <FormControl>
-            <Input
-              placeholder={field.placeholder}
-              id={field.id}
-              className={cn('focus-visible:![border-color:rgba(255,255,255,0.5)]', {
-                'placeholder:text-[#7F7F7F]': theme === 'midnight-black',
-                'placeholder:text-[#A1A1A1]': theme === 'deep-space',
-                'placeholder:text-[#8C8C8C]': theme === 'charcoal-black',
-                'placeholder:text-[#A77BCA]': theme === 'deep-violet',
-                'placeholder:text-[#BDC3C7]': theme === 'night-sky',
-              })}
-              style={{ color: primaryTextColor, borderColor: inputBorderColor }}
-              {...rhFormField}
-              value={rhFormField.value ?? field?.defaultValue ?? ''}
-            />
+            <RadioGroup
+              onValueChange={rhFormField.onChange}
+              value={rhFormField.value ?? (field?.defaultValue as string)}
+              className="flex flex-wrap items-center gap-4 my-1"
+            >
+              {field.options?.map((option, index) => (
+                <div className="flex items-center space-x-1.5" key={index}>
+                  <RadioGroupItem
+                    value={option?.value as string}
+                    id={(option?.label + '-' + field.label) as string}
+                    style={{ borderColor: inputBorderColor }}
+                  />
+                  <Label htmlFor={(option?.label + '-' + field.label) as string} style={{ color: primaryTextColor }}>
+                    {option?.label}
+                  </Label>
+                  <span className="sr-only">{option?.helperText}</span>
+                </div>
+              ))}
+            </RadioGroup>
           </FormControl>
           <FormMessage style={{ color: secondaryTextColor }}>{field?.helperText}</FormMessage>
         </FormItem>
@@ -52,4 +56,4 @@ const FormTextField = ({ field, className, formConfig, control }: FieldProps) =>
   );
 };
 
-export default withResponsiveWidthClasses(FormTextField);
+export default withResponsiveWidthClasses(FormRadioField);
