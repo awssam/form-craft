@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { DateTimePicker } from '@/components/ui/datepicker';
 import { useFormContext } from 'react-hook-form';
+import withSetDefaultValueInFormPrimitive from './withSetDefaultValueInForm';
 
 const FormDatePickerField = ({ field, className, formConfig, control }: FieldProps) => {
   const theme = formConfig?.theme?.type;
@@ -33,7 +34,7 @@ const FormDatePickerField = ({ field, className, formConfig, control }: FieldPro
       name={field?.name}
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
-        <FormItem className={cn('flex flex-col gap-2 space-y-0', className)}>
+        <FormItem className={cn('flex flex-col gap-2 space-y-0', className, 'hover:bg-transparent')}>
           <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]" style={{ color: primaryTextColor }}>
             <span className="relative">
               {field.label}
@@ -67,4 +68,4 @@ const FormDatePickerField = ({ field, className, formConfig, control }: FieldPro
   );
 };
 
-export default withResponsiveWidthClasses(FormDatePickerField);
+export default withSetDefaultValueInFormPrimitive(withResponsiveWidthClasses(FormDatePickerField));

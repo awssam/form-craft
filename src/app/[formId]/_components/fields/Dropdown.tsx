@@ -9,13 +9,17 @@ import { cn } from '@/lib/utils';
 import { Combobox, Option } from '@/components/ui/combobox';
 import { useFormContext, useWatch } from 'react-hook-form';
 
-const FormDropdownField = ({ field, className, formConfig, control }: FieldProps) => {
+const FormDropdownField = ({ field, className, formConfig, control, formValuesByPageMap, pageId }: FieldProps) => {
   const [values, setValues] = useState<Option[]>([]);
   const theme = formConfig?.theme?.type;
   const { inputBorderColor, primaryTextColor, secondaryTextColor } = formConfig?.theme?.properties ?? {};
   const { setValue } = useFormContext();
 
   const fieldDefaultValueString = useMemo(() => JSON.stringify(field?.defaultValue), [field?.defaultValue]);
+  const fieldUserFilledValueString = useMemo(
+    () => JSON.stringify(formValuesByPageMap?.[pageId]?.[field?.name]),
+    [field?.name, formValuesByPageMap, pageId],
+  );
 
   const fieldWatcher = useWatch({ control, name: field.name });
 
@@ -28,14 +32,21 @@ const FormDropdownField = ({ field, className, formConfig, control }: FieldProps
 
   // To keep the selected state in sync with the default value
   useEffect(() => {
-    if (fieldDefaultValueString) {
+    if (fieldDefaultValueString && !fieldUserFilledValueString) {
       const selected = field?.options?.filter((d) =>
         JSON.parse(fieldDefaultValueString)?.includes(d.value),
       ) as Option[];
       setValues(selected);
       setValue(field.name, JSON.parse(fieldDefaultValueString));
     }
-  }, [fieldDefaultValueString, field.name, setValue, field?.options]);
+    if (fieldUserFilledValueString) {
+      const selected = field?.options?.filter((d) =>
+        JSON.parse(fieldUserFilledValueString)?.includes(d.value),
+      ) as Option[];
+      setValues(selected);
+      setValue(field.name, JSON.parse(fieldUserFilledValueString));
+    }
+  }, [fieldDefaultValueString, field.name, setValue, field?.options, fieldUserFilledValueString]);
 
   const handleChange = (values: Option[]) => {
     setValue(field.name, Array.from(new Set(values.map((d) => d.value))), { shouldValidate: true });
@@ -47,7 +58,7 @@ const FormDropdownField = ({ field, className, formConfig, control }: FieldProps
       name={field?.name}
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
-        <FormItem className={cn('flex flex-col gap-2 space-y-0', className)}>
+        <FormItem className={cn('flex flex-col gap-2 space-y-0', className, 'hover:bg-transparent')}>
           <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]">
             <span className="relative">
               {field.label}

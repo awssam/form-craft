@@ -168,6 +168,7 @@ export const FieldDefaultValue = memo(() => {
         return (
           <Combobox
             options={selectedField?.options as Option[]}
+            placeholder="Select an option..."
             selectedValues={
               [selectedField?.options?.find((option) => option?.value === selectedField?.defaultValue)] as Option[]
             }

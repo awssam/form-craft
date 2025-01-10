@@ -52,6 +52,14 @@ export function Combobox({
       setValues(updated);
       handleChange?.(updated);
     } else {
+      const doesExist = values?.[0]?.value === currentValue;
+      if (doesExist) {
+        setValues([]);
+        handleChange?.([]);
+        setOpen(false);
+        return;
+      }
+
       const updated = _options.find((option) => option.value === currentValue) as Option;
       setValues([updated]);
       handleChange?.([updated]);
@@ -66,7 +74,7 @@ export function Combobox({
   }, [open]);
 
   React.useEffect(() => {
-    setValues(selectedValues);
+    setValues(selectedValues?.filter(Boolean));
   }, [selectedValues]);
 
   const label = (

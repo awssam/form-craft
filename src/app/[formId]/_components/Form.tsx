@@ -1,11 +1,12 @@
 'use client';
 
 import { cn } from '@/lib/utils';
-import type { FormConfig } from '@/types/form-config';
-import React from 'react';
+import type { CustomValidationType, FieldType, FormConfig } from '@/types/form-config';
+import React, { useEffect } from 'react';
 import FormContent from './FormContent';
 import FormHeader from './FormHeader';
 import { FieldValues } from 'react-hook-form';
+import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 
 export interface FormProps {
   formConfig: FormConfig;
@@ -19,71 +20,90 @@ const classes = cn(
 
 const Form = ({ formConfig: config }: FormProps) => {
   const [formValuesByPage, setFormValuesByPage] = React.useState<FormValueByPageMap>({});
-  const [formConfig] = React.useState(config);
+  const [formConfig, setFormConfig] = React.useState(config);
   const [activePageId, setActivePageId] = React.useState(formConfig?.pages?.[0]);
 
   const handleFormSubmit = (data: FieldValues) => {
     setFormValuesByPage((prev) => ({ ...prev, [activePageId]: data }));
   };
 
-  // useEffect(() => {
-  //   const getFieldUpdateWithCorrectValidationType = (
-  //     fieldId: string,
-  //     fieldType: FieldType,
-  //     validationType: CustomValidationType,
-  //     validatorKey: string,
-  //   ) => {
-  //     const field = fieldEntities?.[fieldId];
-  //     const fieldValidations =
-  //       CUSTOM_FIELD_VALIDATIONS?.[fieldType as keyof typeof CUSTOM_FIELD_VALIDATIONS] ?? CUSTOM_FIELD_VALIDATIONS.text;
+  useEffect(() => {
+    const fieldEntities = config?.fieldEntities;
 
-  //     const validationMap = fieldValidations?.[validationType as keyof typeof fieldValidations];
-  //     const customValidation = field?.validation?.custom?.[validatorKey];
+    const pages = config?.pages;
 
-  //     let validationFn: ((value: string) => boolean) | null = null;
-  //     let args: unknown[] = [];
+    const getFieldUpdateWithCorrectValidationType = (
+      fieldId: string,
+      fieldType: FieldType,
+      validationType: CustomValidationType,
+      validatorKey: string,
+    ) => {
+      const field = fieldEntities?.[fieldId];
+      const fieldValidations =
+        CUSTOM_FIELD_VALIDATIONS?.[fieldType as keyof typeof CUSTOM_FIELD_VALIDATIONS] ?? CUSTOM_FIELD_VALIDATIONS.text;
 
-  //     if (validationType === 'withValue') {
-  //       args = [customValidation?.value, customValidation?.message];
-  //     }
+      const validationMap = fieldValidations?.[validationType as keyof typeof fieldValidations];
+      const customValidation = field?.validation?.custom?.[validatorKey];
 
-  //     if (validationType === 'binary') {
-  //       args = [customValidation?.message];
-  //     }
+      let validationFn: ((value: string) => boolean) | null = null;
+      let args: unknown[] = [];
 
-  //     const validationFunctor = validationMap?.[validatorKey as keyof typeof validationMap] as (
-  //       ...args: unknown[]
-  //     ) => (value: string) => boolean;
+      if (validationType === 'withValue') {
+        args = [customValidation?.value, customValidation?.message];
+      }
 
-  //     validationFn = validationFunctor?.(...args);
+      if (validationType === 'binary') {
+        args = [customValidation?.message];
+      }
 
-  //     return {
-  //       [validatorKey]: validationFn ?? (() => true),
-  //     };
-  //   };
+      const validationFunctor = validationMap?.[validatorKey as keyof typeof validationMap] as (
+        ...args: unknown[]
+      ) => (value: string) => boolean;
 
-  //   fields?.forEach((fieldId) => {
-  //     const field = fieldEntities?.[fieldId];
-  //     const fieldUpdates = {
-  //       validation: {
-  //         ...field?.validation,
-  //         validate: {
-  //           ...field?.validation?.validate,
-  //         },
-  //       },
-  //     };
+      validationFn = validationFunctor?.(...args);
 
-  //     Object.entries(field?.validation?.custom || {})?.forEach(([key, value]) => {
-  //       const fieldType = field?.type as FieldType;
-  //       fieldUpdates.validation.validate = {
-  //         ...fieldUpdates.validation.validate,
-  //         ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key),
-  //       };
-  //     });
+      return {
+        [validatorKey]: validationFn ?? (() => true),
+      };
+    };
 
-  //     updateFormField(fieldId, fieldUpdates);
-  //   });
-  // }, [formConfig]);
+    pages?.forEach((pageId) => {
+      const fields = config?.pageEntities?.[pageId]?.fields;
+
+      fields?.forEach((fieldId) => {
+        const field = fieldEntities?.[fieldId];
+        const fieldUpdates = {
+          validation: {
+            ...field?.validation,
+            validate: {
+              ...field?.validation?.validate,
+            },
+          },
+        };
+
+        Object.entries(field?.validation?.custom || {})?.forEach(([key, value]) => {
+          const fieldType = field?.type as FieldType;
+          fieldUpdates.validation.validate = {
+            ...fieldUpdates.validation.validate,
+            ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key),
+          };
+        });
+
+        setFormConfig((prev) => {
+          return {
+            ...prev,
+            fieldEntities: {
+              ...prev?.fieldEntities,
+              [fieldId]: {
+                ...prev?.fieldEntities?.[fieldId],
+                ...fieldUpdates,
+              },
+            },
+          };
+        });
+      });
+    });
+  }, [config]);
 
   return (
     <section className={classes} style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor }}>

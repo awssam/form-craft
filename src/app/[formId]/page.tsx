@@ -10,7 +10,7 @@ const FormPage = async ({ params }: { params: { formId: string } }) => {
 
   return (
     <main
-      className="w-full h-full min-h-screen background-dots bg-opacity-75 flex flex-col px-4 py-8"
+      className="w-full h-full min-h-screen background-dots bg-opacity-75 flex flex-col px-2 sm:px-4 py-8"
       style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor }}
     >
       <Form formConfig={formConfig} />

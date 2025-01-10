@@ -7,6 +7,7 @@ import { FieldProps } from './FieldRenderer';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
+import withSetDefaultValueInFormPrimitive from './withSetDefaultValueInForm';
 
 const FormTextarea = ({ field, className, formConfig, control }: FieldProps) => {
   const theme = formConfig?.theme?.type;
@@ -18,7 +19,7 @@ const FormTextarea = ({ field, className, formConfig, control }: FieldProps) => 
       name={field?.name}
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
-        <FormItem className={cn('flex flex-col gap-2 space-y-0', className)}>
+        <FormItem className={cn('flex flex-col gap-2 space-y-0', className, 'hover:bg-transparent')}>
           <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]" style={{ color: primaryTextColor }}>
             <span className="relative">
               {field.label}
@@ -52,4 +53,4 @@ const FormTextarea = ({ field, className, formConfig, control }: FieldProps) => 
   );
 };
 
-export default withResponsiveWidthClasses(FormTextarea);
+export default withSetDefaultValueInFormPrimitive(withResponsiveWidthClasses(FormTextarea));

@@ -92,7 +92,7 @@ export interface FieldValidation {
   >;
 }
 
-interface FieldOption {
+export interface FieldOption {
   label: string; // Display label for the option
   value: string | number; // Value associated with the option
   helperText?: string;

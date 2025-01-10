@@ -9,21 +9,30 @@ import { cn } from '@/lib/utils';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useFormContext } from 'react-hook-form';
 
-const FormCheckboxField = ({ field, className, formConfig, control }: FieldProps) => {
+const FormCheckboxField = ({ field, className, formConfig, control, formValuesByPageMap, pageId }: FieldProps) => {
   const { inputBorderColor, primaryTextColor, secondaryTextColor } = formConfig?.theme?.properties ?? {};
   const formState = useFormContext();
   const [selected, setSelected] = React.useState<Set<string>>(new Set());
 
   const { setValue } = formState;
   const fieldDefaultValueString = useMemo(() => JSON.stringify(field?.defaultValue), [field?.defaultValue]);
+  const fieldUserFilledValueString = useMemo(
+    () => JSON.stringify(formValuesByPageMap?.[pageId]?.[field?.name]),
+    [field?.name, formValuesByPageMap, pageId],
+  );
 
   // To keep the selected state in sync with the default value
+
   useEffect(() => {
-    if (fieldDefaultValueString) {
+    if (fieldDefaultValueString && !fieldUserFilledValueString) {
       setSelected(new Set(JSON.parse(fieldDefaultValueString)));
       setValue(field.name, JSON.parse(fieldDefaultValueString), { shouldValidate: true });
     }
-  }, [fieldDefaultValueString, field.name, setValue]);
+    if (fieldUserFilledValueString) {
+      setSelected(new Set(JSON.parse(fieldUserFilledValueString)));
+      setValue(field.name, JSON.parse(fieldUserFilledValueString), { shouldValidate: true });
+    }
+  }, [fieldDefaultValueString, field.name, setValue, fieldUserFilledValueString]);
 
   const handleCheckboxChange = (checked: boolean, value: string) => {
     const newSelected = new Set(selected);
@@ -42,7 +51,7 @@ const FormCheckboxField = ({ field, className, formConfig, control }: FieldProps
       name={field?.name}
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
-        <FormItem className={cn('flex flex-col gap-2 space-y-0', className)}>
+        <FormItem className={cn('flex flex-col gap-2 space-y-0', className, 'hover:bg-transparent')}>
           <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]" style={{ color: primaryTextColor }}>
             <span className="relative">
               {field.label}

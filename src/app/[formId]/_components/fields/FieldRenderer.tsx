@@ -1,7 +1,7 @@
 import { GenericProps } from '@/types/common';
 import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
 import FormTextField from './Text';
-import { UseFormReturn } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
 import FormTextareaField from './Textarea';
 import FormDropdownField from './Dropdown';
 import FormRadioField from './Radio';
@@ -12,6 +12,8 @@ interface FieldRendererProps {
   field: FieldEntity;
   formConfig: FormConfig;
   control: UseFormReturn['control'];
+  formValuesByPageMap?: { [key: string]: FieldValues };
+  pageId: string;
 }
 
 export type FieldProps = FieldRendererProps & GenericProps;

@@ -21,7 +21,7 @@ const FormPageName = ({ name, color }: { name: string; color: string }) => {
   if (!name) return null;
   return (
     <p
-      className="pl-2 font-semibold text-[16px] border-b border-b-transparent cursor-pointer min-w-12 min-h-6 mt-1"
+      className="pl-2 font-semibold text-[14px] sm:text-[16px] border-b border-b-transparent cursor-pointer min-w-12 min-h-6 mt-1"
       style={{ color }}
     >
       {name}
@@ -56,10 +56,17 @@ const FormContent = ({
     <Form {...form}>
       <form
         className="mt-1 flex flex-col gap-3 w-full transition-all duration-200 ease-in-out"
-        onSubmit={form.handleSubmit(handleFormSubmit, (errors) => console.log(JSON.stringify(errors, null, 2)))}
+        onSubmit={form.handleSubmit(handleFormSubmit, (errors) =>
+          console.log(JSON.stringify(errors, null, 2), form.getValues()),
+        )}
       >
         <FormPageName name={activePage?.name} color={formConfig?.theme?.properties?.primaryTextColor} />
-        <FormFieldContainer activePage={activePage} formConfig={formConfig} control={form.control} />
+        <FormFieldContainer
+          activePage={activePage}
+          formConfig={formConfig}
+          control={form.control}
+          formValuesByPageMap={formValuesByPageMap}
+        />
         <FormActions activePageId={activePageId} formConfig={formConfig} onActivePageIdChange={onActivePageIdChange} />
       </form>
     </Form>
@@ -70,19 +77,28 @@ const FormFieldContainer = ({
   activePage,
   formConfig,
   control,
+  formValuesByPageMap,
 }: {
   activePage: PageEntity;
   formConfig: FormProps['formConfig'];
   control: UseFormReturn['control'];
+  formValuesByPageMap: FormContentProps['formValuesByPageMap'];
 }) => {
   const pageFields = activePage?.fields;
-
+  const activePageId = activePage?.id;
   const fieldEntities = formConfig?.fieldEntities;
 
   return (
     <div className="flex flex-wrap w-full overflow-clip gap-3 transition-all duration-200 ease-in-out">
       {pageFields?.map((field) => (
-        <FieldRenderer key={field} field={fieldEntities?.[field]} formConfig={formConfig} control={control} />
+        <FieldRenderer
+          key={field}
+          field={fieldEntities?.[field]}
+          formConfig={formConfig}
+          control={control}
+          formValuesByPageMap={formValuesByPageMap}
+          pageId={activePageId}
+        />
       ))}
     </div>
   );
