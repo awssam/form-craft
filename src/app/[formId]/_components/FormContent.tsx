@@ -1,20 +1,23 @@
 'use client';
 
-import React from 'react';
-import { FieldValues, useForm, UseFormReturn } from 'react-hook-form';
+import React, { useMemo } from 'react';
+import { FieldValues, useForm, UseFormReturn, useWatch } from 'react-hook-form';
 
 import FieldRenderer from './fields/FieldRenderer';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
 import type { FormProps } from './Form';
-import type { PageEntity } from '@/types/form-config';
+import type { FieldEntity, PageEntity } from '@/types/form-config';
+import useDebounceEffect from '@/hooks/useDebounceEffect';
 
 interface FormContentProps extends FormProps {
   activePageId: string;
+  formValuesByPageMap: Record<string, FieldValues>;
+  fieldVisibilityMap: Record<string, boolean>;
   onActivePageIdChange: (pageId: string) => void;
   onFormSubmit: (data: FieldValues) => void;
-  formValuesByPageMap: Record<string, FieldValues>;
+  onPageFieldChange: React.Dispatch<React.SetStateAction<Record<string, FieldEntity>>>;
 }
 
 const FormPageName = ({ name, color }: { name: string; color: string }) => {
@@ -33,16 +36,26 @@ const FormContent = ({
   formConfig,
   activePageId,
   formValuesByPageMap,
+  fieldVisibilityMap,
   onActivePageIdChange,
   onFormSubmit,
+  onPageFieldChange,
 }: FormContentProps) => {
   const activePage = formConfig?.pageEntities?.[activePageId] || formConfig?.pageEntities?.[formConfig?.pages?.[0]];
-
   const form = useForm({
     defaultValues: {
       ...formValuesByPageMap?.[activePageId],
     },
   });
+
+  const formValues = useWatch({ control: form.control });
+
+  const fieldEntitiesWithNameKeys = useMemo(() => {
+    return Object.values(formConfig?.fieldEntities)?.reduce((acc, field) => {
+      acc[field?.name] = field;
+      return acc;
+    }, {} as { [key: string]: FieldEntity });
+  }, [formConfig?.fieldEntities]);
 
   const handleFormSubmit = (data: FieldValues) => {
     const activePageIndex = formConfig?.pages?.indexOf(activePageId);
@@ -51,6 +64,21 @@ const FormContent = ({
     onFormSubmit?.(data);
     onActivePageIdChange?.(nextPageId);
   };
+
+  useDebounceEffect(
+    React.useCallback(() => {
+      onPageFieldChange?.((prev) => {
+        const newFields = { ...prev };
+        Object.entries(formValues).forEach(([key, value]) => {
+          const field = fieldEntitiesWithNameKeys?.[key];
+          const fieldId = field?.id;
+          newFields[fieldId] = { ...newFields[fieldId], value };
+        });
+        return newFields;
+      });
+    }, [fieldEntitiesWithNameKeys, formValues, onPageFieldChange]),
+    2000,
+  );
 
   return (
     <Form {...form}>
@@ -66,6 +94,7 @@ const FormContent = ({
           formConfig={formConfig}
           control={form.control}
           formValuesByPageMap={formValuesByPageMap}
+          fieldVisibilityMap={fieldVisibilityMap}
         />
         <FormActions activePageId={activePageId} formConfig={formConfig} onActivePageIdChange={onActivePageIdChange} />
       </form>
@@ -78,11 +107,13 @@ const FormFieldContainer = ({
   formConfig,
   control,
   formValuesByPageMap,
+  fieldVisibilityMap,
 }: {
   activePage: PageEntity;
   formConfig: FormProps['formConfig'];
   control: UseFormReturn['control'];
   formValuesByPageMap: FormContentProps['formValuesByPageMap'];
+  fieldVisibilityMap?: FormContentProps['fieldVisibilityMap'];
 }) => {
   const pageFields = activePage?.fields;
   const activePageId = activePage?.id;
@@ -90,16 +121,19 @@ const FormFieldContainer = ({
 
   return (
     <div className="flex flex-wrap w-full overflow-clip gap-3 transition-all duration-200 ease-in-out">
-      {pageFields?.map((field) => (
-        <FieldRenderer
-          key={field}
-          field={fieldEntities?.[field]}
-          formConfig={formConfig}
-          control={control}
-          formValuesByPageMap={formValuesByPageMap}
-          pageId={activePageId}
-        />
-      ))}
+      {pageFields?.map(
+        (field) =>
+          fieldVisibilityMap?.[field] !== false && (
+            <FieldRenderer
+              key={field}
+              field={fieldEntities?.[field]}
+              formConfig={formConfig}
+              control={control}
+              formValuesByPageMap={formValuesByPageMap}
+              pageId={activePageId}
+            />
+          ),
+      )}
     </div>
   );
 };

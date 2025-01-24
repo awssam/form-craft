@@ -1,13 +1,12 @@
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { FieldEntity } from '@/types/form-config';
-import { useFieldVisibilityStore, useFormProperty } from '@/zustand/store';
 import { useEffect } from 'react';
 
-const useFieldConditionalLogicCheck = (fields: string[]) => {
-  // // validate conditional logic for all fields
-  const fieldEntities = useFormProperty('fieldEntities');
-  const setFieldVisibility = useFieldVisibilityStore((s) => s.setFieldVisibility);
-
+const useFieldConditionalLogicCheckGeneric = (
+  fields: string[],
+  fieldEntities: Record<string, FieldEntity> | null,
+  onFieldVisibilityChange: (fieldId: string, isVisible: boolean) => void,
+) => {
   useEffect(() => {
     fields?.forEach((fieldId) => {
       const field = fieldEntities?.[fieldId] as FieldEntity;
@@ -43,20 +42,20 @@ const useFieldConditionalLogicCheck = (fields: string[]) => {
 
         if (operator === 'OR') {
           const isAnyConditionTrue = conditions.some((c) => c);
-          setFieldVisibility(fieldId, isAnyConditionTrue);
+          onFieldVisibilityChange(fieldId, isAnyConditionTrue);
           return;
         }
 
         if (operator === 'AND') {
           const isAllConditionTrue = conditions.every((c) => c);
-          setFieldVisibility(fieldId, isAllConditionTrue);
+          onFieldVisibilityChange(fieldId, isAllConditionTrue);
           return;
         }
       }
     });
-  }, [fields, fieldEntities, setFieldVisibility]);
+  }, [fields, fieldEntities, onFieldVisibilityChange]);
 
   return null;
 };
 
-export default useFieldConditionalLogicCheck;
+export default useFieldConditionalLogicCheckGeneric;

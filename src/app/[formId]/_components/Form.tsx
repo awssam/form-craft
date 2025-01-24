@@ -2,11 +2,12 @@
 
 import { cn } from '@/lib/utils';
 import type { CustomValidationType, FieldType, FormConfig } from '@/types/form-config';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import FormContent from './FormContent';
 import FormHeader from './FormHeader';
 import { FieldValues } from 'react-hook-form';
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
+import useFieldConditionalLogicCheckGeneric from '@/hooks/useFieldConditionalLogicCheck';
 
 export interface FormProps {
   formConfig: FormConfig;
@@ -22,10 +23,17 @@ const Form = ({ formConfig: config }: FormProps) => {
   const [formValuesByPage, setFormValuesByPage] = React.useState<FormValueByPageMap>({});
   const [formConfig, setFormConfig] = React.useState(config);
   const [activePageId, setActivePageId] = React.useState(formConfig?.pages?.[0]);
+  const [fieldEntities, setFieldEntities] = React.useState(config?.fieldEntities);
+  const [fieldVisibilityMap, setFieldVisibiltyMap] = React.useState<Record<string, boolean>>({});
+  const allFields = useMemo(() => Object.keys(formConfig.fieldEntities), [formConfig?.fieldEntities]);
 
   const handleFormSubmit = (data: FieldValues) => {
     setFormValuesByPage((prev) => ({ ...prev, [activePageId]: data }));
   };
+
+  const handleFieldVisibilityChange = useCallback((fieldId: string, isVisible: boolean) => {
+    setFieldVisibiltyMap((prev) => ({ ...prev, [fieldId]: isVisible }));
+  }, []);
 
   useEffect(() => {
     const fieldEntities = config?.fieldEntities;
@@ -105,6 +113,8 @@ const Form = ({ formConfig: config }: FormProps) => {
     });
   }, [config]);
 
+  useFieldConditionalLogicCheckGeneric(allFields!, fieldEntities, handleFieldVisibilityChange);
+
   return (
     <section className={classes} style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor }}>
       <FormHeader formConfig={formConfig} />
@@ -112,9 +122,11 @@ const Form = ({ formConfig: config }: FormProps) => {
         key={activePageId} // should destroy and re-render when activePageId changes
         formConfig={formConfig}
         formValuesByPageMap={formValuesByPage}
+        fieldVisibilityMap={fieldVisibilityMap}
         activePageId={activePageId}
         onActivePageIdChange={setActivePageId}
         onFormSubmit={handleFormSubmit}
+        onPageFieldChange={setFieldEntities}
       />
     </section>
   );

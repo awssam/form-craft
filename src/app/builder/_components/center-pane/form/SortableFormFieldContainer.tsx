@@ -5,7 +5,7 @@ import FieldRenderer from './FieldRenderer';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 
-import { useFormProperty } from '@/zustand/store';
+import { useFieldVisibilityStore, useFormProperty } from '@/zustand/store';
 import useFieldUnregister from '@/hooks/useFieldUnregister';
 import usePopulateFieldValidation from '@/hooks/usePopulateFieldValidation';
 
@@ -24,6 +24,8 @@ const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFie
   const fieldEntities = useFormProperty('fieldEntities');
   const pageEntities = useFormProperty('pageEntities');
 
+  const setFieldVisibility = useFieldVisibilityStore((s) => s.setFieldVisibility);
+
   const fields = useMemo(() => pageEntities?.[pageId]?.fields, [pageEntities, pageId]);
   const form = useForm({});
 
@@ -33,8 +35,8 @@ const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFie
   // for all fields populate the validation functions from the client validation map
   usePopulateFieldValidation(pageId);
 
-  // // validate conditional logic for all fields
-  useFieldConditionalLogicCheck(fields!);
+  // validate conditional logic for all fields
+  useFieldConditionalLogicCheck(fields!, fieldEntities, setFieldVisibility);
 
   return (
     <SortableContext id={pageId} items={fields!} strategy={verticalListSortingStrategy}>
