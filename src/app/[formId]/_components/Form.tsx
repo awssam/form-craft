@@ -31,6 +31,10 @@ const Form = ({ formConfig: config }: FormProps) => {
     setFormValuesByPage((prev) => ({ ...prev, [activePageId]: data }));
   };
 
+  const handleActivePageIdChange = useCallback((pageId: string) => {
+    setActivePageId(pageId);
+  }, []);
+
   const handleFieldVisibilityChange = useCallback((fieldId: string, isVisible: boolean) => {
     setFieldVisibiltyMap((prev) => ({ ...prev, [fieldId]: isVisible }));
   }, []);
@@ -124,9 +128,10 @@ const Form = ({ formConfig: config }: FormProps) => {
         formValuesByPageMap={formValuesByPage}
         fieldVisibilityMap={fieldVisibilityMap}
         activePageId={activePageId}
-        onActivePageIdChange={setActivePageId}
+        onActivePageIdChange={handleActivePageIdChange}
         onFormSubmit={handleFormSubmit}
         onPageFieldChange={setFieldEntities}
+        onFormValueChange={setFormValuesByPage}
       />
     </section>
   );

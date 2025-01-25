@@ -18,6 +18,7 @@ interface FormContentProps extends FormProps {
   onActivePageIdChange: (pageId: string) => void;
   onFormSubmit: (data: FieldValues) => void;
   onPageFieldChange: React.Dispatch<React.SetStateAction<Record<string, FieldEntity>>>;
+  onFormValueChange: React.Dispatch<React.SetStateAction<Record<string, Record<string, unknown>>>>;
 }
 
 const FormPageName = ({ name, color }: { name: string; color: string }) => {
@@ -40,6 +41,7 @@ const FormContent = ({
   onActivePageIdChange,
   onFormSubmit,
   onPageFieldChange,
+  onFormValueChange,
 }: FormContentProps) => {
   const activePage = formConfig?.pageEntities?.[activePageId] || formConfig?.pageEntities?.[formConfig?.pages?.[0]];
   const form = useForm({
@@ -78,6 +80,17 @@ const FormContent = ({
       });
     }, [fieldEntitiesWithNameKeys, formValues, onPageFieldChange]),
     2000,
+  );
+
+  useDebounceEffect(
+    React.useCallback(() => {
+      onFormValueChange?.((prev) => {
+        const newValues = { ...prev };
+        newValues[activePageId] = formValues;
+        return newValues;
+      });
+    }, [activePageId, formValues, onFormValueChange]),
+    1000,
   );
 
   return (
