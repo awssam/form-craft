@@ -47,6 +47,7 @@ export const getAllTemplatesAction = async () => {
 
     return { success: true, data: convertToPlainObject(templates) as FormTemplateType[] };
   } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
   }
 };
@@ -57,6 +58,7 @@ export const deleteAllTemplatesAction = async () => {
     const res = await FormTemplate.deleteMany({ 'templateConfig.createdBy': 'SYSTEM' });
     return { success: true, data: convertToPlainObject(res) };
   } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
   }
 };

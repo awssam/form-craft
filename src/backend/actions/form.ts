@@ -21,6 +21,7 @@ export const createFormConfigAction = async () => {
       data: convertToPlainObject(res) as FormConfig,
     };
   } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
     return {
       success: false,
       error: error,
@@ -63,6 +64,7 @@ export const getAllUserFormsAction = async () => {
       data: convertToPlainObject(forms),
     };
   } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
     return {
       success: false,
       error: error,
@@ -86,6 +88,8 @@ export const deleteFormAction = async (id: string) => {
       data: convertToPlainObject(res),
     };
   } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+
     return {
       success: false,
       error: error,
@@ -108,7 +112,8 @@ export const updateFormConfigAction = async (id: string, update: Partial<FormCon
       data: convertToPlainObject(res),
     };
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) return { success: false, error: error?.message };
+
     return {
       success: false,
       error: error,
@@ -129,6 +134,8 @@ export const publishFormAction = async (id: string) => {
       data: convertToPlainObject(res),
     };
   } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+
     return {
       success: false,
       error: error,

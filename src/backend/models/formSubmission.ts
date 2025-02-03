@@ -33,10 +33,6 @@ const formSubmissionSchema = new mongoose.Schema(
       of: Object,
       required: true,
     },
-    pageProgress: {
-      type: [pageProgressSchema],
-      required: true,
-    },
     status: {
       type: String,
       enum: ['pending', 'completed'],

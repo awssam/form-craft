@@ -10,11 +10,13 @@ import { Button } from '@/components/ui/button';
 import type { FormProps } from './Form';
 import type { FieldEntity, PageEntity } from '@/types/form-config';
 import useDebounceEffect from '@/hooks/useDebounceEffect';
+import { LoaderCircle } from 'lucide-react';
 
 interface FormContentProps extends FormProps {
   activePageId: string;
   formValuesByPageMap: Record<string, FieldValues>;
   fieldVisibilityMap: Record<string, boolean>;
+  isFormSubmitting: boolean;
   onActivePageIdChange: (pageId: string) => void;
   onFormSubmit: (data: FieldValues) => void;
   onPageFieldChange: React.Dispatch<React.SetStateAction<Record<string, FieldEntity>>>;
@@ -38,6 +40,7 @@ const FormContent = ({
   activePageId,
   formValuesByPageMap,
   fieldVisibilityMap,
+  isFormSubmitting,
   onActivePageIdChange,
   onFormSubmit,
   onPageFieldChange,
@@ -58,14 +61,6 @@ const FormContent = ({
       return acc;
     }, {} as { [key: string]: FieldEntity });
   }, [formConfig?.fieldEntities]);
-
-  const handleFormSubmit = (data: FieldValues) => {
-    const activePageIndex = formConfig?.pages?.indexOf(activePageId);
-    const nextPageId = formConfig?.pages?.[activePageIndex + 1] || formConfig?.pages?.[activePageIndex];
-    console.log(data);
-    onFormSubmit?.(data);
-    onActivePageIdChange?.(nextPageId);
-  };
 
   useDebounceEffect(
     React.useCallback(() => {
@@ -93,13 +88,18 @@ const FormContent = ({
     1000,
   );
 
+  const handleFormSubmit = (data: FieldValues) => {
+    const activePageIndex = formConfig?.pages?.indexOf(activePageId);
+    const nextPageId = formConfig?.pages?.[activePageIndex + 1] || formConfig?.pages?.[activePageIndex];
+    onFormSubmit?.(data);
+    onActivePageIdChange?.(nextPageId);
+  };
+
   return (
     <Form {...form}>
       <form
         className="mt-1 flex flex-col gap-3 w-full transition-all duration-200 ease-in-out"
-        onSubmit={form.handleSubmit(handleFormSubmit, (errors) =>
-          console.log(JSON.stringify(errors, null, 2), form.getValues()),
-        )}
+        onSubmit={form.handleSubmit(handleFormSubmit, (errors) => console.log(JSON.stringify(errors, null, 2)))}
       >
         <FormPageName name={activePage?.name} color={formConfig?.theme?.properties?.primaryTextColor} />
         <FormFieldContainer
@@ -109,7 +109,12 @@ const FormContent = ({
           formValuesByPageMap={formValuesByPageMap}
           fieldVisibilityMap={fieldVisibilityMap}
         />
-        <FormActions activePageId={activePageId} formConfig={formConfig} onActivePageIdChange={onActivePageIdChange} />
+        <FormActions
+          isFormSubmitting={isFormSubmitting}
+          activePageId={activePageId}
+          formConfig={formConfig}
+          onActivePageIdChange={onActivePageIdChange}
+        />
       </form>
     </Form>
   );
@@ -155,7 +160,8 @@ export const FormActions = ({
   activePageId,
   formConfig,
   onActivePageIdChange,
-}: Pick<FormContentProps, 'activePageId' | 'formConfig' | 'onActivePageIdChange'>) => {
+  isFormSubmitting,
+}: Pick<FormContentProps, 'activePageId' | 'formConfig' | 'onActivePageIdChange' | 'isFormSubmitting'>) => {
   const isFirstPage = activePageId === formConfig?.pages?.[0];
   const isLastPage = activePageId === formConfig?.pages?.[formConfig?.pages?.length - 1];
 
@@ -169,14 +175,17 @@ export const FormActions = ({
         <Button
           type="button"
           variant={'secondary'}
-          disabled={isFirstPage}
+          disabled={isFirstPage || isFormSubmitting}
           onClick={() => onActivePageIdChange(previousPageId)}
+          size={'sm'}
         >
           Go Back
         </Button>
       )}
-      <Button type="submit" variant={'default'}>
+
+      <Button type="submit" variant={'default'} disabled={isFormSubmitting} size={'sm'}>
         {isLastPage ? 'Submit' : 'Next'}
+        {isLastPage && isFormSubmitting && <LoaderCircle className="ml-2 w-4 h-4 animate-spin" />}
       </Button>
     </div>
   );
