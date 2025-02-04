@@ -1,37 +1,29 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 
-import { CirclePercent, ClipboardList, List } from 'lucide-react';
-import { StarFilledIcon } from '@radix-ui/react-icons';
-import InfoCard from './InfoCard';
+import { CirclePercent, List } from 'lucide-react';
+import InfoCard, { InfoCardSkeleton } from './InfoCard';
 import FormCompletionRateBarChart from './FormCompletionRateBarChart';
 import SubmissionsOvertimeLineChart from './SubmissionsOvertimeLineChart';
+import MostActiveForm from './MostActiveForm';
+import TotalSubmissions from './TotalSubmissions';
+import AverageCompletionRate from './AverageCompletionRate';
 
-const Overview = () => {
+const Overview = async () => {
   return (
     <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-4 ">
-      <InfoCard
-        className="col-span-full sm:col-span-3 md:col-span-3 max-h-[230px] "
-        title="Total Submissions"
-        icon={ClipboardList}
-        description={'Total submissions received across all forms.'}
-        data="120"
-      />
+      <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3 max-h-[230px] " />}>
+        <TotalSubmissions />
+      </Suspense>
 
-      <InfoCard
-        className="col-span-full sm:col-span-3 md:col-span-3  max-h-[230px]"
-        title="Average Completion Rate"
-        icon={CirclePercent}
-        description={'Percentage of users who completed forms.'}
-        data="50"
-      />
+        <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3  max-h-[230px]" />}>
+        <AverageCompletionRate />
+      </Suspense>
 
-      <InfoCard
-        className="col-span-full md:col-span-6 [grid-row:2/span-1]  max-h-[230px]"
-        title={'Most Active Form'}
-        icon={StarFilledIcon}
-        description={'Form with the highest number of submissions received.'}
-        data={'Customer Feedback Form'}
-      />
+      <Suspense
+        fallback={<InfoCardSkeleton className="col-span-full md:col-span-6 [grid-row:2/span-1]  max-h-[230px]" />}
+      >
+        <MostActiveForm />
+      </Suspense>
 
       <FormCompletionRateBarChart />
 

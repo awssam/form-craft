@@ -24,7 +24,7 @@ const TopHeader = () => {
   const { user } = useUser();
   const setFormConfig = useFormActionProperty('setFormConfig');
 
-  const formLink = `${getAppOriginUrl()}/${useFormProperty('id')}`;
+  const formLink = `${getAppOriginUrl()}/form/${useFormProperty('id')}`;
   const { handleCopy, hasCopied } = useCopyInfo();
 
   const [isPublishedFormModalOpen, setIsPublishedFormModalOpen] = React.useState(false);
@@ -128,7 +128,7 @@ const TopHeader = () => {
 export default TopHeader;
 
 const PublishedFormModal = ({ open, setOpen }: { open: boolean; setOpen: (open: boolean) => void }) => {
-  const formLink = `${getAppOriginUrl()}/${useFormProperty('id')}`;
+  const formLink = `${getAppOriginUrl()}/form/${useFormProperty('id')}`;
   const { handleCopy, hasCopied } = useCopyInfo();
 
   return (

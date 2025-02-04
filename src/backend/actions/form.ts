@@ -47,16 +47,25 @@ export const getAllUserFormsAction = async () => {
         },
       },
       {
+        $lookup: {
+          from: 'formsubmissions',
+          localField: 'id',
+          foreignField: 'formId',
+          as: 'submissions',
+        },
+      },
+      {
         $addFields: {
           meta: {
             title: '$name',
             description: '$description',
             status: '$status',
-            submissions: 0,
+            submissions: { $size: '$submissions' },
             lastModified: '$updatedAt',
           },
         },
       },
+      { $unset: ['submissions'] },
     ]);
 
     return {
