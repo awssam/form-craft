@@ -15,7 +15,7 @@ const AverageCompletionRate = async () => {
       title="Average Completion Rate"
       icon={CirclePercent}
       description={'Percentage of users who completed forms.'}
-      data={`${averageCompletionRate ? `${averageCompletionRate}%` : 0}`}
+      data={`${averageCompletionRate ? `${averageCompletionRate?.toFixed(2)}%` : 0}`}
     />
   );
 };
