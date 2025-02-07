@@ -51,7 +51,7 @@ const FormCheckboxField = ({ field, className, formConfig, control, formValuesBy
       name={field?.name}
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
-        <FormItem className={cn('flex flex-col gap-2 space-y-0', className, 'hover:bg-transparent')}>
+        <FormItem className={cn('flex flex-col gap-4 space-y-0', className, 'hover:bg-transparent')}>
           <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]" style={{ color: primaryTextColor }}>
             <span className="relative">
               {field.label}
@@ -76,6 +76,7 @@ const FormCheckboxField = ({ field, className, formConfig, control, formValuesBy
                     id={(option?.label + '-' + field.label) as string}
                     style={{ borderColor: inputBorderColor }}
                     color={primaryTextColor}
+                    className="h-6 w-6"
                   />
                   <Label htmlFor={(option?.label + '-' + field.label) as string} style={{ color: primaryTextColor }}>
                     {option?.label}

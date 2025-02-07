@@ -138,7 +138,7 @@ const FormFieldContainer = ({
   const fieldEntities = formConfig?.fieldEntities;
 
   return (
-    <div className="flex flex-wrap w-full overflow-clip gap-3 transition-all duration-200 ease-in-out">
+    <div className="flex flex-wrap w-full overflow-clip gap-5 transition-all duration-200 ease-in-out">
       {pageFields?.map(
         (field) =>
           fieldVisibilityMap?.[field] !== false && (
@@ -177,13 +177,13 @@ export const FormActions = ({
           variant={'secondary'}
           disabled={isFirstPage || isFormSubmitting}
           onClick={() => onActivePageIdChange(previousPageId)}
-          size={'sm'}
+          size={'default'}
         >
           Go Back
         </Button>
       )}
 
-      <Button type="submit" variant={'default'} disabled={isFormSubmitting} size={'sm'}>
+      <Button type="submit" variant={'default'} disabled={isFormSubmitting} size={'default'}>
         {isLastPage ? 'Submit' : 'Next'}
         {isLastPage && isFormSubmitting && <LoaderCircle className="ml-2 w-4 h-4 animate-spin" />}
       </Button>

@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
 
-import { CirclePercent, List } from 'lucide-react';
 import InfoCard, { InfoCardSkeleton } from './InfoCard';
-import FormCompletionRateBarChart from './FormCompletionRateBarChart';
-import SubmissionsOvertimeLineChart from './SubmissionsOvertimeLineChart';
+import FormCompletionRate from './FormCompletionRate';
+import SubmissionsOvertime from './SubmissionsOvertime';
 import MostActiveForm from './MostActiveForm';
 import TotalSubmissions from './TotalSubmissions';
 import AverageCompletionRate from './AverageCompletionRate';
+import { List } from 'lucide-react';
 
 const Overview = async () => {
   return (
@@ -15,7 +15,7 @@ const Overview = async () => {
         <TotalSubmissions />
       </Suspense>
 
-        <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3  max-h-[230px]" />}>
+      <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3  max-h-[230px]" />}>
         <AverageCompletionRate />
       </Suspense>
 
@@ -25,9 +25,21 @@ const Overview = async () => {
         <MostActiveForm />
       </Suspense>
 
-      <FormCompletionRateBarChart />
+      <Suspense
+        fallback={
+          <InfoCardSkeleton className="col-span-full md:col-span-6 flex flex-col  gap-2 md:[grid-row:3] max-h-[400px]" />
+        }
+      >
+        <FormCompletionRate />
+      </Suspense>
 
-      <SubmissionsOvertimeLineChart />
+      <Suspense
+        fallback={
+          <InfoCardSkeleton className="col-span-full flex flex-col gap-2 row-span-2 md:[grid-column:7/14] max-h-[400px]" />
+        }
+      >
+        <SubmissionsOvertime />
+      </Suspense>
 
       <InfoCard
         className="col-span-full  md:col-span-6 md:max-h-[400px] overflow-hidden "

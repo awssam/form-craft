@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import Menu from '@/components/ui/kebabmenu';
 
 import { formatDistanceToNow } from '@/lib/datetime';
-import { cn } from '@/lib/utils';
+import { cn, copyToClipboard, getAppOriginUrl } from '@/lib/utils';
 import { ArrowRight, LoaderCircle } from 'lucide-react';
 import React from 'react';
 
@@ -41,6 +41,16 @@ const FormCard = ({
       onClick: () => onDelete?.(id, title),
     },
   ];
+
+  if (status === 'published') {
+    formActions.push({
+      label: 'Go to published form',
+      onClick: () => {
+        const formLink = `${getAppOriginUrl()}/form/${id}`;
+        window.open(formLink, '_blank');
+      },
+    });
+  }
 
   return (
     <>

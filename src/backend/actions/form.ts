@@ -60,7 +60,15 @@ export const getAllUserFormsAction = async () => {
             title: '$name',
             description: '$description',
             status: '$status',
-            submissions: { $size: '$submissions' },
+            submissions: {
+              $sum: {
+                $map: {
+                  input: '$submissions',
+                  as: 'submission',
+                  in: { $cond: [{ $eq: ['$$submission.status', 'completed'] }, 1, 0] },
+                },
+              },
+            },
             lastModified: '$updatedAt',
           },
         },
