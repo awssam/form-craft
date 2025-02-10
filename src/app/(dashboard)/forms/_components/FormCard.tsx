@@ -66,7 +66,7 @@ const FormCard = ({
         <CardHeader className="space-y-0.5">
           <CardTitle className="flex items-center justify-between w-full gap-4">
             <h2
-              className="text-base md:text-lg max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300"
+              className="text-base md:text-lg max-w-[90%] hover:text-yellow-200/95 flex items-center group transition-all duration-300"
               onClick={() => onEdit?.(id, title)}
             >
               {title || 'Untitled Form'}
@@ -77,8 +77,9 @@ const FormCard = ({
           <CardDescription className="-mt-6 text-xs text-ellipsis">{description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <h3 className="font-semibold">
+          <h3 className="font-semibold group">
             <span className="font-bold text-2xl">{submissions}</span> submissions
+            {submissions > 0 && <ArrowRight className="w-4 h-4 inline ml-2" aria-label="View Submissions" />}
           </h3>
         </CardContent>
         <CardFooter className="flex items-center justify-between w-full gap-4 text-ellipsis">

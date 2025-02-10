@@ -6,7 +6,7 @@ const FormFooter = () => {
       Powered by{' '}
       <b>
         <a href={getAppOriginUrl()} className="text-blue-500">
-          VI Forms
+          FormCraft
         </a>
       </b>
     </div>

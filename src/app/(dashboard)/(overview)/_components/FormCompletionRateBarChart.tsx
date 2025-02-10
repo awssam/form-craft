@@ -51,7 +51,7 @@ function FormCompletionRateBarChart({ chartData }: FormCompletionRateBarChartPro
           cursor={false}
           content={<ChartTooltipContent hideLabel className="bg-slate-950" labelClassName="text-slate-50" />}
         />
-        <Bar dataKey="completionRate" fill="hsl(var(--chart-1))" radius={8} maxBarSize={80} />
+        <Bar dataKey="completionRate" fill="hsl(var(--chart-1))" radius={8} maxBarSize={60} />
       </BarChart>
     </ChartContainer>
   );

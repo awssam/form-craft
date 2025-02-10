@@ -9,7 +9,7 @@ const Header = () => {
 
   return (
     <div className="flex justify-between gap-6 items-center mb-4 sticky -top-3 bg-[#000000] py-3  z-20 w-full">
-      <h2 className="font-bold text-white md:text-lg text-base">VI Forms</h2>
+      <h2 className="font-bold text-white md:text-lg text-base">FormCraft</h2>
       <CreateFormModal open={isOpen} setOpen={setIsOpen} className="ml-auto" />
       <UserButton />
     </div>

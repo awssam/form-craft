@@ -7,7 +7,7 @@ import './globals.css';
 import ReactQueryProvider from '@/providers/react-query';
 
 export const metadata: Metadata = {
-  title: 'VI Forms',
+  title: 'FormCraft',
   description: 'Work In Progress Fun Project from Varadarajan M',
 };
 
