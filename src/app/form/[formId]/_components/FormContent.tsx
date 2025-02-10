@@ -2,6 +2,9 @@
 
 import React, { useMemo } from 'react';
 import { FieldValues, useForm, UseFormReturn, useWatch } from 'react-hook-form';
+import { LoaderCircle } from 'lucide-react';
+
+import useDebounceEffect from '@/hooks/useDebounceEffect';
 
 import FieldRenderer from './fields/FieldRenderer';
 import { Form } from '@/components/ui/form';
@@ -9,8 +12,6 @@ import { Button } from '@/components/ui/button';
 
 import type { FormProps } from './Form';
 import type { FieldEntity, PageEntity } from '@/types/form-config';
-import useDebounceEffect from '@/hooks/useDebounceEffect';
-import { LoaderCircle } from 'lucide-react';
 
 interface FormContentProps extends FormProps {
   activePageId: string;
@@ -26,12 +27,12 @@ interface FormContentProps extends FormProps {
 const FormPageName = ({ name, color }: { name: string; color: string }) => {
   if (!name) return null;
   return (
-    <p
-      className="pl-2 font-semibold text-[14px] sm:text-[16px] border-b border-b-transparent cursor-pointer min-w-12 min-h-6 mt-1"
+    <h3
+      className="pl-2 font-bold text-[14px] sm:text-[16px] border-b border-b-transparent cursor-pointer min-w-12 min-h-6 mt-1"
       style={{ color }}
     >
       {name}
-    </p>
+    </h3>
   );
 };
 
@@ -170,24 +171,26 @@ export const FormActions = ({
   const previousPageId = formConfig?.pages?.[activePageIndex - 1] || formConfig?.pages?.[0];
 
   return (
-    <div className="flex justify-between items-center gap-2 my-6 pl-2 pr-4">
-      {formConfig?.pages?.length > 1 && (
-        <Button
-          type="button"
-          variant={'secondary'}
-          disabled={isFirstPage || isFormSubmitting}
-          onClick={() => onActivePageIdChange(previousPageId)}
-          size={'default'}
-        >
-          Go Back
-        </Button>
-      )}
+    <>
+      <div className="flex justify-between items-center gap-2 my-6 pl-2 pr-4">
+        {formConfig?.pages?.length > 1 && (
+          <Button
+            type="button"
+            variant={'secondary'}
+            disabled={isFirstPage || isFormSubmitting}
+            onClick={() => onActivePageIdChange(previousPageId)}
+            size={'default'}
+          >
+            Go Back
+          </Button>
+        )}
 
-      <Button type="submit" variant={'default'} disabled={isFormSubmitting} size={'default'}>
-        {isLastPage ? 'Submit' : 'Next'}
-        {isLastPage && isFormSubmitting && <LoaderCircle className="ml-2 w-4 h-4 animate-spin" />}
-      </Button>
-    </div>
+        <Button type="submit" variant={'default'} disabled={isFormSubmitting} size={'default'}>
+          {isLastPage ? 'Submit' : 'Next'}
+          {isLastPage && isFormSubmitting && <LoaderCircle className="ml-2 w-4 h-4 animate-spin" />}
+        </Button>
+      </div>
+    </>
   );
 };
 

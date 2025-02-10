@@ -26,7 +26,7 @@ export interface FormProps {
 type FormValueByPageMap = Record<string, Record<string, unknown>>;
 
 const classes = cn(
-  'flex flex-col gap-9 border-yellow-200/10 px-3 py-5 md:px-7 md:py-5 mx-auto my-auto border border-dashed rounded-md w-[95%] md:w-[min(80%,800px)] transition-all duration-200',
+  'flex flex-col gap-9 border-yellow-200/10 px-3 py-5 md:px-7 md:py-5 mx-auto my-auto border border-dashed rounded-md w-[95%] md:w-[min(80%,890px)] transition-all duration-200',
 );
 
 const Form = ({ formConfig: config }: FormProps) => {
@@ -54,6 +54,11 @@ const Form = ({ formConfig: config }: FormProps) => {
   const { mutateAsync: createActivity } = useCreateActivityMutation({});
 
   const router = useRouter();
+
+  const currentPageNumber = useMemo(
+    () => formConfig?.pages?.indexOf(activePageId) + 1,
+    [activePageId, formConfig?.pages],
+  );
 
   const handleFormSubmit = (data: FieldValues) => {
     const updatedState = { ...formValuesByPage, [activePageId]: data };
@@ -208,7 +213,7 @@ const Form = ({ formConfig: config }: FormProps) => {
         borderRadius: 20,
       }}
     >
-      <FormHeader formConfig={formConfig} />
+      <FormHeader formConfig={formConfig} currentPageNumber={currentPageNumber} />
       <FormContent
         key={activePageId} // should destroy and re-render when activePageId changes
         formConfig={formConfig}

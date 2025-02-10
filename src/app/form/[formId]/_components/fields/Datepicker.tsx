@@ -35,7 +35,11 @@ const FormDatePickerField = ({ field, className, formConfig, control }: FieldPro
       rules={field?.validation as ComponentProps<typeof FormField>['rules']}
       render={({ field: rhFormField }) => (
         <FormItem className={cn('flex flex-col gap-4 space-y-0', className, 'hover:bg-transparent')}>
-          <Label htmlFor={field?.id} className="flex text-xs md:text-[12px]" style={{ color: primaryTextColor }}>
+          <Label
+            htmlFor={field?.id}
+            className="flex text-sm font-semibold md:text-[12px]"
+            style={{ color: primaryTextColor }}
+          >
             <span className="relative">
               {field.label}
               {field?.validation?.custom?.required?.value && (
