@@ -1,12 +1,12 @@
 import React, { Suspense } from 'react';
 
-import InfoCard, { InfoCardSkeleton } from './InfoCard';
+import { InfoCardSkeleton } from './InfoCard';
 import FormCompletionRate from './FormCompletionRate';
 import SubmissionsOvertime from './SubmissionsOvertime';
 import MostActiveForm from './MostActiveForm';
 import TotalSubmissions from './TotalSubmissions';
 import AverageCompletionRate from './AverageCompletionRate';
-import { List } from 'lucide-react';
+import RecentActivity from './RecentActivity';
 
 const Overview = async () => {
   return (
@@ -41,88 +41,13 @@ const Overview = async () => {
         <SubmissionsOvertime />
       </Suspense>
 
-      <InfoCard
-        className="col-span-full  md:col-span-6 md:max-h-[400px] overflow-hidden "
-        title="Recent Activity"
-        icon={List}
-        contentClassName="overflow-y-scroll max-h-[80%]"
-        description={'A list of recent submissions.'}
-        renderData={() => (
-          <div className="flex flex-col gap-4">
-            {/* Event 2 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">📝</span>
-              <p className="text-xs font-medium">
-                New submission on <span className="font-bold">Event Registration Form</span>.
-              </p>
-            </div>
-
-            {/* Event 3 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">✅</span>
-              <p className="text-xs font-medium">
-                Form <span className="font-bold">Contact Us</span> is now live.
-              </p>
-            </div>
-
-            {/* Event 4 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">📝</span>
-              <p className="text-xs font-medium">
-                New submission on <span className="font-bold">Inquiry Form</span>.
-              </p>
-            </div>
-
-            {/* Event 5 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">📝</span>
-              <p className="text-xs font-medium">
-                New submission on <span className="font-bold">Survey Form</span>.
-              </p>
-            </div>
-
-            {/* Event 6 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">📝</span>
-              <p className="text-xs font-medium">
-                New submission on <span className="font-bold">Newsletter Signup</span>.
-              </p>
-            </div>
-
-            {/* Event 7 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">✅</span>
-              <p className="text-xs font-medium">
-                Form <span className="font-bold">Feedback Survey</span> is now live.
-              </p>
-            </div>
-
-            {/* Event 8 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">📝</span>
-              <p className="text-xs font-medium">
-                New submission on <span className="font-bold">Product Inquiry Form</span>.
-              </p>
-            </div>
-
-            {/* Event 9 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">✅</span>
-              <p className="text-xs font-medium">
-                Form <span className="font-bold">Event Feedback</span> is now live.
-              </p>
-            </div>
-
-            {/* Event 10 */}
-            <div className="flex items-center gap-2 p-2 bg-card border border-input rounded-md shadow-md">
-              <span className="text-xs text-green-500">📝</span>
-              <p className="text-xs font-medium">
-                New submission on <span className="font-bold">Service Request Form</span>.
-              </p>
-            </div>
-          </div>
-        )}
-      />
+      <Suspense
+        fallback={
+          <InfoCardSkeleton className="col-span-full flex flex-col gap-2 row-span-2 md:[grid-column:7/14] max-h-[400px]" />
+        }
+      >
+        <RecentActivity />
+      </Suspense>
     </div>
   );
 };

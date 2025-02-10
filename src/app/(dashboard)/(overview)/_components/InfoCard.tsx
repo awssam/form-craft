@@ -32,7 +32,7 @@ const InfoCard = ({ className, title, icon, description, data, renderData, conte
     >
       <CardHeader className="space-y-0.5">
         <TitleWithIcon title={title} icon={icon} />
-        <CardDescription className="text-xs">{description}</CardDescription>
+        <CardDescription className="text-[13.2px]">{description}</CardDescription>
       </CardHeader>
       <CardContent className={cn('mt-auto', contentClassName)}>
         {renderData ? renderData() : <h2 className="font-bold text-white sm:text-2xl text-xl">{data}</h2>}

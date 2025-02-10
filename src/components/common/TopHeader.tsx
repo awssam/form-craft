@@ -14,6 +14,7 @@ import { Input } from '../ui/input';
 import LeftPaneBreadCrumbs from '@/app/builder/_components/left-pane/BreadCrumbs';
 import useCopyInfo from '@/hooks/useCopyInfo';
 import CustomTooltip from '../ui/custom-tooltip';
+import { useCreateActivityMutation } from '@/data-fetching/client/activity';
 
 const links = [
   { href: '/', label: 'Dashboard' },
@@ -37,6 +38,7 @@ const TopHeader = () => {
 
   const { mutateAsync, isPending } = usePublishFormMutation();
 
+  const { mutateAsync: createActivity } = useCreateActivityMutation({});
   const handleUseTemplate = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...rest } = formConfig;
@@ -50,6 +52,14 @@ const TopHeader = () => {
   };
 
   const handleFormPublishUnPublish = async (id: string) => {
+    createActivity({
+      formId: id,
+      formName: formConfig?.name,
+      type: formConfig?.status === 'published' ? 'unpublished' : 'published',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
+
     if (formConfig?.status === 'published') {
       setFormConfig({
         ...formConfig,

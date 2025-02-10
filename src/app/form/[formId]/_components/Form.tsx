@@ -1,6 +1,6 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { cn, getAppOriginUrl } from '@/lib/utils';
 import type { CustomValidationType, FieldType, FormConfig } from '@/types/form-config';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import FormContent from './FormContent';
@@ -16,6 +16,8 @@ import useFormSubmissionId from '@/hooks/useFormSubmissionId';
 import { useCreateFormSubmissionMutation } from '@/data-fetching/client/formSubmission';
 
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
+import { useCreateActivityMutation } from '@/data-fetching/client/activity';
+import FormFooter from './FormFooter';
 
 export interface FormProps {
   formConfig: FormConfig;
@@ -24,7 +26,7 @@ export interface FormProps {
 type FormValueByPageMap = Record<string, Record<string, unknown>>;
 
 const classes = cn(
-  'flex flex-col gap-3 border-yellow-200/10 px-3 py-5 md:px-7 md:py-5 mx-auto my-auto border border-dashed rounded-md w-[95%] md:w-[min(80%,800px)] transition-all duration-200',
+  'flex flex-col gap-9 border-yellow-200/10 px-3 py-5 md:px-7 md:py-5 mx-auto my-auto border border-dashed rounded-md w-[95%] md:w-[min(80%,800px)] transition-all duration-200',
 );
 
 const Form = ({ formConfig: config }: FormProps) => {
@@ -48,6 +50,8 @@ const Form = ({ formConfig: config }: FormProps) => {
       });
     },
   });
+
+  const { mutateAsync: createActivity } = useCreateActivityMutation({});
 
   const router = useRouter();
 
@@ -77,6 +81,13 @@ const Form = ({ formConfig: config }: FormProps) => {
         onSettled: (data) => {
           if (data?._id) {
             setIsSubmissionSuccess(true);
+            createActivity({
+              type: 'submission',
+              formId: config?.id,
+              formName: config?.name,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+            });
           }
         },
       });
@@ -189,7 +200,14 @@ const Form = ({ formConfig: config }: FormProps) => {
   }
 
   return (
-    <section className={classes} style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor }}>
+    <section
+      className={classes}
+      style={{
+        backgroundColor: formConfig?.theme?.properties?.formBackgroundColor,
+        boxShadow: '1px 1px 20px 4px #130d18',
+        borderRadius: 20,
+      }}
+    >
       <FormHeader formConfig={formConfig} />
       <FormContent
         key={activePageId} // should destroy and re-render when activePageId changes
@@ -203,6 +221,7 @@ const Form = ({ formConfig: config }: FormProps) => {
         onFormValueChange={setFormValuesByPage}
         isFormSubmitting={isSubmitting}
       />
+      <FormFooter />
     </section>
   );
 };
