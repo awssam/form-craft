@@ -7,6 +7,7 @@ import FormCustomizationSection from './form-customization/FormCustomization';
 
 import { cn } from '@/lib/utils';
 import { GenericProps } from '@/types/common';
+import FormIntegrations from './form-integrations/FormIntegrations';
 
 const LeftPane = ({ className }: GenericProps) => {
   const classes = cn('h-full flex bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto', className);
@@ -15,8 +16,9 @@ const LeftPane = ({ className }: GenericProps) => {
     <div className={classes}>
       <Header />
       <FormInfoSection />
-      <FormStructureSection />
+      <FormIntegrations />
       <FormCustomizationSection />
+      <FormStructureSection />
     </div>
   );
 };
