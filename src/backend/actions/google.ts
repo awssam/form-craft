@@ -20,7 +20,11 @@ export const getAuthorizationUrl = async () => {
     return {
       success: true,
       data: client.generateAuthUrl({
-        scope: ['https://www.googleapis.com/auth/spreadsheets', 'https://www.googleapis.com/auth/userinfo.email'],
+        scope: [
+          'https://www.googleapis.com/auth/spreadsheets',
+          'https://www.googleapis.com/auth/userinfo.email',
+          'https://www.googleapis.com/auth/drive.readonly',
+        ],
         access_type: 'offline',
       }),
     };
@@ -83,6 +87,99 @@ export const disconnectGoogleAccountAction = async () => {
     return {
       success: true,
       data: true,
+    };
+  } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+    return { success: false, error: error };
+  }
+};
+
+export const getAllUserSpreadSheetsFromDriveAction = async () => {
+  try {
+    const userId = await verifyAuth();
+    const connectedAccount = await ConnectedAccount.findOne({ provider: 'google', userId })?.lean();
+
+    const client = await getClient();
+
+    client.setCredentials({
+      access_token: connectedAccount?.accessToken,
+      refresh_token: connectedAccount?.refreshToken,
+    });
+
+    const drive = google.drive({ version: 'v3', auth: client });
+
+    const res = await drive.files.list({
+      pageSize: 100,
+      q: "mimeType='application/vnd.google-apps.spreadsheet' and trashed=false",
+      fields: 'nextPageToken, files(id, name)',
+    });
+
+    return {
+      success: true,
+      data: res?.data?.files || [],
+    };
+  } catch (error) {
+    console.log('error', error);
+    if (error instanceof Error) return { success: false, error: error?.message };
+    return { success: false, error: error };
+  }
+};
+
+export const getAllWorksheetsFromSpreadSheetAction = async (spreadsheetId: string) => {
+  try {
+    const userId = await verifyAuth();
+    const connectedAccount = await ConnectedAccount.findOne({ provider: 'google', userId })?.lean();
+
+    if (!connectedAccount || !spreadsheetId) return { success: false, error: 'Invalid request' };
+
+    const client = await getClient();
+
+    client.setCredentials({
+      access_token: connectedAccount?.accessToken,
+      refresh_token: connectedAccount?.refreshToken,
+    });
+
+    const sheets = google.sheets({ version: 'v4', auth: client });
+
+    const res = await sheets.spreadsheets.get({
+      spreadsheetId,
+      includeGridData: true,
+    });
+
+    return {
+      success: true,
+      data: res?.data?.sheets || [],
+    };
+  } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+    return { success: false, error: error };
+  }
+};
+
+export const getAllColumnHeadersFromWorksheetAction = async (spreadsheetId: string, worksheetName: string) => {
+  try {
+    const userId = await verifyAuth();
+    const connectedAccount = await ConnectedAccount.findOne({ provider: 'google', userId })?.lean();
+
+    if (!connectedAccount || !spreadsheetId) return { success: false, error: 'Invalid request' };
+
+    const client = await getClient();
+
+    client.setCredentials({
+      access_token: connectedAccount?.accessToken,
+      refresh_token: connectedAccount?.refreshToken,
+    });
+
+    const sheets = google.sheets({ version: 'v4', auth: client });
+
+    const res = await sheets.spreadsheets.values.get({
+      spreadsheetId,
+      range: `${worksheetName}!1:1`,
+    });
+
+    return {
+      success: true,
+      data: res?.data?.values || [],
     };
   } catch (error) {
     if (error instanceof Error) return { success: false, error: error?.message };
