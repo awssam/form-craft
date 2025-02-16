@@ -252,7 +252,7 @@ export const FieldWidth = memo(() => {
 
 FieldWidth.displayName = 'FieldWidth';
 
-const defaultOptions = [{ label: 'Option 1', value: 'option-1' }];
+const defaultOptions = [{ label: 'Option 1', value: 'Option 1' }];
 
 export const FieldOptionsForm = memo(() => {
   const { handlePropertyChangeWithValue } = useSelectedFieldUpdate();
@@ -290,9 +290,9 @@ export const FieldOptionsForm = memo(() => {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit((data) => console.log(data))}>
-        <FormFieldWrapper id="options" label="Options" helperText="Add options for the field (Label, Value)" required>
+        <FormFieldWrapper id="options" label="Options" helperText="Add options for the field" required>
           {fields?.map((field, index) => (
-            <div className="flex items-start gap-3 mb-3" key={field.id}>
+            <div className="flex items-center gap-3 mb-3" key={field.id}>
               <FormField
                 control={form.control}
                 name={`options.${index}.label`}
@@ -301,14 +301,14 @@ export const FieldOptionsForm = memo(() => {
                 }}
                 render={({ field: rhfField }) => (
                   <FormControl>
-                    <div className="flex flex-col gap-2 space-x-2">
+                    <div className="flex flex-col gap-2 space-x-2 w-full">
                       <Input {...rhfField} value={rhfField.value as string} placeholder='Label e.g "Option 1"' />
                       <FormMessage />
                     </div>
                   </FormControl>
                 )}
               />
-              <FormField
+              {/* <FormField
                 control={form.control}
                 name={`options.${index}.value`}
                 rules={{
@@ -322,7 +322,7 @@ export const FieldOptionsForm = memo(() => {
                     </div>
                   </FormControl>
                 )}
-              />
+              /> */}
               {renderActionButton(
                 Plus,
                 'Add Option',
@@ -344,7 +344,11 @@ export const FieldOptionsForm = memo(() => {
           <Button
             type="submit"
             variant="secondary"
-            onClick={() => handlePropertyChangeWithValue('options')(form.getValues('options'))}
+            onClick={() =>
+              handlePropertyChangeWithValue('options')(
+                form.getValues('options')?.map((option) => ({ ...option, value: option.label })) as Option[],
+              )
+            }
           >
             Save Changes
           </Button>
