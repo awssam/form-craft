@@ -1,6 +1,6 @@
 'use client';
 
-import { cn, getAppOriginUrl } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import type { CustomValidationType, FieldType, FormConfig } from '@/types/form-config';
 import React, { useCallback, useEffect, useMemo } from 'react';
 import FormContent from './FormContent';

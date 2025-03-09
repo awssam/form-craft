@@ -11,8 +11,9 @@ import { useAuth } from '@clerk/nextjs';
 import { useFormIntegrations } from '@/data-fetching/client/formIntegration';
 
 export const useGoogleAuthUrl = ({ enabled }: { enabled: boolean }) => {
+  const user = useAuth();
   return useQuery({
-    queryKey: ['googleAuthUrl'],
+    queryKey: ['googleAuthUrl', { userId: user?.userId }],
     queryFn: getAuthorizationUrl,
     enabled,
     staleTime: 5 * 60 * 1000, // Consider URL valid for 5 minutes

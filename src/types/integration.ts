@@ -22,3 +22,14 @@ export interface GoogleSheetIntegration extends FormIntegration<GoogleSheetInteg
   provider: 'google';
   config: GoogleSheetIntegrationConfig;
 }
+
+export interface AirtableIntegrationConfig {
+  base: Option | null;
+  table: Option | null;
+  fields: Record<string, string>;
+}
+
+export interface AirtableIntegration extends FormIntegration<AirtableIntegrationConfig> {
+  provider: 'airtable';
+  config: AirtableIntegrationConfig;
+}

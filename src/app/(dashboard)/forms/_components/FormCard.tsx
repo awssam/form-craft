@@ -4,7 +4,7 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter }
 import Menu from '@/components/ui/kebabmenu';
 
 import { formatDistanceToNow } from '@/lib/datetime';
-import { cn, copyToClipboard, getAppOriginUrl } from '@/lib/utils';
+import { cn, getAppOriginUrl } from '@/lib/utils';
 import { ArrowRight, LoaderCircle } from 'lucide-react';
 import React from 'react';
 

@@ -12,102 +12,91 @@ import {
 } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Loader2, Plus } from 'lucide-react';
-import {
-  useConnectedGoogleAccount,
-  useDisconnectGoogleAccount,
-  useFormGoogleSheetIntegration,
-  useGoogleAuthUrl,
-  useSpreadsheetsFromDrive,
-  useWorksheetColumnHeaders,
-  useWorksheetsFromSpreadSheet,
-} from './hooks/useGoogleSheetIntegrationUtils';
-import Image from 'next/image';
-import { Combobox, Option } from '@/components/ui/combobox';
 import { useEffect, useMemo, useState } from 'react';
-import { useFormProperty } from '@/zustand/store';
-import { GoogleSheetIntegration as GoogleSheetsFormIntegration } from '@/types/integration';
+import { AirtableIntegration } from '@/types/integration';
 import { useSaveIntegrationMutation } from '@/data-fetching/client/formIntegration';
+import {
+  useAirtableAuthUrl,
+  useAirtableBases,
+  useAirtableBaseTables,
+  useConnectedAirtableAccount,
+  useDisconnectAirtableAccount,
+  useFormAirtableIntegration,
+} from './hooks/useAirtableIntegrationUtils';
+import { Combobox, Option } from '@/components/ui/combobox';
+import { useFormProperty } from '@/zustand/store';
 import { Skeleton } from '@/components/ui/skeleton';
 
-interface GoogleSheetIntegrationModalProps {
+interface AirtableIntegrationModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 }
 
-const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrationModalProps) => {
-  const [integration, setIntegration] = useState<GoogleSheetsFormIntegration>({} as GoogleSheetsFormIntegration);
+const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationModalProps) => {
+  const [integration, setIntegration] = useState<AirtableIntegration>({} as AirtableIntegration);
 
   const formId = useFormProperty('id');
   const fieldEntities = useFormProperty('fieldEntities');
 
-  const { data: authUrl, isLoading, isError } = useGoogleAuthUrl({ enabled: open });
-  const { data: connectedAccount } = useConnectedGoogleAccount({ enabled: open });
-  const { mutateAsync: disconnectAccount, isPending: isDisconnecting } = useDisconnectGoogleAccount();
-  const { data: userSpreadsheets } = useSpreadsheetsFromDrive({ enabled: open && !!connectedAccount });
-  const { data: worksheetColumnHeaders, isLoading: isWorksheetColumnHeadersLoading } = useWorksheetColumnHeaders({
-    enabled:
-      open &&
-      !!connectedAccount &&
-      !!integration?.config?.spreadsheet?.value &&
-      !!integration?.config?.worksheet?.value,
-    spreadsheetId: integration?.config?.spreadsheet?.value as string,
-    worksheetName: integration?.config?.worksheet?.value as string,
-  });
+  const { data: authUrl, isLoading, isError } = useAirtableAuthUrl({ enabled: open });
+  const { data: existingGSIntegrationForForm, isLoading: isExistingIntegrationLoading } = useFormAirtableIntegration(
+    formId as string,
+    true,
+  );
 
-  const { data: worksheetsFromSpreadSheet } = useWorksheetsFromSpreadSheet({
-    enabled: open && !!connectedAccount && !!integration?.config?.spreadsheet?.value,
-    spreadsheetId: integration?.config?.spreadsheet?.value as string,
+  const { data: connectedAccount } = useConnectedAirtableAccount({ enabled: open });
+  const { mutateAsync: disconnectAccount, isPending: isDisconnecting } = useDisconnectAirtableAccount();
+
+  const { data: bases } = useAirtableBases({ enabled: open && !!connectedAccount });
+
+  const { data: tables, isLoading: isTablesLoading } = useAirtableBaseTables({
+    enabled: open && !!connectedAccount && !!integration?.config?.base?.value,
+    baseId: integration?.config?.base?.value as string,
   });
 
   const { mutateAsync: saveFormIntegrationMutation, isPending: isSavingFormIntegration } = useSaveIntegrationMutation(
     {},
   );
 
-  const isGoogleAccountConnected = !!connectedAccount?.accountEmail;
+  const isAirtableAccountConnected = !!connectedAccount?.accountEmail;
 
-  const { data: existingGSIntegrationForForm, isLoading: isExistingIntegrationLoading } = useFormGoogleSheetIntegration(
-    formId as string,
-    true,
-  );
-
-  useEffect(() => {
-    if (existingGSIntegrationForForm) {
-      setIntegration(existingGSIntegrationForForm as GoogleSheetsFormIntegration);
-    }
-  }, [existingGSIntegrationForForm]);
-
-  const spreadSheetMenuOptions = useMemo(() => {
+  const baseOptions = useMemo(() => {
     return connectedAccount?.accountEmail
-      ? userSpreadsheets?.map((spreadsheet) => ({
-          label: spreadsheet?.name,
-          value: spreadsheet?.id,
+      ? bases?.map((base) => ({
+          label: base?.name,
+          value: base?.id,
         }))
       : [];
-  }, [connectedAccount, userSpreadsheets]);
+  }, [bases, connectedAccount?.accountEmail]);
 
-  const worksheetMenuOptions = useMemo(() => {
-    return connectedAccount?.accountEmail
-      ? worksheetsFromSpreadSheet?.map((worksheet) => ({
-          label: worksheet?.properties?.title,
-          value: `${worksheet?.properties?.title}`,
+  const tableOptions = useMemo(() => {
+    return connectedAccount?.accountEmail && integration?.config?.base?.value
+      ? tables?.map((table) => ({
+          label: table?.name,
+          value: table?.id,
         }))
       : [];
-  }, [connectedAccount?.accountEmail, worksheetsFromSpreadSheet]);
+  }, [connectedAccount?.accountEmail, integration?.config?.base?.value, tables]);
+
+  const tableFields = useMemo(() => {
+    const selectedTableId = integration?.config?.table?.value as string;
+    const selectedTable = tables?.find((table) => table?.id === selectedTableId);
+
+    return selectedTable?.fields;
+  }, [tables, integration?.config?.table?.value]);
 
   const fieldsAsOptions = useMemo(
     () => Object.values(fieldEntities || {})?.map((v) => ({ label: v?.label, value: v?.name })),
     [fieldEntities],
   );
 
-  const worksheetColumns = useMemo(() => {
-    // [['column1', 'column2', 'column3']] -> this is the format worksheetColumnHeaders will be in.
-    return worksheetColumnHeaders?.[0]?.map((column) => ({
-      label: column,
-      value: column,
-    }));
-  }, [worksheetColumnHeaders]);
+  useEffect(() => {
+    if (existingGSIntegrationForForm) {
+      setIntegration(existingGSIntegrationForForm as AirtableIntegration);
+    }
+  }, [existingGSIntegrationForForm]);
 
-  const handleGoogleAuth = () => {
+  const handleAirtableAuth = () => {
     if (authUrl) {
       window.location.href = authUrl as string;
     }
@@ -115,26 +104,21 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
 
   const handleDisconnectAccount = () => {
     disconnectAccount();
-    setIntegration({} as GoogleSheetsFormIntegration);
+    setIntegration({} as AirtableIntegration);
   };
 
   const handleSaveIntegration = () => {
-    const worksheetColumnHeadersInOrder = worksheetColumns?.map((column) => column?.value) as string[];
-
     const updatedIntegration = {
       ...integration,
-      provider: 'google' as const,
+      provider: 'airtable' as const,
       formId: formId as string,
       userId: connectedAccount?.userId as string,
       connectedAccountId: connectedAccount?.accountId as string,
       config: {
         ...integration.config,
-        worksheetColumnHeaders: worksheetColumnHeadersInOrder,
       },
     };
-
     setIntegration(updatedIntegration);
-
     saveFormIntegrationMutation(updatedIntegration, {
       onSuccess: (data) => {
         console.log('Integration saved successfully: --->>>', data);
@@ -148,26 +132,19 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-auto">
+      <DialogContent className="max-w-[80vw] sm:max-w-3xl max-h-[80vh] overflow-auto">
         <DialogHeader className="sticky -top-[24px] bg-[#0c0a0a]">
-          <DialogTitle>Set up Google Sheet Integration</DialogTitle>
+          <DialogTitle>Set up Airtable Integration</DialogTitle>
           <DialogDescription>
-            Set up a Google Sheet integration to sync your form data with Google Sheets.
+            Set up an Airtable integration to sync your form data with your Airtable account.
           </DialogDescription>
         </DialogHeader>
 
         <section className="flex flex-col gap-8  mt-3 max-w-full overflow-hidden">
           <div className="flex flex-col gap-2">
-            <Label className="text-white">Google Account</Label>
-            {isGoogleAccountConnected ? (
+            <Label className="text-white">Airtable Account</Label>
+            {isAirtableAccountConnected ? (
               <div className="flex items-center gap-2">
-                <Image
-                  src={connectedAccount?.accountPicture as string}
-                  alt="google account image"
-                  width={24}
-                  height={24}
-                  className="rounded-full w-4 h-4"
-                />
                 <span className="text-muted-foreground text-sm">{connectedAccount?.accountEmail}</span>
                 <Button variant="outline" size={'sm'} disabled={isDisconnecting} onClick={handleDisconnectAccount}>
                   Disconnect
@@ -175,9 +152,9 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
               </div>
             ) : (
               <>
-                <Button variant="secondary" className="w-max" disabled={isLoading} onClick={handleGoogleAuth}>
+                <Button variant="secondary" className="w-max" disabled={isLoading} onClick={handleAirtableAuth}>
                   <Plus className="w-4 h-4 mr-2" />
-                  {isLoading ? 'Loading...' : 'Add Google Account'}
+                  {isLoading ? 'Loading...' : 'Connect Account'}
                 </Button>
                 {isError && (
                   <p className="text-sm text-red-500">Failed to load authentication URL. Please try again.</p>
@@ -186,74 +163,71 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
             )}
           </div>
 
-          {isGoogleAccountConnected && !isExistingIntegrationLoading && (
+          {isAirtableAccountConnected && !isExistingIntegrationLoading && (
             <div className="flex flex-col gap-2 max-w-full">
-              <Label className="text-white">Choose the spreadsheet from your drive</Label>
+              <Label className="text-white">Choose the base to sync</Label>
               <Combobox
                 triggerClassName="max-w-full"
-                options={spreadSheetMenuOptions as Option[]}
+                options={baseOptions as Option[]}
                 handleChange={(values) => {
                   setIntegration((prevIntegration) => ({
                     ...prevIntegration,
                     config: {
                       ...prevIntegration.config,
-                      spreadsheet: values[0],
-                      worksheet: null,
-                      worksheetColumnHeaders: [],
+                      base: values[0],
+                      table: null,
                     },
                     fieldMappings: {},
                   }));
                 }}
-                selectedValues={[integration?.config?.spreadsheet as Option]}
+                selectedValues={[integration?.config?.base as Option]}
               />
             </div>
           )}
 
-          {isGoogleAccountConnected && !isExistingIntegrationLoading && (
+          {isAirtableAccountConnected && !isExistingIntegrationLoading && (
             <div className="flex flex-col gap-2 max-w-full">
-              <Label className="text-white">Choose the worksheet from the selected spreadsheet</Label>
+              <Label className="text-white">Choose the table from the selected base</Label>
               <Combobox
                 triggerClassName="max-w-full"
-                options={worksheetMenuOptions as Option[]}
+                options={tableOptions as Option[]}
                 handleChange={(values) => {
-                  setIntegration((prevIntegration: GoogleSheetsFormIntegration) => ({
+                  setIntegration((prevIntegration: AirtableIntegration) => ({
                     ...prevIntegration,
                     config: {
                       ...prevIntegration.config,
-                      worksheet: values[0],
-                      worksheetColumnHeaders: [],
+                      table: values[0],
                     },
                     fieldMappings: {},
                   }));
                 }}
-                selectedValues={[integration?.config?.worksheet as Option]}
+                selectedValues={[integration?.config?.table as Option]}
               />
             </div>
           )}
 
-          {isGoogleAccountConnected && !isExistingIntegrationLoading && !!worksheetColumns?.length && (
+          {isAirtableAccountConnected && tableFields?.length && (
             <div className="flex flex-col gap-4 max-w-full">
               <Label className="text-white font-semibold text-xl">Field Mapper</Label>
 
-              {worksheetColumns?.map((column) => (
-                <div className="flex flex-col gap-2 max-w-full" key={column.value}>
-                  <Label className="text-muted-foreground">{column.label}</Label>
+              {tableFields?.map((column) => (
+                <div className="flex flex-col gap-2 max-w-full" key={column.id}>
+                  <Label className="text-muted-foreground">{column.name}</Label>
                   <Combobox
                     triggerClassName="max-w-full"
                     options={fieldsAsOptions} // 🔹 Form fields as options
                     handleChange={(values) => {
-                      console.log(`Mapping: ${column.value} → ${values[0]?.value}`);
-                      setIntegration((prevIntegration: GoogleSheetsFormIntegration) => ({
+                      setIntegration((prevIntegration: AirtableIntegration) => ({
                         ...prevIntegration,
                         fieldMappings: {
                           ...prevIntegration.fieldMappings,
-                          [column.value]: values[0]?.value, // Google Sheet column name: Form field name
+                          [column.name]: values[0]?.value as string, // Airtable Column ID: Form field name
                         },
                       }));
                     }}
                     selectedValues={[
                       fieldsAsOptions?.find(
-                        (option) => option?.value === integration?.fieldMappings?.[column?.value],
+                        (option) => option?.value === integration?.fieldMappings?.[column?.name as string],
                       ) as Option,
                     ]}
                   />
@@ -282,7 +256,7 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
           </>
         )}
 
-        {isWorksheetColumnHeadersLoading && (
+        {isTablesLoading && (
           <div className="flex flex-col gap-2 max-w-full mt-3">
             <Skeleton className="h-5 w-96 rounded-md mb-3" />
 
@@ -312,9 +286,10 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
             </div>
           </div>
         )}
+
         <DialogFooter className="sticky -bottom-[10px]">
           <Button
-            disabled={!isGoogleAccountConnected || isSavingFormIntegration || isExistingIntegrationLoading}
+            disabled={!isAirtableAccountConnected || isSavingFormIntegration}
             onClick={handleSaveIntegration}
             variant={'default'}
           >
@@ -332,4 +307,4 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
   );
 };
 
-export default GoogleSheetIntegrationModal;
+export default AirtableIntegrationModal;

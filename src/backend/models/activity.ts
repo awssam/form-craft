@@ -5,7 +5,7 @@ const activitySchema = new mongoose.Schema(
     type: {
       type: String,
       required: true,
-      enum: ['submission', 'published', 'unpublished'],
+      enum: ['submission', 'published', 'unpublished', 'integration_error'],
     },
     formId: {
       type: String,
@@ -14,6 +14,9 @@ const activitySchema = new mongoose.Schema(
     formName: {
       type: String,
       required: true,
+    },
+    details: {
+      type: Object,
     },
   },
   { timestamps: true },

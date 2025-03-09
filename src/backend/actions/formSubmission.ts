@@ -1,6 +1,6 @@
 'use server';
 
-import { GoogleSheetIntegration } from '@/types/integration';
+import { AirtableIntegration, GoogleSheetIntegration } from '@/types/integration';
 import connectDb from '../db/connection';
 import Form from '../models/form';
 import FormIntegration from '../models/formIntegration';
@@ -11,6 +11,8 @@ import ConnectedAccount from '../models/connectedAccount';
 import { google } from 'googleapis';
 import { FieldEntity, FormConfig } from '@/types/form-config';
 import { formatDate } from 'date-fns';
+import { airtableFetch } from './airtable';
+import Activity from '../models/activity';
 
 export const createNewFormSubmissionAction = async (data: FormSubmissionModelType) => {
   try {
@@ -77,6 +79,7 @@ const runFormIntegrations = async (formId: string, data: FormSubmissionModelType
     for (const formIntegration of formIntegrations) {
       switch (formIntegration?.provider) {
         case 'airtable':
+          await postDataIntoAirtable(formIntegration as AirtableIntegration, data, formConfig as unknown as FormConfig);
           break;
         case 'google': {
           await postDataIntoGoogleSheet(
@@ -148,6 +151,89 @@ export const postDataIntoGoogleSheet = async (
     }
   } catch (error) {
     console.log('error', error);
+    if (error instanceof Error) return { success: false, error: error?.message };
+    return { success: false, error: error };
+  }
+};
+
+export const postDataIntoAirtable = async (
+  integration: AirtableIntegration,
+  data: FormSubmissionModelType['data'],
+  form: FormConfig,
+) => {
+  try {
+    const formFields = Object.entries(form?.fieldEntities)?.reduce((acc, [, field]) => {
+      acc[field?.name as keyof typeof acc] = field;
+      return acc;
+    }, {} as Record<string, FieldEntity>);
+
+    const fieldMappings = integration?.fieldMappings;
+
+    const airtableRowData = Object.entries(fieldMappings ?? {})?.reduce((acc, [column, associatedFieldName]) => {
+      const fieldType = formFields?.[associatedFieldName]?.type;
+      const value = data?.[associatedFieldName as keyof typeof data];
+
+      if (fieldType === 'date') {
+        return { ...acc, [column]: formatDate(value as string, 'dd MMM, yyyy') };
+      }
+
+      if ((fieldType === 'checkbox' || fieldType === 'dropdown') && Array.isArray(value)) {
+        return { ...acc, [column]: (value as unknown as string[])?.join(', ') };
+      }
+
+      return { ...acc, [column]: value };
+    }, {});
+
+    const baseId = integration?.config?.base?.value;
+    const tableId = integration?.config?.table?.value;
+
+    const requestBody = JSON.stringify({
+      fields: airtableRowData,
+      typecast: true,
+    });
+
+    console.info('Posting data into Airtable: ', requestBody);
+
+    const res = await airtableFetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
+      method: 'POST',
+      body: requestBody,
+    });
+
+    if (res?.data && !res?.data?.error) {
+      if (Object.keys(airtableRowData)?.length !== Object.keys(res?.data?.fields)?.length) {
+        const newActivity = await Activity.create({
+          type: 'integration_error',
+          formId: form?.id,
+          formName: form?.name,
+          details: {
+            provider: 'airtable',
+            message:
+              'One or more fields failed to sync with Airtable, This is likely caused because of a mismatch in field types and allowed values between the form and Airtable. Please check the form configuration and try again.',
+          },
+        });
+
+        await newActivity?.save();
+      }
+
+      return { success: true, data: res };
+    }
+
+    if (res?.data?.error) {
+      const newActivity = await Activity.create({
+        type: 'integration_error',
+        formId: form?.id,
+        formName: form?.name,
+        details: {
+          provider: 'airtable',
+          message: res?.data?.error?.message,
+        },
+      });
+
+      await newActivity?.save();
+
+      return { success: false, error: res?.error };
+    }
+  } catch (error) {
     if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
   }

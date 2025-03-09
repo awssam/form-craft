@@ -1,16 +1,16 @@
 import mongoose, { InferSchemaType } from 'mongoose';
 
-const pageProgressSchema = new mongoose.Schema({
-  pageId: {
-    type: String,
-    required: true,
-  },
-  timestamp: {
-    type: Date,
-    required: true,
-    default: Date.now(),
-  },
-});
+// const pageProgressSchema = new mongoose.Schema({
+//   pageId: {
+//     type: String,
+//     required: true,
+//   },
+//   timestamp: {
+//     type: Date,
+//     required: true,
+//     default: Date.now(),
+//   },
+// });
 
 const formSubmissionSchema = new mongoose.Schema(
   {

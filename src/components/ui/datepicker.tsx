@@ -652,7 +652,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
       placeholder = 'Pick a date',
       placeHolderClasses,
       style,
-      className: _className,
+      // className: _className,
       ...props
     },
     ref,
