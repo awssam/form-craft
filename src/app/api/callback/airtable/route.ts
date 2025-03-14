@@ -1,5 +1,6 @@
 import ConnectedAccount from '@/backend/models/connectedAccount';
 import { verifyAuth } from '@/backend/util';
+import { getAppOriginUrl } from '@/lib/utils';
 import { getUnixTime } from 'date-fns';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
@@ -29,6 +30,8 @@ export const GET = async (req: NextRequest) => {
     // Base64 encode the entire "clientId:clientSecret" string
     const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
+    const url = `${getAppOriginUrl()}${process.env.AIRTABLE_REDIRECT_URI || ''}`;
+
     const res = await fetch(`${process.env.AIRTABLE_BASE_URL}/token`, {
       method: 'POST',
       headers: {
@@ -38,9 +41,9 @@ export const GET = async (req: NextRequest) => {
       body: new URLSearchParams({
         code: code || '',
         code_verifier: codeVerifier,
-        redirect_uri: process.env.AIRTABLE_REDIRECT_URI || '',
+        redirect_uri: url || '',
         grant_type: 'authorization_code',
-      }).toString(), // Ensure proper encoding
+      }).toString(),
     });
 
     const authDetails = await res.json();

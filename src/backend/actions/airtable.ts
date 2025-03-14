@@ -4,6 +4,7 @@ import crypto from 'crypto';
 import { cookies } from 'next/headers';
 import { convertToPlainObject, verifyAuth } from '../util';
 import ConnectedAccount, { ConnectedAccountType } from '../models/connectedAccount';
+import { getAppOriginUrl } from '@/lib/utils';
 
 export const airtableFetchWithToken = async (url: string, options: RequestInit & { token: string }) => {
   try {
@@ -54,8 +55,10 @@ const _constructAuthorizationUrl = async () => {
     const codeVerifier = generateRandomString(64);
     const codeChallenge = generateCodeChallenge(codeVerifier);
 
+    const redirectUri = `${getAppOriginUrl()}${process.env.AIRTABLE_REDIRECT_URI || ''}`;
+
     airtableUrl.searchParams.set('client_id', process.env.AIRTABLE_CLIENT_ID || '');
-    airtableUrl.searchParams.set('redirect_uri', process.env.AIRTABLE_REDIRECT_URI || '');
+    airtableUrl.searchParams.set('redirect_uri', redirectUri);
     airtableUrl.searchParams.set('response_type', 'code');
     airtableUrl.searchParams.set(
       'scope',

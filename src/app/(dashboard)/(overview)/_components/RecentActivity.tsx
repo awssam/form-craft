@@ -1,5 +1,5 @@
 import React from 'react';
-import { List, FileText, CheckCircle, Clock, FolderX, AlertCircle, Info } from 'lucide-react';
+import { List, FileText, CheckCircle, FolderX, AlertCircle } from 'lucide-react';
 import { getAllActivitiesFromLastWeekAction } from '@/backend/actions/activity';
 import InfoCard from './InfoCard';
 import { ActivityModelType } from '@/backend/models/activity';
