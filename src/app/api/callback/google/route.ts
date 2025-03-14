@@ -5,8 +5,11 @@ import { google } from 'googleapis';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 import { getUnixTime } from '@/lib/datetime';
+import connectDb from '@/backend/db/connection';
 
 export const GET = async (req: NextRequest) => {
+  await connectDb();
+
   const { searchParams } = new URL(req?.url);
   const code = searchParams.get('code');
   const userId = await verifyAuth();

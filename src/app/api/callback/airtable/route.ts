@@ -1,3 +1,4 @@
+import connectDb from '@/backend/db/connection';
 import ConnectedAccount from '@/backend/models/connectedAccount';
 import { verifyAuth } from '@/backend/util';
 import { getAppOriginUrl } from '@/lib/utils';
@@ -6,6 +7,8 @@ import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
 export const GET = async (req: NextRequest) => {
+
+  await connectDb();
   const userId = await verifyAuth();
   const { searchParams } = new URL(req?.url);
 
