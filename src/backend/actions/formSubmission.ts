@@ -79,14 +79,10 @@ const runFormIntegrations = async (formId: string, data: FormSubmissionModelType
     for (const formIntegration of formIntegrations) {
       switch (formIntegration?.provider) {
         case 'airtable':
-          await postDataIntoAirtable(formIntegration as AirtableIntegration, data, formConfig as unknown as FormConfig);
+          postDataIntoAirtable(formIntegration as AirtableIntegration, data, formConfig as unknown as FormConfig);
           break;
         case 'google': {
-          await postDataIntoGoogleSheet(
-            formIntegration as GoogleSheetIntegration,
-            data,
-            formConfig as unknown as FormConfig,
-          );
+          postDataIntoGoogleSheet(formIntegration as GoogleSheetIntegration, data, formConfig as unknown as FormConfig);
           break;
         }
         default:
