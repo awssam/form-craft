@@ -50,12 +50,12 @@ const FormIntegrations = () => {
       title="Form Integrations"
       subtitle="Connect your form to other services."
     >
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(80px,1fr))] gap-6 border-input bg-background px-3 py-5 rounded-md min-w-100">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(110px,1fr))] gap-6 border-input bg-background px-3 py-5 rounded-md min-w-100">
         {integrations.map((integration) => (
           <Card
             onClick={integration.onClick}
             key={integration.name}
-            className="flex flex-col items-center justify-center text-center gap-2 px-2 py-4 cursor-pointer hover:scale-105 transition-all duration-300"
+            className="flex flex-col  items-center justify-center text-center gap-2 px-2 py-4 cursor-pointer hover:scale-105 transition-all duration-300"
           >
             <Image src={integration.icon as unknown as string} alt={integration.name} className="w-8 h-8" />
             <span className="text-sm font-medium text-muted-foreground">{integration.name}</span>

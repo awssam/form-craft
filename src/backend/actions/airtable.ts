@@ -5,15 +5,11 @@ import { cookies } from 'next/headers';
 import { convertToPlainObject, verifyAuth } from '../util';
 import ConnectedAccount, { ConnectedAccountType } from '../models/connectedAccount';
 
-export const airtableFetch = async (url: string, options: RequestInit) => {
+export const airtableFetchWithToken = async (url: string, options: RequestInit & { token: string }) => {
   try {
-    const userId = await verifyAuth();
-
-    const connectedAccount = await ConnectedAccount.findOne({ userId, provider: 'airtable' })?.lean();
-
     const res = await fetch(url, {
       headers: {
-        Authorization: `Bearer ${connectedAccount?.accessToken}`,
+        Authorization: `Bearer ${options?.token}`,
         'Content-Type': 'application/json',
       },
       ...options,
@@ -23,6 +19,19 @@ export const airtableFetch = async (url: string, options: RequestInit) => {
       success: true,
       data: await res.json(),
     };
+  } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+    return { success: false, error: error };
+  }
+};
+
+export const airtableFetch = async (url: string, options: RequestInit) => {
+  try {
+    const userId = await verifyAuth();
+
+    const connectedAccount = await ConnectedAccount.findOne({ userId, provider: 'airtable' })?.lean();
+
+    return airtableFetchWithToken(url, { ...options, token: connectedAccount?.accessToken as string });
   } catch (error) {
     if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
@@ -61,12 +70,6 @@ const _constructAuthorizationUrl = async () => {
     return { codeVerifier: '', url: '' };
   }
 };
-
-// export const getAirtableClient = async () => {
-//   const airtable = new Airtable({
-//     apiKey: process.env.AIRTABLE_API_KEY,
-//   })
-// }
 
 export const getAirtableAuthorizationUrl = async () => {
   try {

@@ -11,7 +11,7 @@ import ConnectedAccount from '../models/connectedAccount';
 import { google } from 'googleapis';
 import { FieldEntity, FormConfig } from '@/types/form-config';
 import { formatDate } from 'date-fns';
-import { airtableFetch } from './airtable';
+import { airtableFetchWithToken } from './airtable';
 import Activity from '../models/activity';
 
 export const createNewFormSubmissionAction = async (data: FormSubmissionModelType) => {
@@ -161,7 +161,12 @@ export const postDataIntoAirtable = async (
   data: FormSubmissionModelType['data'],
   form: FormConfig,
 ) => {
+  console.time('integration_airtable');
   try {
+    console.log('INTEGRATION_RUN_START', JSON.stringify(integration, null, 2));
+
+    const connectedAccount = await ConnectedAccount.findOne({ provider: 'airtable', userId: integration.userId });
+
     const formFields = Object.entries(form?.fieldEntities)?.reduce((acc, [, field]) => {
       acc[field?.name as keyof typeof acc] = field;
       return acc;
@@ -189,15 +194,18 @@ export const postDataIntoAirtable = async (
 
     const requestBody = JSON.stringify({
       fields: airtableRowData,
-      typecast: true,
+      typecast: false,
     });
 
     console.info('Posting data into Airtable: ', requestBody);
 
-    const res = await airtableFetch(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
+    const res = await airtableFetchWithToken(`https://api.airtable.com/v0/${baseId}/${tableId}`, {
       method: 'POST',
       body: requestBody,
+      token: connectedAccount?.accessToken as string,
     });
+
+    console.log('response from airtable', res);
 
     if (res?.data && !res?.data?.error) {
       if (Object.keys(airtableRowData)?.length !== Object.keys(res?.data?.fields)?.length) {
@@ -215,10 +223,13 @@ export const postDataIntoAirtable = async (
         await newActivity?.save();
       }
 
+      console.info('Data saved into Airtable: ', res?.data);
+
       return { success: true, data: res };
     }
 
     if (res?.data?.error) {
+      console.log('Error saving data into Airtable: ', res?.data?.error);
       const newActivity = await Activity.create({
         type: 'integration_error',
         formId: form?.id,
@@ -234,7 +245,12 @@ export const postDataIntoAirtable = async (
       return { success: false, error: res?.error };
     }
   } catch (error) {
+    console.log('Error saving data into Airtable: ', error);
+
     if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
+  } finally {
+    console.log('INTEGRATION_RUN_END');
+    console.timeEnd('integration_airtable');
   }
 };

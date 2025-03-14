@@ -1,5 +1,6 @@
 import ConnectedAccount from '@/backend/models/connectedAccount';
 import { verifyAuth } from '@/backend/util';
+import { getUnixTime } from 'date-fns';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
 
@@ -25,10 +26,6 @@ export const GET = async (req: NextRequest) => {
   const codeVerifier = req.cookies.get('airtable_code_verifier')?.value;
 
   if (state && codeVerifier) {
-    console.log('codeVerifier', codeVerifier);
-    console.log('state', state);
-    console.log('code', code);
-
     // Base64 encode the entire "clientId:clientSecret" string
     const authHeader = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
@@ -56,14 +53,17 @@ export const GET = async (req: NextRequest) => {
 
     const userDetails = await data.json();
 
-    console.log('authDetails', authDetails);
-    console.log('userDetails', userDetails);
-
     const isExistingAccount = await ConnectedAccount.findOne({ accountId: userDetails?.id });
 
     if (isExistingAccount) {
       return redirect('/builder?integration=airtable');
     }
+
+    console.log('Creating connected account for user', userId, userDetails?.email);
+
+    const currentTime = new Date().toISOString();
+    const expiryDate = new Date(currentTime);
+    expiryDate.setUTCSeconds(expiryDate.getUTCSeconds() + authDetails?.expires_in);
 
     if (!isExistingAccount) {
       const user = await ConnectedAccount.create({
@@ -72,7 +72,7 @@ export const GET = async (req: NextRequest) => {
         provider: 'airtable',
         accessToken: authDetails?.access_token,
         refreshToken: authDetails?.refresh_token,
-        expiryDate: authDetails?.expiry_date,
+        expiryDate: getUnixTime(expiryDate),
         tokenType: authDetails?.token_type,
         scope: userDetails?.scopes?.join(', '),
         accountEmail: userDetails?.email,
@@ -82,20 +82,5 @@ export const GET = async (req: NextRequest) => {
 
       return redirect('/builder?integration=airtable');
     }
-
-    // Token Response: {
-    //     token_type: 'Bearer',
-    //     scope: 'data.records:read data.records:write schema.bases:read schema.bases:write user.email:read',
-    //     access_token: 'oaanU1C3MVqtSNmw6.v1.eyJ1c2VySWQiOiJ1c3JjMlNWaUo5SjdpVG5ncSIsImV4cGlyZXNBdCI6IjIwMjUtMDMtMDhUMTc6Mjg6NTkuMDAwWiIsIm9hdXRoQXBwbGljYXRpb25JZCI6Im9hcE5zY0tHQVBYT2sxUVFhIiwic2VjcmV0IjoiODk2MTlkOGFiMTMzMjBmYTc2NzE3ZDliZjUyMjEzYzA5MjBmYzk5OTQ2ZmNkMDBhNTQ5NjI0ZTU0MTY4OGFkYiJ9.4975638f81933782c42360f3e23b2ab7bdd25bf5b944cd90793f8198d2002102',
-    //     expires_in: 3600,
-    //     refresh_token: 'oaanU1C3MVqtSNmw6.v1.refresh.eyJ1c2VySWQiOiJ1c3JjMlNWaUo5SjdpVG5ncSIsInJlZnJlc2hFeHBpcmF0aW9uVGltZSI6IjIwMjUtMDUtMDdUMTY6Mjg6NTkuMDAwWiIsIm9hdXRoQXBwbGljYXRpb25JZCI6Im9hcE5zY0tHQVBYT2sxUVFhIiwic2VjcmV0IjoiYzk5MmJhMDQ1YzExYzU2M2YxZjk1ZWNmMzg4MTJiMGFiY2Q3NGEzNWY3ZTUyZDRkMjZiNTJkZmI2ZmUwMWMxNCJ9.90467ae6c670e129b50f923cfc64a29b75fc4279c6a50c3dec9f9162983d622e',
-    //     refresh_expires_in: 5184000
-    //   }
   }
-
-  // const isExistingAccount = await ConnectedAccount.findOne({ accountId: userInfo?.id });
-
-  // if (isExistingAccount) {
-  //   return redirect('/builder?integration=google');
-  // }
 };

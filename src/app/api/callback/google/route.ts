@@ -4,6 +4,7 @@ import { getClient } from '@/backend/actions/google';
 import { google } from 'googleapis';
 import { redirect } from 'next/navigation';
 import { NextRequest } from 'next/server';
+import { getUnixTime } from '@/lib/datetime';
 
 export const GET = async (req: NextRequest) => {
   const { searchParams } = new URL(req?.url);
@@ -25,6 +26,10 @@ export const GET = async (req: NextRequest) => {
     return redirect('/builder?integration=google');
   }
 
+  console.log('Creating connected account for user', userId);
+
+  const unixTimestampInSeconds = getUnixTime(tokens?.expiry_date as number);
+
   if (!isExistingAccount) {
     const user = await ConnectedAccount.create({
       userId,
@@ -32,7 +37,7 @@ export const GET = async (req: NextRequest) => {
       provider: 'google',
       accessToken: tokens?.access_token,
       refreshToken: tokens?.refresh_token,
-      expiryDate: tokens?.expiry_date,
+      expiryDate: unixTimestampInSeconds,
       tokenType: tokens?.token_type,
       idToken: tokens?.id_token,
       scope: tokens?.scope,

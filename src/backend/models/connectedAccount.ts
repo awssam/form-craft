@@ -28,9 +28,8 @@ const connectedAccountSchema = new mongoose.Schema({
   refreshToken: {
     type: String,
   },
-
   expiryDate: {
-    type: Number,
+    type: BigInt,
   },
   tokenType: {
     type: String,
