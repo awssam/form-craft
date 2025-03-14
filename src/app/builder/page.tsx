@@ -1,3 +1,5 @@
+'use client';
+
 import TopHeader from '@/components/common/TopHeader';
 import SectionDisplay from '@/app/builder/_components/SectionDisplay';
 import { FormSectionDisplayProvider } from '@/hooks/useFormSectionDisplay';
