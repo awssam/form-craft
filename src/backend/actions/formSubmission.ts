@@ -105,6 +105,7 @@ export const postDataIntoGoogleSheet = async (
   form: FormConfig,
 ) => {
   try {
+    console.log('INTEGRATION_RUN_START_GOOGLE', JSON.stringify(integration, null, 2));
     const formFields = Object.entries(form?.fieldEntities)?.reduce((acc, [, field]) => {
       acc[field?.name as keyof typeof acc] = field;
       return acc;
@@ -137,6 +138,8 @@ export const postDataIntoGoogleSheet = async (
 
     const sheets = google.sheets({ version: 'v4', auth: client });
 
+    console.log('POSTING DATA INTO GOOGLE SHEET', JSON.stringify(gsRowData, null, 2));
+
     const res = await sheets.spreadsheets.values.append({
       spreadsheetId: integration?.config?.spreadsheet?.value as string,
       range: integration?.config?.worksheet?.value as string,
@@ -146,13 +149,31 @@ export const postDataIntoGoogleSheet = async (
       },
     });
 
+    console.log('POSTED DATA INTO GOOGLE SHEET', JSON.stringify(res?.data, null, 2));
+
     if (res?.data) {
       return { success: true, data: res };
     }
   } catch (error) {
     console.log('error', error);
+
+    console.log('Error saving data into Google sheet: ', error);
+    const newActivity = await Activity.create({
+      type: 'integration_error',
+      formId: form?.id,
+      formName: form?.name,
+      details: {
+        provider: 'google',
+        message: error instanceof Error ? error?.message : error,
+      },
+    });
+
+    await newActivity?.save().catch(console.log);
+
     if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
+  } finally {
+    console.log('INTEGRATION_RUN_END_GOOGLE');
   }
 };
 
