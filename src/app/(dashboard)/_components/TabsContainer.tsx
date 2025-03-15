@@ -3,6 +3,7 @@
 import { Skeleton } from '@/components/ui/skeleton';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUser } from '@clerk/nextjs';
+import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import React from 'react';
 
@@ -41,13 +42,20 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
           {/* <Button variant={'default'}>Download</Button> */}
           <TabsList className="">
             <TabsTrigger value="/" className="text-xs md:text-sm">
-              Overview
+              <Link prefetch href="/">
+                Overview
+              </Link>
             </TabsTrigger>
             <TabsTrigger value="/forms" className="text-xs md:text-sm">
-              My Forms
+              <Link prefetch href="/forms">
+                My Forms
+              </Link>
             </TabsTrigger>
             <TabsTrigger value="/templates" className="text-xs md:text-sm">
-              Templates
+              <Link prefetch href="/templates">
+                {' '}
+                Templates
+              </Link>
             </TabsTrigger>
             {/* <TabsTrigger value="/analytics" className="text-xs md:text-sm">
               Analytics
