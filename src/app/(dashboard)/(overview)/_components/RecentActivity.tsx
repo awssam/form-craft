@@ -30,7 +30,7 @@ const activityTypeMap = {
     color: 'text-red-500',
     message: (activity: ActivityModelType) => (
       <>
-        <div className="flex items-center">
+        <div className="flex items-center flex-wrap">
           <span className="font-bold capitalize mr-1">{activity?.details?.provider} </span> integration failed for{' '}
           <b className="ml-1">{activity?.formName}</b>
         </div>
