@@ -148,7 +148,7 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto z-[9999999]">
+      <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="leading-normal">Set up Google Sheet Integration</DialogTitle>
           <DialogDescription>

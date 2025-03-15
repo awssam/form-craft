@@ -132,7 +132,7 @@ const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationMod
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto z-[9999999]">
+      <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Set up Airtable Integration</DialogTitle>
           <DialogDescription>
@@ -287,7 +287,7 @@ const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationMod
           </div>
         )}
 
-        <DialogFooter>
+        <DialogFooter className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-end">
           <Button
             disabled={!isAirtableAccountConnected || isSavingFormIntegration}
             onClick={handleSaveIntegration}
