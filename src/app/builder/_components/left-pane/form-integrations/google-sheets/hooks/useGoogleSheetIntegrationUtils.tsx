@@ -25,7 +25,6 @@ export const useConnectedGoogleAccount = ({ enabled }: { enabled: boolean }) => 
   return useQuery({
     queryKey: ['connectedGoogleAccount'],
     queryFn: () => getConnectedGoogleAccount(),
-    staleTime: 10 * 1000,
     retry: false,
     enabled,
   });
@@ -48,7 +47,6 @@ export const useSpreadsheetsFromDrive = ({ enabled }: { enabled: boolean }) => {
   return useQuery({
     queryKey: ['spreadsheetsFromDrive', { userId }],
     queryFn: () => getAllUserSpreadSheetsFromDrive(),
-    staleTime: 60 * 1000,
     retry: false,
     enabled,
   });
@@ -66,7 +64,6 @@ export const useWorksheetsFromSpreadSheet = ({
   return useQuery({
     queryKey: ['worksheetsFromSpreadSheet', { spreadsheetId, userId }],
     queryFn: () => getAllWorksheetsFromSpreadSheet(spreadsheetId),
-    staleTime: 60 * 1000,
     retry: false,
     enabled,
   });
@@ -85,7 +82,6 @@ export const useWorksheetColumnHeaders = ({
   return useQuery({
     queryKey: ['worksheetColumnHeaders', { userId, spreadsheetId, worksheetName }],
     queryFn: () => getAllColumnHeadersFromWorksheet(spreadsheetId, worksheetName),
-    staleTime: 60 * 1000,
     retry: false,
     enabled,
   });

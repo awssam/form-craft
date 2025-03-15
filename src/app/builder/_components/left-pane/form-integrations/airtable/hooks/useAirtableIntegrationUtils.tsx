@@ -24,7 +24,6 @@ export const useConnectedAirtableAccount = ({ enabled }: { enabled: boolean }) =
   return useQuery({
     queryKey: ['connectedAirtableAccount'],
     queryFn: () => getConnectedAirtableAccount(),
-    staleTime: 10 * 1000,
     retry: false,
     enabled,
   });
@@ -46,7 +45,6 @@ export const useAirtableBases = ({ enabled }: { enabled: boolean }) => {
   return useQuery({
     queryKey: ['airtableBases', { userId }],
     queryFn: () => getAirtableBases(),
-    staleTime: 10 * 1000,
     retry: false,
     enabled,
   });
@@ -56,7 +54,6 @@ export const useAirtableBaseTables = ({ enabled, baseId }: { enabled: boolean; b
   return useQuery({
     queryKey: ['airtableBaseTables', { baseId }],
     queryFn: () => getAirtableTables(baseId),
-    staleTime: 10 * 1000,
     retry: false,
     enabled,
   });

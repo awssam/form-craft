@@ -67,7 +67,7 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
 
   const { data: existingGSIntegrationForForm, isLoading: isExistingIntegrationLoading } = useFormGoogleSheetIntegration(
     formId as string,
-    true,
+    open,
   );
 
   useEffect(() => {
@@ -148,9 +148,9 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-3xl max-h-[80vh] overflow-auto">
-        <DialogHeader className="sticky -top-[24px] bg-[#0c0a0a]">
-          <DialogTitle>Set up Google Sheet Integration</DialogTitle>
+      <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto z-[9999999]">
+        <DialogHeader>
+          <DialogTitle className="leading-normal">Set up Google Sheet Integration</DialogTitle>
           <DialogDescription>
             Set up a Google Sheet integration to sync your form data with Google Sheets.
           </DialogDescription>
@@ -160,7 +160,7 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
           <div className="flex flex-col gap-2">
             <Label className="text-white">Google Account</Label>
             {isGoogleAccountConnected ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center flex-wrap gap-2">
                 <Image
                   src={connectedAccount?.accountPicture as string}
                   alt="google account image"
@@ -266,53 +266,53 @@ const GoogleSheetIntegrationModal = ({ open, onOpenChange }: GoogleSheetIntegrat
         {isExistingIntegrationLoading && (
           <>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
 
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
 
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
           </>
         )}
 
-        {isWorksheetColumnHeadersLoading && (
+        {isWorksheetColumnHeadersLoading && isGoogleAccountConnected && (
           <div className="flex flex-col gap-2 max-w-full mt-3">
-            <Skeleton className="h-5 w-96 rounded-md mb-3" />
+            <Skeleton className="h-5 w-[100%] rounded-md mb-3" />
 
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
           </div>
         )}
-        <DialogFooter className="sticky -bottom-[10px]">
+        <DialogFooter className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-end">
           <Button
             disabled={!isGoogleAccountConnected || isSavingFormIntegration || isExistingIntegrationLoading}
             onClick={handleSaveIntegration}

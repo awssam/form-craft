@@ -30,7 +30,6 @@ export const useFormIntegrations = (
   return useQuery({
     queryKey: ['form-integrations', { formId, filter }],
     queryFn: () => getFormIntegrations(formId, filter) as Promise<FormIntegration[]>,
-    staleTime: 60 * 1000 * 60,
     select: (res) => select?.(res as FormIntegration[]) || res,
     enabled,
   });

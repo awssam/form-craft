@@ -4,7 +4,7 @@ import { useAuth } from '@clerk/nextjs';
 import { FieldEntity, FormConfig, FormConfigWithMeta } from '@/types/form-config';
 import { useFormConfigStore } from '@/zustand/store';
 import { toast } from 'sonner';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { saveFormConfigToLocalStorage } from '@/lib/form';
 
 export const useFormsQuery = () => {
@@ -112,9 +112,12 @@ export const useAutoSaveFormConfig = () => {
   const { mutateAsync: updateFormMutation, isPending, error } = useUpdateFormConfigMutation();
   const formConfig = useFormConfigStore((s) => s.formConfig);
   const timer = useRef<NodeJS.Timeout | null>(null);
+  const [hasUserInteractedWithSite, setHasUserInteractedWithSite] = useState(false);
 
   useEffect(() => {
-    if (formConfig?.createdBy === 'SYSTEM') return; // Don't auto save templates
+    if (formConfig?.createdBy === 'SYSTEM' || !hasUserInteractedWithSite) return; // Don't auto save templates
+
+    console.log('update triggered');
 
     let timerId = timer?.current as NodeJS.Timeout;
 
@@ -160,7 +163,18 @@ export const useAutoSaveFormConfig = () => {
     }, 3000);
 
     return () => clearTimeout(timerId);
-  }, [formConfig, updateFormMutation]);
+  }, [formConfig, updateFormMutation, hasUserInteractedWithSite]);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      setHasUserInteractedWithSite(true);
+    };
+    document.addEventListener('mousedown', handleInteraction);
+
+    return () => {
+      document.removeEventListener('mousedown', handleInteraction);
+    };
+  }, []);
 
   return {
     isPending,

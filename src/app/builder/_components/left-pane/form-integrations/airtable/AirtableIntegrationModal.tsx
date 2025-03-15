@@ -41,7 +41,7 @@ const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationMod
   const { data: authUrl, isLoading, isError } = useAirtableAuthUrl({ enabled: open });
   const { data: existingGSIntegrationForForm, isLoading: isExistingIntegrationLoading } = useFormAirtableIntegration(
     formId as string,
-    true,
+    open,
   );
 
   const { data: connectedAccount } = useConnectedAirtableAccount({ enabled: open });
@@ -132,8 +132,8 @@ const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationMod
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-[80vw] sm:max-w-3xl max-h-[80vh] overflow-auto">
-        <DialogHeader className="sticky -top-[24px] bg-[#0c0a0a]">
+      <DialogContent className="max-w-[90vw] sm:max-w-3xl max-h-[80vh] overflow-y-auto z-[9999999]">
+        <DialogHeader>
           <DialogTitle>Set up Airtable Integration</DialogTitle>
           <DialogDescription>
             Set up an Airtable integration to sync your form data with your Airtable account.
@@ -144,7 +144,7 @@ const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationMod
           <div className="flex flex-col gap-2">
             <Label className="text-white">Airtable Account</Label>
             {isAirtableAccountConnected ? (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center flex-wrap gap-2">
                 <span className="text-muted-foreground text-sm">{connectedAccount?.accountEmail}</span>
                 <Button variant="outline" size={'sm'} disabled={isDisconnecting} onClick={handleDisconnectAccount}>
                   Disconnect
@@ -240,54 +240,54 @@ const AirtableIntegrationModal = ({ open, onOpenChange }: AirtableIntegrationMod
         {isExistingIntegrationLoading && (
           <>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
 
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
 
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
           </>
         )}
 
-        {isTablesLoading && (
+        {isTablesLoading && isAirtableAccountConnected && (
           <div className="flex flex-col gap-2 max-w-full mt-3">
-            <Skeleton className="h-5 w-96 rounded-md mb-3" />
+            <Skeleton className="h-5 w-[100%] rounded-md mb-3" />
 
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
             <div className="flex flex-col gap-2 max-w-full">
-              <Skeleton className="h-3 w-96 rounded-md" />
-              <Skeleton className="h-6 w-96 rounded-md" />
+              <Skeleton className="h-3 w-[100%] rounded-md" />
+              <Skeleton className="h-6 w-[100%] rounded-md" />
             </div>
           </div>
         )}
 
-        <DialogFooter className="sticky -bottom-[10px]">
+        <DialogFooter>
           <Button
             disabled={!isAirtableAccountConnected || isSavingFormIntegration}
             onClick={handleSaveIntegration}

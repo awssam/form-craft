@@ -26,7 +26,7 @@ const MobileSectionDisplayer = <T,>(props: Props<T>) => {
   );
 
   return (
-    <div className="bottom-10 left-1/2 fixed flex items-center border-greyBorder md:hidden bg-[#242428] rounded-2xl max-w-[90vw] h-full max-h-min -translate-x-1/2 z-[9999999999]">
+    <div className="bottom-10 left-1/2 fixed flex items-center border-greyBorder md:hidden bg-[#242428] rounded-2xl max-w-[90vw] h-full max-h-min -translate-x-1/2 z-[9999]">
       {options?.map((option, index) => {
         if (index === 0)
           return renderOption(option, cn('px-4 py-2.5 rounded-l-2xl', selectedOption === option ? 'bg-black' : ''));
