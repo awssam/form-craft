@@ -4,10 +4,13 @@ import { type FormIntegration as FormIntegrationType } from '@/types/integration
 import { convertToPlainObject, verifyAuth } from '../util';
 import FormIntegration, { type FormIntegrationType as FormIntegrationModelType } from '../models/formIntegration';
 import { type RootFilterQuery } from 'mongoose';
+import connectDb from '../db/connection';
 
 export const saveFormIntegration = async (formIntegration: FormIntegrationType) => {
   try {
     const userId = await verifyAuth();
+
+    await connectDb();
 
     const integration = await FormIntegration.updateOne(
       {
@@ -35,6 +38,9 @@ export const saveFormIntegration = async (formIntegration: FormIntegrationType) 
 export const getFormIntegrations = async (formId: string, filter?: RootFilterQuery<FormIntegrationModelType>) => {
   try {
     const userId = await verifyAuth();
+
+    await connectDb();
+
     const integrations = await FormIntegration.find({ ...filter, userId, formId });
     return {
       success: true,

@@ -5,6 +5,7 @@ import { google } from 'googleapis';
 import ConnectedAccount, { ConnectedAccountType } from '../models/connectedAccount';
 import { convertToPlainObject, verifyAuth } from '../util';
 import { getAppOriginUrl } from '@/lib/utils';
+import connectDb from '../db/connection';
 
 export const getClient = async () => {
   const url = `${getAppOriginUrl()}${process.env.GOOGLE_REDIRECT_URI || ''}`;
@@ -65,6 +66,8 @@ export const getConnectedGoogleAccountAction = async () => {
   const userId = await verifyAuth();
 
   try {
+    await connectDb();
+
     const connectedAccount = await ConnectedAccount.findOne({ userId, provider: 'google' })?.lean();
 
     return {
@@ -81,6 +84,7 @@ export const disconnectGoogleAccountAction = async () => {
   const userId = await verifyAuth();
 
   try {
+    await connectDb();
     await ConnectedAccount.deleteOne({ userId, provider: 'google' });
     return {
       success: true,
@@ -95,6 +99,8 @@ export const disconnectGoogleAccountAction = async () => {
 export const getAllUserSpreadSheetsFromDriveAction = async () => {
   try {
     const userId = await verifyAuth();
+    await connectDb();
+
     const connectedAccount = await ConnectedAccount.findOne({ provider: 'google', userId })?.lean();
 
     const client = await getClient();
@@ -126,6 +132,8 @@ export const getAllUserSpreadSheetsFromDriveAction = async () => {
 export const getAllWorksheetsFromSpreadSheetAction = async (spreadsheetId: string) => {
   try {
     const userId = await verifyAuth();
+    await connectDb();
+
     const connectedAccount = await ConnectedAccount.findOne({ provider: 'google', userId })?.lean();
 
     if (!connectedAccount || !spreadsheetId) return { success: false, error: 'Invalid request' };
@@ -157,6 +165,8 @@ export const getAllWorksheetsFromSpreadSheetAction = async (spreadsheetId: strin
 export const getAllColumnHeadersFromWorksheetAction = async (spreadsheetId: string, worksheetName: string) => {
   try {
     const userId = await verifyAuth();
+    await connectDb();
+
     const connectedAccount = await ConnectedAccount.findOne({ provider: 'google', userId })?.lean();
 
     if (!connectedAccount || !spreadsheetId) return { success: false, error: 'Invalid request' };

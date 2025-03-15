@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { convertToPlainObject, verifyAuth } from '../util';
 import ConnectedAccount, { ConnectedAccountType } from '../models/connectedAccount';
 import { getAppOriginUrl } from '@/lib/utils';
+import connectDb from '../db/connection';
 
 export const airtableFetchWithToken = async (url: string, options: RequestInit & { token: string }) => {
   try {
@@ -29,6 +30,7 @@ export const airtableFetchWithToken = async (url: string, options: RequestInit &
 export const airtableFetch = async (url: string, options: RequestInit) => {
   try {
     const userId = await verifyAuth();
+    await connectDb();
 
     const connectedAccount = await ConnectedAccount.findOne({ userId, provider: 'airtable' })?.lean();
 
@@ -111,6 +113,8 @@ export const getConnectedAirtableAccountAction = async () => {
   const userId = await verifyAuth();
 
   try {
+    await connectDb();
+
     const connectedAccount = await ConnectedAccount.findOne({ userId, provider: 'airtable' })?.lean();
 
     return {
@@ -127,6 +131,8 @@ export const disconnectAirtableAccountAction = async () => {
   const userId = await verifyAuth();
 
   try {
+    await connectDb();
+
     await ConnectedAccount.deleteOne({ userId, provider: 'airtable' });
 
     return {
