@@ -30,9 +30,11 @@ const _refreshAndUpdateGoogleToken = async (connectedAccount: Document<Connected
       return 0;
     }
 
+    const unixTimestampInSeconds = getUnixTime(credentials.expiry_date as number);
+
     connectedAccount.set('accessToken', credentials.access_token);
     connectedAccount.set('refreshToken', credentials.refresh_token);
-    connectedAccount.set('expiryDate', credentials.expiry_date);
+    connectedAccount.set('expiryDate', unixTimestampInSeconds);
     await connectedAccount.save();
 
     return 1;
