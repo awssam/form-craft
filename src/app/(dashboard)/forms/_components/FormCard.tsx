@@ -6,6 +6,7 @@ import Menu from '@/components/ui/kebabmenu';
 import { formatDistanceToNow } from '@/lib/datetime';
 import { cn, getAppOriginUrl } from '@/lib/utils';
 import { ArrowRight, LoaderCircle } from 'lucide-react';
+import Link from 'next/link';
 import React from 'react';
 
 interface FormCardProps {
@@ -77,10 +78,10 @@ const FormCard = ({
           <CardDescription className="-mt-6 text-xs text-ellipsis">{description}</CardDescription>
         </CardHeader>
         <CardContent>
-          <h3 className="font-semibold group">
+          <Link prefetch href={submissions > 0 ? `/forms/${id}` : ''} className="font-semibold group">
             <span className="font-bold text-2xl">{submissions}</span> submissions
             {submissions > 0 && <ArrowRight className="w-4 h-4 inline ml-2" aria-label="View Submissions" />}
-          </h3>
+          </Link>
         </CardContent>
         <CardFooter className="flex items-center justify-between w-full gap-4 text-ellipsis">
           <p className="text-muted-foreground text-xs">

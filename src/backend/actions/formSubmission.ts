@@ -5,7 +5,7 @@ import connectDb from '../db/connection';
 import Form from '../models/form';
 import FormIntegration from '../models/formIntegration';
 import FormSubmission, { FormSubmissionModelType } from '../models/formSubmission';
-import { convertToPlainObject } from '../util';
+import { convertToPlainObject, verifyAuth } from '../util';
 import { getClient } from './google';
 import ConnectedAccount from '../models/connectedAccount';
 import { google } from 'googleapis';
@@ -64,6 +64,30 @@ export const createNewFormSubmissionAction = async (data: FormSubmissionModelTyp
 
       return { success: true, data: convertToPlainObject(res) };
     }
+  } catch (error) {
+    if (error instanceof Error) return { success: false, error: error?.message };
+  }
+};
+
+export const getFormSubmissionsAction = async (formId: string, filter?: Record<string, unknown>) => {
+  try {
+    await connectDb();
+    const userId = await verifyAuth();
+
+    const form = await Form.findOne({ id: formId, createdBy: userId })?.lean();
+
+    if (!form) throw new Error('Form not found');
+
+    const res = await FormSubmission.find({ ...filter, formId })
+      .sort({ createdAt: -1 })
+      ?.lean();
+
+    const data = {
+      formConfig: form,
+      submissions: res as unknown as FormSubmissionModelType[],
+    };
+
+    return { success: true, data: convertToPlainObject(data) as unknown as typeof data };
   } catch (error) {
     if (error instanceof Error) return { success: false, error: error?.message };
   }

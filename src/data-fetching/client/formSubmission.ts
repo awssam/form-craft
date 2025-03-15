@@ -1,5 +1,5 @@
-import { createFormSubmission } from '../functions/formSubmission';
-import { useMutation } from '@tanstack/react-query';
+import { createFormSubmission, getFormSubmissions } from '../functions/formSubmission';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 export const useCreateFormSubmissionMutation = ({
   onMutate,
@@ -23,4 +23,12 @@ export const useCreateFormSubmissionMutation = ({
     mutateAsync,
     isPending,
   };
+};
+
+export const useGetFormSubmissionQuery = (formId: string) => {
+  return useQuery({
+    queryKey: ['form-submissions', formId],
+    queryFn: () => getFormSubmissions(formId, { status: 'completed' }),
+    staleTime: 10 * 1000,
+  });
 };
