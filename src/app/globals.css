@@ -114,3 +114,12 @@
     user-select: none;
   }
 }
+
+.clerk-footer {
+  padding-bottom: 10px;
+}
+.cl-userProfile-root .cl-cardBox .cl-navbar div:nth-of-type(3),
+.clerk-footer div:last-child,
+.cl-userButtonPopoverFooter {
+  display: none;
+}
