@@ -56,7 +56,7 @@ export function FloatingMenuButton({ menuItems, activeMenu, onMenuSelect, useBla
   const activeIconBgClass = 'bg-gray-700 group-hover:bg-gray-600';
 
   return (
-    <div className="fixed bottom-6 right-6 z-50" ref={menuRef}>
+    <div className="fixed bottom-6 right-6 z-50 md:hidden" ref={menuRef}>
       {/* Main floating button */}
       <button
         onClick={toggleMenu}
