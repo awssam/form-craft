@@ -58,3 +58,12 @@ export const getAppOriginUrl = () => {
     return process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : process?.env?.NEXT_PUBLIC_APP_URL || '';
   return window.location.origin;
 };
+
+export const isValidUrl = (url: string) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};

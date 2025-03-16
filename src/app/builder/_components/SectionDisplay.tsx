@@ -1,11 +1,25 @@
 'use client';
 
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
-import LeftPane from './left-pane/LeftPane';
-import RightPane from './right-pane/RightPane';
-import CenterPane from './center-pane/CenterPane';
-import MobileSectionDisplayer from '@/components/common/MobileSectionDisplayer';
+import dynamic from 'next/dynamic';
+
+const LeftPane = dynamic(() => import('./left-pane/LeftPane'), {
+  ssr: false,
+  loading: () => <LeftPaneSkeleton />,
+});
+
+const RightPane = dynamic(() => import('./right-pane/RightPane'), {
+  ssr: false,
+  loading: () => <RightPaneSkeleton />,
+});
+
+const CenterPane = dynamic(() => import('./center-pane/CenterPane'), {
+  ssr: false,
+  loading: () => <CenterPaneSkeleton />,
+});
+
+const MobileSectionDisplayer = dynamic(() => import('@/components/common/MobileSectionDisplayer'), { ssr: false });
 
 import { cn } from '@/lib/utils';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
@@ -28,6 +42,7 @@ import { FieldEntity } from '@/types/form-config';
 import { useFormActionProperty, useFormProperty, useUIEventsActionProperty } from '@/zustand/store';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useAutoSaveFormConfig } from '@/data-fetching/client/form';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const SectionDisplay = () => {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor));
@@ -163,11 +178,67 @@ const SectionDisplay = () => {
         <MobileSectionDisplayer
           options={Object.values(FORMSECTIONS)}
           selectedOption={section}
-          setSelectedOption={setSection}
+          setSelectedOption={setSection as Dispatch<SetStateAction<unknown>>}
         />
       </DndContext>
     </main>
   );
 };
 
+function LeftPaneSkeleton() {
+  return (
+    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto">
+      <Skeleton className="h-8 w-full" />
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div className="p-4 space-y-10" key={index}>
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-1/2" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function CenterPaneSkeleton() {
+  return (
+    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto z-10">
+      {Array.from({ length: 5 }).map((_, index) => (
+        <div className="flex flex-col gap-4 max-w-[80%] mx-auto mb-[100px]" key={index}>
+          <Skeleton className="h-8 w-2/3" />
+          <Skeleton className="h-[300px] w-full" />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RightPaneSkeleton() {
+  return (
+    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto z-10">
+      <Skeleton className="h-8 w-full max-w-[95%] mx-auto" />
+
+      <div className="mt-[40px] flex flex-col gap-3">
+        <Skeleton className="h-5 w-1/3" />
+        <Skeleton className="h-4 w-2/3" />
+      </div>
+      <div className="flex flex-col gap-[40px] mt-[40px]">
+        {Array.from({ length: 10 }).map((_, index) => (
+          <Skeleton className="h-[70px] w-full" key={index} />
+        ))}
+      </div>
+    </div>
+  );
+}
 export default SectionDisplay;

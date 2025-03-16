@@ -2,18 +2,18 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { getFormIntegrations, saveFormIntegration } from '../functions/formIntegration';
 import { type FormIntegration } from '@/types/integration';
 
-export const useSaveIntegrationMutation = ({
+export const useSaveIntegrationMutation = <T>({
   onSuccess,
   onError,
 }: {
-  onSuccess?: (data: FormIntegration, context: unknown) => void;
+  onSuccess?: (data: FormIntegration<T>, context: unknown) => void;
   onError?: (error: unknown) => void;
 }) => {
   return useMutation({
-    mutationFn: async (data: FormIntegration) => saveFormIntegration(data),
+    mutationFn: async (data: FormIntegration<T>) => saveFormIntegration(data),
     retry: false,
     onSuccess: (data, _, context) => {
-      onSuccess?.(data as FormIntegration, context);
+      onSuccess?.(data as FormIntegration<T>, context);
     },
     onError: (error) => {
       onError?.(error);

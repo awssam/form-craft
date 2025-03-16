@@ -1,7 +1,7 @@
 'use client';
 
 import FormConfigSection from '@/components/common/FormConfigSection';
-import { Table2Icon } from 'lucide-react';
+import { Table2Icon, WebhookIcon } from 'lucide-react';
 
 import SheetsIcon from '../../../../../../public/images/sheets.png';
 import AirtableIcon from '../../../../../../public/images/airtable.png';
@@ -11,10 +11,13 @@ import { useEffect, useState } from 'react';
 import GoogleSheetIntegrationModal from './google-sheets/GoogleSheetIntegrationModal';
 import { useSearchParams } from 'next/navigation';
 import AirtableIntegrationModal from './airtable/AirtableIntegrationModal';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import WebhookIntegrationModal from './webhook/WebhookIntegrationModal';
 
 const FormIntegrations = () => {
   const [isGoogleSheetModalOpen, setIsGoogleSheetModalOpen] = useState(false);
   const [isAirtableModalOpen, setIsAirtableModalOpen] = useState(false);
+  const [isWebhookModalOpen, setIsWebhookModalOpen] = useState(false);
 
   const params = useSearchParams();
 
@@ -28,19 +31,30 @@ const FormIntegrations = () => {
       case 'airtable':
         setIsAirtableModalOpen(true);
         break;
+      case 'webhook':
+        setIsWebhookModalOpen(true);
+        break;
     }
   }, [integrationSetup]);
 
   const integrations = [
     {
-      name: 'Google Sheets',
+      name: 'Sheets',
       icon: SheetsIcon,
+      iconType: 'image',
       onClick: () => setIsGoogleSheetModalOpen(true),
     },
     {
       name: 'Airtable',
       icon: AirtableIcon,
+      iconType: 'image',
       onClick: () => setIsAirtableModalOpen(true),
+    },
+    {
+      name: 'Webhook',
+      icon: <WebhookIcon className="w-7 h-7 text-white/90" />,
+      iconType: 'component',
+      onClick: () => setIsWebhookModalOpen(true),
     },
   ];
 
@@ -57,7 +71,10 @@ const FormIntegrations = () => {
             key={integration.name}
             className="flex flex-col  items-center justify-center text-center gap-2 px-2 py-4 cursor-pointer hover:scale-105 transition-all duration-300"
           >
-            <Image src={integration.icon as unknown as string} alt={integration.name} className="w-8 h-8" />
+            {integration.iconType === 'image' && (
+              <Image src={integration.icon as StaticImport} alt={integration.name} className="w-8 h-8" />
+            )}
+            {integration.iconType === 'component' && (integration.icon as React.ReactElement)}
             <span className="text-sm font-medium text-muted-foreground">{integration.name}</span>
           </Card>
         ))}
@@ -65,6 +82,7 @@ const FormIntegrations = () => {
 
       <GoogleSheetIntegrationModal open={isGoogleSheetModalOpen} onOpenChange={setIsGoogleSheetModalOpen} />
       <AirtableIntegrationModal open={isAirtableModalOpen} onOpenChange={setIsAirtableModalOpen} />
+      <WebhookIntegrationModal open={isWebhookModalOpen} onOpenChange={setIsWebhookModalOpen} />
     </FormConfigSection>
   );
 };

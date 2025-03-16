@@ -6,7 +6,7 @@ import FormIntegration, { type FormIntegrationType as FormIntegrationModelType }
 import { type RootFilterQuery } from 'mongoose';
 import connectDb from '../db/connection';
 
-export const saveFormIntegration = async (formIntegration: FormIntegrationType) => {
+export const saveFormIntegration = async <T>(formIntegration: FormIntegrationType<T>) => {
   try {
     const userId = await verifyAuth();
 

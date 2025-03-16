@@ -4,7 +4,7 @@ import {
 } from '@/backend/actions/formIntegration';
 import { FormIntegration } from '@/types/integration';
 
-export const saveFormIntegration = async (data: FormIntegration) => {
+export const saveFormIntegration = async <T>(data: FormIntegration<T>) => {
   const res = await saveFormIntegrationAction(data);
   if (res?.success) return res?.data;
 

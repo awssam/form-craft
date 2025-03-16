@@ -1,6 +1,6 @@
 'use server';
 
-import { AirtableIntegration, GoogleSheetIntegration } from '@/types/integration';
+import { AirtableIntegration, GoogleSheetIntegration, WebhookIntegration } from '@/types/integration';
 import connectDb from '../db/connection';
 import Form from '../models/form';
 import FormIntegration from '../models/formIntegration';
@@ -13,6 +13,7 @@ import { FieldEntity, FormConfig } from '@/types/form-config';
 import { formatDate } from 'date-fns';
 import { airtableFetchWithToken } from './airtable';
 import Activity from '../models/activity';
+import { isValidUrl } from '@/lib/utils';
 
 export const createNewFormSubmissionAction = async (data: FormSubmissionModelType) => {
   try {
@@ -109,6 +110,10 @@ const runFormIntegrations = async (formId: string, data: FormSubmissionModelType
           postDataIntoGoogleSheet(formIntegration as GoogleSheetIntegration, data, formConfig as unknown as FormConfig);
           break;
         }
+        case 'webhook': {
+          postDataIntoWebhook(formIntegration as WebhookIntegration, data, formConfig as unknown as FormConfig);
+          break;
+        }
         default:
           break;
       }
@@ -116,6 +121,21 @@ const runFormIntegrations = async (formId: string, data: FormSubmissionModelType
   } catch (error) {
     if (error instanceof Error) return { success: false, error: error?.message };
     return { success: false, error: error };
+  }
+};
+
+export const createNewIntegrationLog = async (formId: string, formName: string, details: Record<string, unknown>) => {
+  try {
+    const activity = new Activity({
+      type: 'integration_error',
+      formName: formName,
+      formId,
+      details,
+    });
+    await activity.save();
+    return activity;
+  } catch {
+    return null;
   }
 };
 
@@ -250,18 +270,11 @@ export const postDataIntoAirtable = async (
 
     if (res?.data && !res?.data?.error) {
       if (Object.keys(airtableRowData)?.length !== Object.keys(res?.data?.fields)?.length) {
-        const newActivity = await Activity.create({
-          type: 'integration_error',
-          formId: form?.id,
-          formName: form?.name,
-          details: {
-            provider: 'airtable',
-            message:
-              'One or more fields failed to sync with Airtable, This is likely caused because of a mismatch in field types and allowed values between the form and Airtable. Please check the form configuration and try again.',
-          },
+        createNewIntegrationLog(form?.id, form?.name, {
+          provider: 'airtable',
+          message:
+            'One or more fields failed to sync with Airtable, This is likely caused because of a mismatch in field types and allowed values between the form and Airtable. Please check the form configuration and try again.',
         });
-
-        await newActivity?.save();
       }
 
       console.info('Data saved into Airtable: ', res?.data);
@@ -271,17 +284,10 @@ export const postDataIntoAirtable = async (
 
     if (res?.data?.error) {
       console.log('Error saving data into Airtable: ', res?.data?.error);
-      const newActivity = await Activity.create({
-        type: 'integration_error',
-        formId: form?.id,
-        formName: form?.name,
-        details: {
-          provider: 'airtable',
-          message: res?.data?.error?.message,
-        },
+      createNewIntegrationLog(form?.id, form?.name, {
+        provider: 'airtable',
+        message: res?.data?.error?.message,
       });
-
-      await newActivity?.save();
 
       return { success: false, error: res?.error };
     }
@@ -293,5 +299,58 @@ export const postDataIntoAirtable = async (
   } finally {
     console.log('INTEGRATION_RUN_END');
     console.timeEnd('integration_airtable');
+  }
+};
+
+export const postDataIntoWebhook = async (
+  integration: WebhookIntegration,
+  data: FormSubmissionModelType['data'],
+  form: FormConfig,
+) => {
+  try {
+    console.time('integration_webhook');
+    console.log('INTEGRATION_RUN_START', JSON.stringify(integration, null, 2));
+
+    const webhookUrl = integration?.config?.url;
+
+    if (!isValidUrl(webhookUrl)) {
+      throw new Error('Invalid Webhook URL');
+    }
+
+    const headers = integration?.config?.headers?.reduce((acc, header) => {
+      acc[header?.key] = header?.value;
+      acc['Content-Type'] = 'application/json';
+      return acc;
+    }, {} as Record<string, string>);
+
+    const webhookBody = Object.values(form?.fieldEntities)?.reduce((acc, field) => {
+      acc[field?.label] = data?.[field?.name as keyof typeof data];
+      return acc;
+    }, {} as Record<string, unknown>);
+
+    const res = await fetch(webhookUrl as string, {
+      method: integration?.config?.httpMethod || 'POST',
+      headers,
+      body: JSON.stringify(webhookBody),
+    });
+
+    if (res?.status >= 400) {
+      throw new Error(`Error saving data into Webhook: ${res?.status} - ${res?.statusText}`);
+    } else {
+      console.info('Data saved into Webhook: ');
+      return { success: true, data: res };
+    }
+  } catch (error) {
+    console.log('Error saving data into Webhook: ', error);
+
+    createNewIntegrationLog(form?.id, form?.name, {
+      provider: 'webhook',
+      message: error instanceof Error ? error?.message : error,
+    });
+    if (error instanceof Error) return { success: false, error: error?.message };
+    return { success: false, error: error };
+  } finally {
+    console.log('INTEGRATION_RUN_END');
+    console.timeEnd('integration_webhook');
   }
 };

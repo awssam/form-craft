@@ -33,3 +33,20 @@ export interface AirtableIntegration extends FormIntegration<AirtableIntegration
   provider: 'airtable';
   config: AirtableIntegrationConfig;
 }
+
+type WebhookHeaderConfig = {
+  key: string;
+  value: string;
+  editable: boolean;
+};
+
+export interface WebhookIntegrationConfig {
+  url: string;
+  httpMethod: string;
+  headers: WebhookHeaderConfig[];
+}
+
+export interface WebhookIntegration extends FormIntegration<WebhookIntegrationConfig> {
+  provider: 'webhook';
+  config: WebhookIntegrationConfig;
+}
