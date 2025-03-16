@@ -171,7 +171,7 @@ const WebhookIntegrationModal = ({ open, onOpenChange }: WebhookIntegrationModal
           </section>
         )}
 
-        <DialogFooter>
+        <DialogFooter className="flex flex-col-reverse gap-4 sm:flex-row sm:justify-end">
           <Button disabled={isSaving} onClick={handleSaveIntegration}>
             Save Integration
           </Button>

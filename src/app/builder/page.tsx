@@ -1,24 +1,18 @@
-'use client';
-
 import TopHeader from '@/components/common/TopHeader';
 import SectionDisplay from '@/app/builder/_components/SectionDisplay';
 import { FormSectionDisplayProvider } from '@/hooks/useFormSectionDisplay';
-import React from 'react';
-import { useUser } from '@clerk/nextjs';
 
-const FormBuilderPage = () => {
-  const { isSignedIn } = useUser();
+export const revalidate = false;
 
-  if (isSignedIn) {
-    return (
-      <FormSectionDisplayProvider>
-        <>
-          <TopHeader />
-          <SectionDisplay />
-        </>
-      </FormSectionDisplayProvider>
-    );
-  }
+const FormBuilderPage = async () => {
+  return (
+    <FormSectionDisplayProvider>
+      <>
+        <TopHeader />
+        <SectionDisplay />
+      </>
+    </FormSectionDisplayProvider>
+  );
 };
 
 export default FormBuilderPage;

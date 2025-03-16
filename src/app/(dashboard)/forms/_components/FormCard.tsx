@@ -70,8 +70,10 @@ const FormCard = ({
               className="text-base md:text-lg max-w-[90%] hover:text-yellow-200/95 flex items-center group transition-all duration-300"
               onClick={() => onEdit?.(id, title)}
             >
-              {title || 'Untitled Form'}
-              <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0 " />
+              <Link prefetch href={`/builder`}>
+                {title || 'Untitled Form'}
+                <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0 " />
+              </Link>
             </h2>
             {!isPreview && <Menu items={formActions} />}
           </CardTitle>
