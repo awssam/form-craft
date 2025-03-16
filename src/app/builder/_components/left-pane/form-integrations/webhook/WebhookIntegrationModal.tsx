@@ -38,8 +38,24 @@ const WebhookIntegrationModal = ({ open, onOpenChange }: WebhookIntegrationModal
   const { user } = useUser();
 
   useEffect(() => {
-    if (webhookIntegration) {
-      setIntegration(webhookIntegration as WebhookIntegration);
+    const webhook = webhookIntegration as WebhookIntegration;
+
+    if (webhook) {
+      setIntegration(() => {
+        return {
+          ...webhook,
+          config: {
+            ...webhook.config,
+            headers: webhook?.config?.headers ?? [
+              {
+                key: 'Content-Type',
+                value: 'application/json',
+                editable: false,
+              },
+            ],
+          },
+        };
+      });
     }
   }, [webhookIntegration]);
 

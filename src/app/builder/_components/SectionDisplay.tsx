@@ -187,7 +187,7 @@ const SectionDisplay = () => {
 
 function LeftPaneSkeleton() {
   return (
-    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto">
+    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto flex-grow">
       <Skeleton className="h-8 w-full" />
       {Array.from({ length: 5 }).map((_, index) => (
         <div className="p-4 space-y-10" key={index}>
@@ -213,7 +213,7 @@ function LeftPaneSkeleton() {
 
 function CenterPaneSkeleton() {
   return (
-    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto z-10">
+    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto z-10 flex-grow-[2]">
       {Array.from({ length: 5 }).map((_, index) => (
         <div className="flex flex-col gap-4 max-w-[80%] mx-auto mb-[100px]" key={index}>
           <Skeleton className="h-8 w-2/3" />
@@ -226,7 +226,7 @@ function CenterPaneSkeleton() {
 
 function RightPaneSkeleton() {
   return (
-    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto z-10">
+    <div className="h-full bg-background flex-col gap-6 p-4 pt-0 max-h-screen overflow-auto z-10 flex-grow">
       <Skeleton className="h-8 w-full max-w-[95%] mx-auto" />
 
       <div className="mt-[40px] flex flex-col gap-3">
