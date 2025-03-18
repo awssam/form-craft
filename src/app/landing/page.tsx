@@ -121,10 +121,10 @@ const LandingPage = () => {
               <Sparkles className="inline-block mr-2 h-3.5 w-3.5 text-purple-400" />
               Features
             </div>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-zinc-500">
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white bg-clip-text text-transparent bg-gradient-to-r from-white via-white to-zinc-500">
               Everything You Need to Create Perfect Forms
             </h2>
-            <p className="text-zinc-300 text-lg">
+            <p className="text-zinc-300">
               Design forms that convert with an intuitive builder, intelligent logic, and seamless integrations. Whether
               you’re starting with our templates or building from scratch, FormCraft has you covered.
             </p>
