@@ -22,9 +22,6 @@ const LandingPage = () => {
           <a href="#templates" className="text-gray-300 hover:text-white transition-colors">
             Templates
           </a>
-          <a href="#pricing" className="text-gray-300 hover:text-white transition-colors">
-            Pricing
-          </a>
         </nav>
         <div className="flex items-center gap-4">
           <Button className="bg-gradient-to-r from-zinc-800 to-zinc-600 hover:from-zinc-700 hover:to-zinc-500 text-white">
@@ -64,12 +61,15 @@ const LandingPage = () => {
                 variant="outline"
                 className="text-black bg-gray-300 border-gray-700 rounded-full hover:bg-gray-800"
               >
-                Watch Demo
+                <Link href={'#demo'}>Watch Demo</Link>
               </Button>
             </div>
           </div>
 
-          <div className="relative mx-auto max-w-5xl mt-16 rounded-xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900/70">
+          <div
+            id="demo"
+            className="relative mx-auto max-w-5xl mt-16 rounded-xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900/70"
+          >
             <div className="absolute inset-0 bg-gradient-to-tr from-black to-zinc-500/10 pointer-events-none"></div>
             <div className="p-8 md:p-12 flex flex-col items-center">
               <div className="w-full aspect-video bg-black rounded-lg flex items-center justify-center mb-6 relative overflow-hidden group cursor-pointer">
@@ -257,16 +257,6 @@ const LandingPage = () => {
                 <li>
                   <a href="#templates" className="text-zinc-400 hover:text-white transition-colors">
                     Templates
-                  </a>
-                </li>
-                <li>
-                  <a href="#pricing" className="text-zinc-400 hover:text-white transition-colors">
-                    Pricing
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-zinc-400 hover:text-white transition-colors">
-                    Integrations
                   </a>
                 </li>
               </ul>
