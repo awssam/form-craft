@@ -86,7 +86,7 @@ export default function TableDemo() {
         {isLoading ? (
           <Skeleton className="h-10 w-[200px]" />
         ) : (
-          <h3 className="font-bold text-lg sm:text-xl tracking-tight border-b border-b-transparent min-w-12 min-h-6">
+          <h3 className="font-bold text-lg sm:text-xl gradient-text-light tracking-tight border-b border-b-transparent min-w-12 min-h-6">
             Submissions for {data?.formConfig?.name}
           </h3>
         )}

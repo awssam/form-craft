@@ -57,9 +57,10 @@ const FormCard = ({
     <>
       <Card
         className={cn(
-          'w-full border-[#212326] border-dashed shadow-xl hover:border-yellow-200/30 transition-all transform-gpu hover:-translate-y-2',
+          'glass-card border-zinc-800/50 gradient-border hover-lift shadow-lg',
+          'hover:border-zinc-700/50 transition-all duration-300',
           {
-            'cursor-pointer duration-300': !isPreview,
+            'cursor-pointer': !isPreview,
             'cursor-not-allowed animate-pulse': isPreview,
           },
         )}
@@ -67,26 +68,26 @@ const FormCard = ({
         <CardHeader className="space-y-0.5">
           <CardTitle className="flex items-center justify-between w-full gap-4">
             <h2
-              className="text-base md:text-lg max-w-[90%] hover:text-yellow-200/95 flex items-center group transition-all duration-300"
+              className="text-base md:text-lg max-w-[90%] gradient-text flex items-center group transition-all duration-300"
               onClick={() => onEdit?.(id, title)}
             >
               <Link prefetch href={`/builder`}>
                 {title || 'Untitled Form'}
-                <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0 " />
+                <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0" />
               </Link>
             </h2>
             {!isPreview && <Menu items={formActions} />}
           </CardTitle>
-          <CardDescription className="-mt-6 text-xs text-ellipsis">{description}</CardDescription>
+          <CardDescription className="-mt-6 text-xs text-zinc-300">{description}</CardDescription>
         </CardHeader>
         <CardContent>
           <Link prefetch href={submissions > 0 ? `/forms/${id}` : ''} className="font-semibold group">
-            <span className="font-bold text-2xl">{submissions}</span> submissions
+            <span className="font-bold text-2xl">{submissions}</span> <span className="text-zinc-300">submissions</span>
             {submissions > 0 && <ArrowRight className="w-4 h-4 inline ml-2" aria-label="View Submissions" />}
           </Link>
         </CardContent>
         <CardFooter className="flex items-center justify-between w-full gap-4 text-ellipsis">
-          <p className="text-muted-foreground text-xs">
+          <p className="text-zinc-400 text-xs">
             Last modified: {formatDistanceToNow(new Date(lastModified ?? Date.now()))}
           </p>
           <FormStatusTag status={isPreview ? 'creating-new' : status} />
@@ -102,21 +103,21 @@ const FormStatusTag = ({ status }: { status: string }) => {
   const statusConfig = {
     draft: {
       label: 'Draft',
-      color: 'bg-slate-800', // Yellow color for draft
+      color: 'bg-zinc-800/80 border border-zinc-700/50',
     },
     published: {
       label: 'Published',
-      color: 'bg-green-800',
+      color: 'bg-green-900/70 border border-green-700/50',
     },
     'creating-new': {
       label: 'Creating...',
-      color: 'bg-gray-800',
+      color: 'bg-zinc-800/80 border border-zinc-700/50',
     },
   };
 
   return (
     <div
-      className={`flex items-center gap-1 h-6 px-3 rounded-full ${
+      className={`flex items-center gap-1 h-6 px-3 rounded-full backdrop-blur-sm ${
         statusConfig[status as keyof typeof statusConfig]?.color
       }`}
     >

@@ -4,9 +4,6 @@ import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from '@/comp
 import { cn } from '@/lib/utils';
 import React from 'react';
 import { FormTemplate } from '@/types/template';
-import Image from 'next/image';
-
-import FormTemplatePlaceholderImage from '../../../../../public/images/form-template-placeholder.jpg';
 import { Button } from '@/components/ui/button';
 import { ArrowRight } from 'lucide-react';
 
@@ -17,49 +14,77 @@ interface TemplateCardProps {
 
 const TemplateCard = ({ template, onPreview }: TemplateCardProps) => {
   const { meta } = template;
+
+  // Generate a deterministic gradient background based on template id
+  const getTemplateBackground = () => {
+    const id = template.id || template._id || '';
+    const num = id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % 5;
+
+    const gradients = [
+      'from-zinc-800 to-zinc-900', // default
+      'from-zinc-800 to-purple-950/20',
+      'from-zinc-800 to-blue-950/20',
+      'from-zinc-800 to-green-950/20',
+      'from-zinc-800 to-amber-950/20',
+    ];
+
+    return gradients[num] || gradients[0];
+  };
+
   return (
     <Card
       className={cn(
-        'w-full relative border-[#212326] border-dashed shadow-xl hover:border-yellow-200/30 transition-all transform-gpu hover:-translate-y-2',
-        'cursor-pointer duration-300 group',
+        'glass-card border-zinc-800/50 gradient-border hover-lift shadow-lg',
+        'hover:border-zinc-700/50 transition-all duration-300 group',
+        'overflow-hidden',
       )}
     >
-      {/* Card Content */}
-
-      <CardHeader className="space-y-0.5 px-4 py-2">
-        {/* Image or Fallback */}
-        <div className="relative w-full h-[200px] overflow-hidden my-2">
-          <Image
-            src={FormTemplatePlaceholderImage}
-            alt={meta.name}
-            className="rounded-md -hue-rotate-60 transition-all duration-300 group-hover:scale-105 w-full h-full object-cover"
-          />
+      <div
+        className={`h-48 bg-gradient-to-br ${getTemplateBackground()} p-4 relative overflow-hidden transition-transform group-hover:scale-105 duration-500`}
+      >
+        <div className="absolute inset-0 bg-gradient-to-t from-zinc-900 via-transparent to-transparent opacity-80"></div>
+        <div className="absolute bottom-4 left-4">
+          <span className="inline-block px-2 py-1 text-xs font-medium bg-zinc-800/80 text-zinc-300 rounded-md backdrop-blur-sm">
+            {'Template'}
+          </span>
         </div>
-        <CardTitle
-          className="flex group/title items-center justify-between w-full gap-4"
-          onClick={() => onPreview?.(template)}
-        >
-          <h2 className="md:text-lg text-base max-w-[90%] hover:text-yellow-200 flex items-center group transition-all duration-300">
+      </div>
+
+      <CardHeader className="space-y-0.5">
+        <CardTitle className="flex items-center justify-between w-full gap-4" onClick={() => onPreview?.(template)}>
+          <h2 className="text-base md:text-lg max-w-[90%] gradient-text flex items-center group transition-all duration-300">
             {meta.name}
+            <ArrowRight className="w-4 h-4 inline ml-2 group-hover:opacity-100 opacity-0" />
           </h2>
-          <ArrowRight className="w-4 h-4 ml-2 opacity-0 group-hover/title:opacity-100 group-hover/title:text-yellow-200" />
         </CardTitle>
 
-        <CardDescription className="text-xs">{meta.description?.slice(0, 150) + '...'}</CardDescription>
+        <CardDescription className="-mt-1 text-xs text-zinc-400">
+          {meta.description?.slice(0, 100)}
+          {meta.description && meta.description.length > 100 ? '...' : ''}
+        </CardDescription>
       </CardHeader>
 
-      {/* Footer */}
-      <CardFooter className="flex items-center flex-wrap w-full px-4 py-2 mt-auto mb-3 gap-3">
-        <TemplateTag label="Subscription and Memberships" />
+      {/* <CardContent className="pt-0">
+        <div className="flex flex-wrap gap-2 mt-2">
+          {meta.tags?.slice(0, 2).map((tag, index) => (
+            <span
+              key={index}
+              className="inline-block px-2 py-1 text-xs bg-zinc-800/50 text-zinc-300 rounded-full border border-zinc-700/30"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      </CardContent> */}
 
+      <CardFooter className="flex justify-between items-center">
         <Button
           onClick={() => onPreview?.(template)}
-          variant="secondary"
+          variant="ghost"
           size="sm"
-          className="rounded-full bg-black border hover:border-yellow-200/30 absolute top-2 right-2 md:top-3 md:right-3 md:opacity-0 md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:-translate-x-0 md:scale-0 opacity-100 scale-100 md:group-hover:scale-100 hover:scale-110 transition-all duration-300"
+          className="w-full justify-between bg-zinc-800/50 text-zinc-300 hover:bg-zinc-700 hover:text-white"
         >
-          <span>Preview</span>
-          {/* <ArrowRight className="w-4 h-4 ml-2" /> */}
+          Use template <ArrowRight className="h-4 w-4 ml-2" />
         </Button>
       </CardFooter>
     </Card>
@@ -67,11 +92,3 @@ const TemplateCard = ({ template, onPreview }: TemplateCardProps) => {
 };
 
 export default TemplateCard;
-
-const TemplateTag = ({ label }: { label: string }) => {
-  return (
-    <div className={`flex items-center gap-1 py-1 px-3 rounded-full bg-gray-800 border border-input`}>
-      <span className="text-white font-normal text-xs flex items-center gap-1">{label}</span>
-    </div>
-  );
-};

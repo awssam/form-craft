@@ -45,18 +45,18 @@ const LandingPage = () => {
               <Sparkles className="mr-1 h-3 w-3 text-zinc-400" /> Visual Form Builder
             </Badge>
             <h1 className="text-3xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
-              Create Beautiful Forms Without Code
+              Build Beautiful Forms Without Code
             </h1>
             <p className="text-base md:text-xl text-gray-300 mb-8">
-              FormCraft is a powerful drag-and-drop form builder that helps you create stunning, responsive forms with
-              advanced features in minutes, not hours.
+              FormCraft is a powerful no code drag-and-drop form builder that helps you create stunning, responsive
+              forms with advanced features in minutes, not hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 size="lg"
                 className="bg-black hover:bg-gray-800 border border-zinc-400/50 rounded-full text-white"
               >
-                Start Building for Free
+                <Link href="/sign-in">Start Building for Free</Link>
                 <ArrowRightIcon className="ml-2 h-4 w-4" />
               </Button>
               <Button
@@ -113,7 +113,7 @@ const LandingPage = () => {
         {/* Background Elements */}
         <div className="absolute top-20 -right-40 w-96 h-96 bg-zinc-900/10 rounded-full filter blur-[100px]"></div>
         <div className="absolute bottom-20 -left-40 w-96 h-96 bg-slate-900/10 rounded-full filter blur-[100px]"></div>
-        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center opacity-[0.02] pointer-events-none"></div>
+        <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center pointer-events-none"></div>
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center max-w-3xl mx-auto mb-16">
@@ -125,7 +125,8 @@ const LandingPage = () => {
               Everything You Need to Create Perfect Forms
             </h2>
             <p className="text-zinc-300 text-lg">
-              FormCraft combines powerful features with an intuitive interface to help you build forms that convert.
+              Design forms that convert with an intuitive builder, intelligent logic, and seamless integrations. Whether
+              you’re starting with our templates or building from scratch, FormCraft has you covered.
             </p>
           </div>
 
@@ -140,7 +141,7 @@ const LandingPage = () => {
             <FeatureCard
               icon={<Zap className="h-6 w-6 text-blue-400" />}
               title="Conditional Logic"
-              description="Show or hide fields based on user input to create dynamic, interactive forms."
+              description="Create dynamic forms that adjust in real time based on user inputs."
               gradient="from-zinc-900/80 to-black/20"
               status="completed"
             />
@@ -153,14 +154,14 @@ const LandingPage = () => {
             />
             <FeatureCard
               icon={<Database className="h-6 w-6 text-amber-400" />}
-              title="Integrations"
-              description="Connect with Google Sheets, Airtable, and custom webhooks to automate your workflow."
+              title="Seamless Integrations"
+              description="Connect with Google Sheets, Airtable, and webhooks to automate your workflows."
               gradient="from-zinc-900/80 to-amber-950/20"
               status="completed"
             />
             <FeatureCard
               icon={<BarChart3 className="h-6 w-6 text-rose-400" />}
-              title="Analytics Dashboard"
+              title="Real-Time Analytics"
               description="Track form views, submissions, completion rates, and other key metrics."
               gradient="from-zinc-900/80 to-rose-950/20"
               status="completed"
@@ -196,7 +197,8 @@ const LandingPage = () => {
             </div>
             <h2 className="text-3xl md:text-4xl font-bold mb-6 text-white">Start with Pre-built Templates</h2>
             <p className="text-zinc-300">
-              Choose from a variety of professionally designed templates to jumpstart your form creation process.
+              Choose from a diverse range of professionally designed templates and customize them to fit your unique
+              needs.
             </p>
           </div>
 

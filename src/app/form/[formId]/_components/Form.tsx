@@ -17,7 +17,6 @@ import { useCreateFormSubmissionMutation } from '@/data-fetching/client/formSubm
 
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { useCreateActivityMutation } from '@/data-fetching/client/activity';
-import FormFooter from './FormFooter';
 
 export interface FormProps {
   formConfig: FormConfig;
@@ -226,7 +225,7 @@ const Form = ({ formConfig: config }: FormProps) => {
         onFormValueChange={setFormValuesByPage}
         isFormSubmitting={isSubmitting}
       />
-      <FormFooter />
+      {/* <FormFooter /> */}
     </section>
   );
 };

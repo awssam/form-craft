@@ -55,7 +55,7 @@ const Forms = () => {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="md:w-[500px] h-11"
+            className="md:w-[500px] h-11 bg-zinc-900/30 border-zinc-800/60 backdrop-blur-sm focus:border-zinc-700/70 transition-all"
             placeholder="Quickly find your forms from here."
             type="search"
           />
@@ -74,12 +74,9 @@ const Forms = () => {
           ))}
 
           {filteredForms?.length === 0 && (
-            <div className="col-span-full flex flex-col gap-2 mt-12 justify-center items-center text-muted-foreground">
-              <h4 className="text-xl font-bold">No forms found</h4>
-              <p className="text-sm">
-                You can create a new form from the <span className="text-yellow-200 font-bold">Create a New form</span>{' '}
-                button.
-              </p>
+            <div className="col-span-full flex flex-col gap-2 mt-12 justify-center items-center text-zinc-400">
+              <h4 className="text-xl font-bold gradient-text">No forms found</h4>
+              <p className="text-sm max-w-[80%]">Maybe create one?</p>
             </div>
           )}
         </section>

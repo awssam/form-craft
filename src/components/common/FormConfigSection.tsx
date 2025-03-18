@@ -20,9 +20,9 @@ const FormConfigSection = ({ className, icon, subtitle, title, children }: FormS
           <div className="flex flex-col">
             <div className="flex items-start gap-2">
               {icon}
-              <h3 className="-mt-2 font-bold text-white/90 text-sm tracking-tight md:text-lg"> {title}</h3>
+              <h3 className="-mt-2 font-bold gradient-text text-sm tracking-tight md:text-lg"> {title}</h3>
             </div>
-            {subtitle && <small className="-mt-0.5 ml-6 text-xs font-[500] text-muted-foreground">{subtitle}</small>}
+            {subtitle && <small className="-mt-0.5 ml-6 text-xs font-[500] text-zinc-300">{subtitle}</small>}
           </div>
         </AccordionTrigger>
         <AccordionContent className={classes}>{children}</AccordionContent>

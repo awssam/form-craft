@@ -26,7 +26,10 @@ const TabsContainer = ({ children }: { children: React.ReactNode }) => {
           {!isLoaded ? (
             <Skeleton className="h-7 w-52 rounded-md mx-auto sm:mx-0" />
           ) : (
-            <h2 className="font-bold text-white md:text-2xl text-lg">Hey {user?.firstName ?? '...'} 👋</h2>
+            <h2 className="font-bold md:text-2xl text-lg">
+              <span className="gradient-text">Hey {user?.firstName ?? '...'}!</span>
+              <span>👋</span>
+            </h2>
           )}
 
           {!isLoaded ? (

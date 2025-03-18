@@ -10,24 +10,24 @@ import RecentActivity from './RecentActivity';
 
 const Overview = async () => {
   return (
-    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-4 ">
-      <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3 max-h-[230px] " />}>
+    <div className="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-12 gap-6 pb-8">
+      <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3 max-h-[230px]" />}>
         <TotalSubmissions />
       </Suspense>
 
-      <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3  max-h-[230px]" />}>
+      <Suspense fallback={<InfoCardSkeleton className="col-span-full sm:col-span-3 md:col-span-3 max-h-[230px]" />}>
         <AverageCompletionRate />
       </Suspense>
 
       <Suspense
-        fallback={<InfoCardSkeleton className="col-span-full md:col-span-6 [grid-row:2/span-1]  max-h-[230px]" />}
+        fallback={<InfoCardSkeleton className="col-span-full md:col-span-6 [grid-row:2/span-1] max-h-[230px]" />}
       >
         <MostActiveForm />
       </Suspense>
 
       <Suspense
         fallback={
-          <InfoCardSkeleton className="col-span-full md:col-span-6 flex flex-col  gap-2 md:[grid-row:3] max-h-[400px]" />
+          <InfoCardSkeleton className="col-span-full md:col-span-6 flex flex-col gap-2 md:[grid-row:3] max-h-[400px]" />
         }
       >
         <FormCompletionRate />

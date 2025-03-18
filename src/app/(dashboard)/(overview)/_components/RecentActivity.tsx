@@ -24,7 +24,6 @@ const activityTypeMap = {
       </>
     ),
   },
-
   integration_error: {
     icon: AlertCircle,
     color: 'text-red-500',
@@ -54,16 +53,15 @@ const RecentActivity = async () => {
     return (
       <div
         key={activity.createdAt.toString()}
-        className="flex items-center gap-3 p-3 bg-card border border-input rounded-lg shadow-sm hover:shadow-md transition-all"
+        className="flex items-center gap-3 p-3 bg-zinc-900/50 backdrop-blur-sm border border-zinc-800/60 rounded-lg shadow-sm hover:shadow-md transition-all hover:border-zinc-700/70"
       >
-        <div className={`p-2 bg-muted rounded-full ${color}`}>
+        <div className={`p-2 bg-zinc-800/80 rounded-full ${color}`}>
           <Icon className="w-5 h-5" />
         </div>
         <div className="flex flex-col">
-          <p className="text-sm font-medium text-foreground">{message(activity)}</p>
-          <p className="text-xs text-muted-foreground">{formattedTime}</p>
-
-          <small className="text-xs text-red-500 mt-1">{activity?.details?.message ?? ''}</small>
+          <p className="text-sm font-medium text-zinc-100">{message(activity)}</p>
+          <p className="text-xs text-zinc-400">{formattedTime}</p>
+          <small className="text-xs text-red-400 mt-1">{activity?.details?.message ?? ''}</small>
         </div>
       </div>
     );
@@ -80,8 +78,8 @@ const RecentActivity = async () => {
         activities.length > 0 ? (
           <div className="flex flex-col gap-5">{activities.map(renderActivity)}</div>
         ) : (
-          <div className="flex flex-col items-center justify-center p-6 text-center text-muted-foreground">
-            <FolderX className="w-10 h-10 text-gray-500" />
+          <div className="flex flex-col items-center justify-center p-6 text-center text-zinc-400">
+            <FolderX className="w-10 h-10 text-zinc-500" />
             <p className="text-sm font-medium mt-2">No activities in the past week</p>
           </div>
         )
