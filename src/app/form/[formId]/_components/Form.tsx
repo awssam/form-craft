@@ -25,7 +25,7 @@ export interface FormProps {
 type FormValueByPageMap = Record<string, Record<string, unknown>>;
 
 const classes = cn(
-  'flex flex-col gap-9 border-yellow-200/10 px-3 py-5 md:px-7 md:py-5 mx-auto my-auto border border-dashed rounded-md w-[95%] md:w-[min(80%,890px)] transition-all duration-200',
+  'flex relative z-[2] flex-col gap-9 border-yellow-200/10 px-3 py-5 md:px-7 md:py-5 mx-auto my-auto border border-dashed rounded-md w-[95%] md:w-[min(80%,890px)] transition-all duration-200',
 );
 
 const Form = ({ formConfig: config }: FormProps) => {
@@ -190,7 +190,7 @@ const Form = ({ formConfig: config }: FormProps) => {
   if (isSubmissionSuccess) {
     return (
       <section
-        className={'m-auto text-center grid gap-1'}
+        className={'m-auto relative z-[2] text-center grid gap-1'}
         style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor }}
       >
         <h3 className="text-white text-xl sm:text-3xl font-bold">Thank you!</h3>

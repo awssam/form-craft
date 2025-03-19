@@ -55,7 +55,7 @@ const FormPage = async ({ params }: { params: { formId: string } }) => {
 
   return (
     <main
-      className={`w-full h-full min-h-screen relative bg-gradient-to-b ${gradientConfig.backgroundGradient} flex flex-col px-2 sm:px-4 py-8`}
+      className={`w-full h-full overflow-x-hidden min-h-screen relative bg-gradient-to-b ${gradientConfig.backgroundGradient} flex flex-col px-2 sm:px-4 py-8`}
     >
       <div
         className={`absolute top-20 -right-40 w-96 h-96 ${gradientConfig.accentGlow1} rounded-full filter blur-[100px]`}
@@ -69,7 +69,7 @@ const FormPage = async ({ params }: { params: { formId: string } }) => {
       )}
 
       <div
-        className="absolute inset-0 bg-[url('/grid.svg')] bg-center pointer-events-none"
+        className="absolute z-[1] inset-0 bg-[url('/grid.svg')] bg-center"
         style={{ opacity: gradientConfig.gridOpacity }}
       ></div>
 

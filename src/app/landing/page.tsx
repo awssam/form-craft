@@ -6,6 +6,16 @@ import FeatureCard from './feature-card';
 import TemplateShowcase from './template-showcase';
 import Link from 'next/link';
 
+const LINKS = {
+  githubProfile: 'https://github.com/Varadarajan-M',
+  linkedinProfile: 'https://www.linkedin.com/in/varadarajan-m-724512164/',
+  projectRepo: 'https://github.com/Varadarajan-M/form-craft',
+  signin: '/sign-in',
+  templates: '/templates',
+  signup: '/sign-up',
+  portfolio: 'https://varadarajan-m.vercel.app',
+};
+
 const LandingPage = () => {
   return (
     <div className="min-h-screen bg-black text-white scroll-smooth">
@@ -22,10 +32,13 @@ const LandingPage = () => {
           <a href="#templates" className="text-gray-300 hover:text-white transition-colors">
             Templates
           </a>
+          <a href={LINKS.projectRepo} className="text-gray-300 hover:text-white transition-colors">
+            Github
+          </a>
         </nav>
         <div className="flex items-center gap-4">
           <Button className="bg-gradient-to-r from-zinc-800 to-zinc-600 hover:from-zinc-700 hover:to-zinc-500 text-white">
-            <Link href="/sign-in">Log in</Link>
+            <Link href={LINKS.signin}>Log in</Link>
           </Button>
         </div>
       </header>
@@ -39,7 +52,7 @@ const LandingPage = () => {
         <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-12">
             <Badge variant="outline" className="mb-4 px-3 py-1 border-zinc-500/50 bg-zinc-500/10 text-white">
-              <Sparkles className="mr-1 h-3 w-3 text-zinc-400" /> Visual Form Builder
+              <Sparkles className="mr-1 h-3 w-3 text-yellow-650" /> Visual Form Builder
             </Badge>
             <h1 className="text-3xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
               Build Beautiful Forms Without Code
@@ -53,7 +66,7 @@ const LandingPage = () => {
                 size="lg"
                 className="bg-black hover:bg-gray-800 border border-zinc-400/50 rounded-full text-white"
               >
-                <Link href="/sign-in">Start Building for Free</Link>
+                <Link href={LINKS.signin}>Start Building for Free</Link>
                 <ArrowRightIcon className="ml-2 h-4 w-4" />
               </Button>
               <Button
@@ -181,7 +194,7 @@ const LandingPage = () => {
               variant="outline"
               className="border-zinc-700 bg-zinc-800/50 hover:bg-zinc-700 text-zinc-300 hover:text-white"
             >
-              Explore All Features
+              <Link href={LINKS.signin}>Explore All Features</Link>
               <ArrowRightIcon className="ml-2 h-4 w-4" />
             </Button>
           </div>
@@ -280,17 +293,12 @@ const LandingPage = () => {
               <h3 className="font-semibold mb-4 text-white">Connect</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-zinc-400 hover:text-white transition-colors">
-                    Twitter
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+                  <a href={LINKS.linkedinProfile} className="text-zinc-400 hover:text-white transition-colors">
                     LinkedIn
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+                  <a href={LINKS.githubProfile} className="text-zinc-400 hover:text-white transition-colors">
                     GitHub
                   </a>
                 </li>
@@ -298,10 +306,24 @@ const LandingPage = () => {
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-zinc-800 flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center gap-2 mb-4 md:mb-0">
-              <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-600"></div>
-              <span className="font-bold text-white">FormCraft</span>
+            <div className="flex flex-col gap-3">
+              <div className="flex items-center gap-2 mb-4 md:mb-0">
+                <div className="h-6 w-6 rounded-lg bg-gradient-to-br from-zinc-800 to-zinc-600"></div>
+                <span className="font-bold text-white">FormCraft</span>
+              </div>
+              <span className="text-muted-foreground/60 text-sm">
+                Built by{' '}
+                <a href={LINKS.portfolio} target="_blank" className="underline">
+                  Varadarajan M
+                </a>
+                . The source code is available on{' '}
+                <a className="underline" href={LINKS.projectRepo} target="_blank">
+                  Github
+                </a>
+                .
+              </span>
             </div>
+
             <p className="text-zinc-500 text-sm">© {new Date().getFullYear()} FormCraft. All rights reserved.</p>
           </div>
         </div>
