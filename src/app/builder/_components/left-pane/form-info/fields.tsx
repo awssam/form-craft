@@ -9,6 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useFormActionProperty, useFormProperty } from '@/zustand/store';
 
 import { FormConfig } from '@/types/form-config';
+import ComingSoonBadge from '@/components/common/ComingSoonBadge';
 
 const usePropertyAndUpdate = <K extends keyof FormConfig>(key: K) => {
   const v = useFormProperty(key)!;
@@ -52,7 +53,11 @@ export const FormTags = () => {
 
 export const FormCover = () => {
   return (
-    <FormField label="Cover Picture" id="coverPicture">
+    <FormField
+      label="Cover Picture"
+      id="coverPicture"
+      renderLabelExtraContent={() => <ComingSoonBadge className="ml-2" />}
+    >
       <Input id="coverPicture" className="bg-background" type="file" />
     </FormField>
   );

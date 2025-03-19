@@ -1,9 +1,7 @@
 'use client';
 
-import { Input } from '@/components/ui/input';
 import React from 'react';
 import TemplateCard from './TemplateCard';
-import { Combobox } from '@/components/ui/combobox';
 import { FormTemplate } from '@/types/template';
 import { useFormActionProperty } from '@/zustand/store';
 import { FormConfig } from '@/types/form-config';
@@ -42,7 +40,7 @@ const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => 
   return (
     <>
       <div className="flex flex-col gap-6">
-        <header className="flex flex-col sm:flex-row justify-between gap-4 items-center">
+        {/* <header className="flex flex-col sm:flex-row justify-between gap-4 items-center">
           <Input
             className="md:w-[500px] h-11 bg-zinc-900/30 border-zinc-800/60 backdrop-blur-sm focus:border-zinc-700/70 transition-all"
             placeholder="Start typing what you want and we will try to find a template for you..."
@@ -60,7 +58,7 @@ const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => 
             selectedValues={[]}
             allowMultiple={false}
           />
-        </header>
+        </header> */}
 
         <section className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 rounded-lg">
           {templates?.map((template) => (

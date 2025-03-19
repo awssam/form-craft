@@ -1,3 +1,4 @@
+import ComingSoonBadge from '@/components/common/ComingSoonBadge';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -26,18 +27,21 @@ const FormCreationOption = ({
   icon: Icon,
   title,
   onClick,
+  isActive = true,
 }: {
   icon: React.ElementType;
   title: string;
   onClick?: () => void;
+  isActive?: boolean;
 }) => {
   return (
     <div
       onClick={onClick}
-      className="rounded-lg cursor-pointer border-dashed border hover:border-yellow-200/30 px-2 py-6 grid place-items-center bg-card group"
+      className="rounded-lg relative cursor-pointer border-dashed border hover:border-yellow-200/30 px-2 py-6 grid place-items-center bg-card group"
     >
-      <Icon className="w-6 h-6 text-muted-foreground group-hover:text-yellow-200" />
-      <p className="mt-2 text-center text-sm group-hover:text-yellow-200">{title}</p>
+      <Icon className="w-6 h-6 text-muted-foreground" />
+      <p className="mt-2 text-center text-sm gradient-text">{title}</p>
+      {!isActive && <ComingSoonBadge className="mt-2" />}
     </div>
   );
 };
@@ -88,8 +92,8 @@ const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => 
 
         <div className="grid md:grid-cols-3 gap-4 my-8">
           <FormCreationOption onClick={handleBuildFromScratch} icon={PuzzleIcon} title="Build from scratch" />
-          <FormCreationOption icon={Sparkles} title="Build with AI ✨" />
           <FormCreationOption onClick={handleWithTemplateOption} icon={LucideBuilding} title="Start with a template" />
+          <FormCreationOption isActive={false} icon={Sparkles} title="Build with AI ✨" />
         </div>
 
         <DialogFooter>
