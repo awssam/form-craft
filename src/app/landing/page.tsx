@@ -32,7 +32,7 @@ const LandingPage = () => {
           <a href="#templates" className="text-gray-300 hover:text-white transition-colors">
             Templates
           </a>
-          <a href={LINKS.projectRepo} className="text-gray-300 hover:text-white transition-colors">
+          <a href={LINKS.projectRepo} className="text-gray-300 hover:text-white transition-colors" target="_blank">
             Github
           </a>
         </nav>
@@ -84,29 +84,21 @@ const LandingPage = () => {
             className="relative mx-auto max-w-5xl mt-16 rounded-xl overflow-hidden border border-zinc-800 shadow-2xl bg-zinc-900/70"
           >
             <div className="absolute inset-0 bg-gradient-to-tr from-black to-zinc-500/10 pointer-events-none"></div>
-            <div className="p-8 md:p-12 flex flex-col items-center">
-              <div className="w-full aspect-video bg-black rounded-lg flex items-center justify-center mb-6 relative overflow-hidden group cursor-pointer">
-                <div className="absolute inset-0 bg-gradient-to-br from-zinc-500/5 to-zinc-500/5"></div>
-                <div className="h-20 w-20 rounded-full bg-zinc-500/20 flex items-center justify-center backdrop-blur-sm group-hover:scale-110 transition-transform">
-                  <div className="h-16 w-16 rounded-full bg-gradient-to-r from-zinc-600 to-zinc-500 flex items-center justify-center">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-8 w-8 text-white ml-1"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                    </svg>
-                  </div>
-                </div>
-                <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-sm p-3 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity">
-                  <p className="text-white text-sm">Watch how FormCraft transforms your form building experience</p>
-                </div>
+            <div className="p-8 md:p-8 flex flex-col items-center">
+              <div className="w-full aspect-video rounded-lg overflow-hidden mb-6">
+                <iframe
+                  width="560"
+                  height="315"
+                  src="https://www.youtube.com/embed/c421va-7f5Q?si=hD0nmpuS64Hjqlxa"
+                  title="YouTube video player"
+                  className="w-full h-full relative z-[2] rounded-lg"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  referrerPolicy="strict-origin-when-cross-origin"
+                  allowFullScreen
+                ></iframe>
               </div>
+
               <div className="relative z-50">
                 <h3 className="text-xl md:text-2xl font-semibold mb-2 text-center bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
                   See FormCraft in Action

@@ -1,14 +1,50 @@
-import type { Metadata } from 'next';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Toaster } from '@/components/ui/sonner';
-
 import { CLERK_APPEARANCE_CONFIG } from '@/config/clerk';
 import './globals.css';
 import ReactQueryProvider from '@/providers/react-query';
+import { getAppOriginUrl } from '@/lib/utils';
 
-export const metadata: Metadata = {
-  title: 'FormCraft',
-  description: 'Work In Progress Fun Project from Varadarajan M',
+export const metadata = {
+  title: 'FormCraft: No Code Visual Form Builder',
+  description:
+    'FormCraft is an intuitive visual form builder that empowers you to create, customize, and analyze beautiful, responsive forms without writing code. Enjoy an easy drag-and-drop interface, conditional logic, and seamless integrations.',
+  keywords: [
+    'FormCraft',
+    'visual form builder',
+    'Next.js',
+    'React',
+    'TypeScript',
+    'DnD Kit',
+    'drag and drop forms',
+    'conditional logic',
+    'multi-page forms',
+    'form analytics',
+    'integrations',
+  ],
+  openGraph: {
+    title: 'FormCraft: No Code Visual Form Builder',
+    description:
+      'Build stunning, responsive forms without code using FormCraft. Enjoy a drag-and-drop builder, advanced conditional logic, and powerful integrations to automate your workflow.',
+    url: getAppOriginUrl(),
+    siteName: 'FormCraft',
+    images: [
+      {
+        url: `${getAppOriginUrl()}/images/og.png`,
+        width: 1200,
+        height: 630,
+        alt: 'FormCraft Landing Page',
+      },
+    ],
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'FormCraft: No Code Visual Form Builder',
+    description:
+      'Create stunning forms effortlessly with FormCraft’s drag-and-drop interface, intelligent logic, and seamless integrations.',
+    images: [`${getAppOriginUrl()}/images/og.png`],
+  },
 };
 
 export default function RootLayout({

@@ -1,15 +1,15 @@
-
 # FormCraft
 
 FormCraft is a powerful visual form builder that empowers you to create beautiful, responsive forms without writing a single line of code. With an intuitive drag-and-drop interface, advanced conditional logic, seamless integrations, and real-time analytics, FormCraft simplifies the form creation process—helping you capture data and drive conversions effortlessly.
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your_username/FormCraft)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
+Experience Live at: https://form-craft-v1-beta.vercel.app
 
 ## Features
 
 ### Form Creation and Customization
+
 - **Drag-and-Drop Interface:**  
   Easily add, remove, and rearrange form fields with an intuitive drag-and-drop experience.
 - **Common Form Templates:**  
@@ -30,13 +30,13 @@ FormCraft is a powerful visual form builder that empowers you to create beautifu
   Fully optimized for all devices, ensuring mobile-friendly form experiences.
 
 ### Data Management and Integrations
+
 - **Form Submissions:**  
   View all your submissions in a neat tabular format. Export as PDF and CSV coming soon.
 - **Email Notifications:**  
-  Configure email alerts for new submissions to keep you updated. *(Coming soon)*
+  Configure email alerts for new submissions to keep you updated. _(Coming soon)_
 - **Third-Party Integrations:**  
   Seamlessly connect with popular tools such as Google Sheets, Airtable, and custom webhooks to automate your workflow.
-
 
 ## Contact
 
