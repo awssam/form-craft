@@ -53,16 +53,52 @@ export default function TableDemo() {
   const { data, isLoading, isFetching, refetch } = useGetFormSubmissionQuery(formId);
 
   const fieldEntites = data?.formConfig?.fieldEntities;
-  const fieldEntitesWithNameKeys = useMemo(
-    () =>
-      Object.values(fieldEntites || {})?.reduce((acc, curr) => ({ ...acc, [curr?.name]: curr }), {}) as Record<
-        string,
-        FieldEntity | undefined
-      >,
-    [fieldEntites],
+  const fieldIdsInOrder = useMemo(
+    () => data?.formConfig?.pages?.flatMap((p) => data?.formConfig?.pageEntities[p]?.fields),
+    [data],
   );
 
+  const renderTableColumnHeaders = () => {
+    return (
+      <>
+        <TableHead className="">#</TableHead>
+        <TableHead className="">Date of Submission</TableHead>
+        {fieldIdsInOrder?.map((fieldId) => {
+          const field = fieldEntites?.[fieldId];
+
+          return (
+            <>
+              <TableHead className="min-w-[150px]" key={field?.name}>
+                {field?.label}
+              </TableHead>
+            </>
+          );
+        })}
+      </>
+    );
+  };
+
   const submissions = data?.submissions;
+
+  const renderTableRows = () => {
+    return submissions?.map((submission) => {
+      return (
+        <TableRow key={submission?.createdAt?.toString()}>
+          <TableCell>{submissions?.indexOf(submission) + 1}</TableCell>
+          <TableCell>{formatDate(submission?.createdAt, 'dd MMM, yyyy')}</TableCell>
+          {fieldIdsInOrder?.map((fieldId, index) => {
+            const field = fieldEntites?.[fieldId];
+            const rec = submission?.data as unknown as Record<string, unknown>;
+            return (
+              <TableCell key={`cell-${fieldId}-${index}`}>
+                <FieldRenderer field={field!} value={rec?.[field?.name as string]} />
+              </TableCell>
+            );
+          })}
+        </TableRow>
+      );
+    });
+  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -102,29 +138,9 @@ export default function TableDemo() {
         <Table>
           <TableCaption className="sr-only">A List of recent submissions</TableCaption>
           <TableHeader>
-            <TableRow>
-              <TableHead className="">#</TableHead>
-              <TableHead className="">Date of Submission</TableHead>
-              {Object.values(fieldEntites || {})?.map((field) => (
-                <TableHead className="min-w-[150px]" key={field?.name}>
-                  {field?.label}
-                </TableHead>
-              ))}
-            </TableRow>
+            <TableRow>{renderTableColumnHeaders()}</TableRow>
           </TableHeader>
-          <TableBody>
-            {submissions?.map((submission, index) => (
-              <TableRow key={index}>
-                <TableCell>{index + 1}</TableCell>
-                <TableCell>{formatDate(submission?.createdAt, 'dd MMM, yyyy')}</TableCell>
-                {Object.entries(submission.data || {})?.map(([key, field]) => (
-                  <TableCell key={`${key}-${index}`}>
-                    <FieldRenderer field={fieldEntitesWithNameKeys?.[key] as FieldEntity} value={field} />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))}
-          </TableBody>
+          <TableBody>{renderTableRows()}</TableBody>
           <TableFooter>
             <TableRow>
               <TableCell colSpan={Object.keys(fieldEntites || {}).length + 1} className="font-bold">
