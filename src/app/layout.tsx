@@ -4,6 +4,7 @@ import { CLERK_APPEARANCE_CONFIG } from '@/config/clerk';
 import './globals.css';
 import ReactQueryProvider from '@/providers/react-query';
 import { getAppOriginUrl } from '@/lib/utils';
+import { Analytics } from '@vercel/analytics/react';
 
 export const metadata = {
   title: 'FormCraft: No Code Visual Form Builder',
@@ -69,6 +70,7 @@ export default function RootLayout({
                 },
               }}
             />
+            <Analytics />
           </ReactQueryProvider>
         </body>
       </html>
