@@ -652,7 +652,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
       placeholder = 'Pick a date',
       placeHolderClasses,
       style,
-      // className: _className,
+      className,
       ...props
     },
     ref,
@@ -665,6 +665,7 @@ const DateTimePicker = React.forwardRef<Partial<DateTimePickerRef>, DateTimePick
      * instead of resetting to 00:00
      */
     const handleSelect = (newDay: Date | undefined) => {
+      if (false) console.log(className);
       if (!newDay) return;
       if (!value) {
         onChange?.(newDay);
