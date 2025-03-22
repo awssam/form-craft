@@ -107,9 +107,41 @@ Each field must include:
 - **showWhen**: *(array)*
   - Each rule object includes:
     - **fieldId**: *(string)* The ID of the triggering field.
+    - **label**: *(string)* The label of the triggering field.
     - **operator**: *(string)* The comparison operator (e.g., \`"equals"\`, \`"notEquals"\`).
+    - **operatorType** *(enum)* The type of comparison (e.g., \`"withValue"\`, \`"binary"\`).
     - **value**: *(string | number | boolean)* The value to compare.
 - **operator**: *(enum)* Either \`"AND"\` or \`"OR"\`.
+
+
+Conditional Logic Example:
+\`\`\`json
+"conditionalLogic": {
+  "operator": "AND",
+  "showWhen": [
+    {
+      "fieldId": "fieldId1",
+      "label": "<Field 1 Label>",
+      "operator": "equals",
+      "operatorType": "withValue",
+      "value": "value1"
+    },
+    {
+      "fieldId": "fieldId2",
+      "label": "<Field 2 Label>",
+      "operator": "required",
+      "operatorType": "binary",
+      "value": true
+    },
+    {
+      "fieldId": "fieldId3",
+      "label": "<Field 3 Label>", // assume this is of type dropdown or checkbox
+      "operator": "contains" // **As dropdown and checkbox type fields is always an array of values** RADIO and some other fields supports equals whereas checkbox and dropdown supports contains instead
+      "operatorType": "withValue",
+      "value": "value3"
+    }
+  ]
+}
 
 ---
 
