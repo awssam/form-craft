@@ -16,6 +16,8 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import BuildWithAI from './BuildWithAI';
 import ActionWidget from './ActionWidget';
+import { NewFeatureBadge } from '@/components/common/FeatureReleaseBadge';
+import useFeatureAnnouncer from '@/hooks/useFeatureAnnouncer';
 
 interface CreateFormModalProps {
   open: boolean;
@@ -26,6 +28,7 @@ interface CreateFormModalProps {
 const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => {
   const router = useRouter();
   const setFormConfig = useFormActionProperty('setFormConfig');
+  const hasAnnouncedNewFormFeature = useFeatureAnnouncer('new-form-generation-capability');
 
   const mutate = useCreateFormMutation({
     onMutate: () => {
@@ -57,9 +60,12 @@ const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild className={className}>
-        <Button variant="default" size={'sm'}>
-          Create a new form
-        </Button>
+        <div className="flex gap-2 items-center">
+          {!hasAnnouncedNewFormFeature && <NewFeatureBadge />}
+          <Button variant="default" size={'sm'}>
+            Create a new form
+          </Button>
+        </div>
       </DialogTrigger>
       <DialogContent className="rounded-lg sm:max-w-[700px]">
         <DialogHeader>

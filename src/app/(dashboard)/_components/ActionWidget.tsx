@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 
 interface ActionWidgetProps {
   icon: React.ElementType;
-  title: string;
+  title: React.ReactNode;
   description: string;
   children: React.ReactNode;
   className?: string;

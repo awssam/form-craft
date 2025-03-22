@@ -12,6 +12,7 @@ const LINKS = {
   projectRepo: 'https://github.com/Varadarajan-M/form-craft',
   signin: '/sign-in',
   templates: '/templates',
+  dashboard: '/',
   signup: '/sign-up',
   portfolio: 'https://varadarajan-m.vercel.app',
 };
@@ -51,14 +52,20 @@ const LandingPage = () => {
 
         <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <Badge variant="outline" className="mb-4 px-3 py-1 border-zinc-500/50 bg-zinc-500/10 text-white">
-              <Sparkles className="mr-1 h-3 w-3 text-yellow-650" /> Visual Form Builder
-            </Badge>
+            <Link href={`${LINKS.dashboard}?ai-form-builder=1`}>
+              <Badge
+                variant="outline"
+                className="mb-4 px-3 py-1 gradient-border bg-orange-500/10 text-white font-normal"
+              >
+                <Sparkles className="mr-1 h-3 w-3 text-yellow-650" /> <span className="font-bold mr-2">New: </span> AI
+                Form Builder is out now!!! <ArrowRightIcon className="ml-2 h-3 w-3" />
+              </Badge>
+            </Link>
             <h1 className="text-3xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
               Build Beautiful Forms Without Code
             </h1>
             <p className="text-base md:text-xl text-gray-300 mb-8">
-              FormCraft is a powerful no code drag-and-drop form builder that helps you create stunning, responsive
+              FormCraft is an AI powered no code drag-and-drop form builder that helps you create stunning, responsive
               forms with advanced features in minutes, not hours.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -137,6 +144,13 @@ const LandingPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <FeatureCard
+              icon={<Wand2 className="h-6 w-6 text-indigo-400" />}
+              title="AI Form Generator"
+              description="Generate forms from prompts and customize them to your needs with AI assistance."
+              gradient="from-zinc-900/80 to-indigo-950/20"
+              status="completed"
+            />
+            <FeatureCard
               icon={<Layers className="h-6 w-6 text-purple-400" />}
               title="Drag & Drop Builder"
               description="Easily add, remove, and rearrange form fields with our intuitive drag-and-drop interface."
@@ -170,13 +184,6 @@ const LandingPage = () => {
               description="Track form views, submissions, completion rates, and other key metrics."
               gradient="from-zinc-900/80 to-rose-950/20"
               status="completed"
-            />
-            <FeatureCard
-              icon={<Wand2 className="h-6 w-6 text-indigo-400" />}
-              title="AI Form Generator"
-              description="Generate forms from prompts and customize them to your needs with AI assistance."
-              gradient="from-zinc-900/80 to-indigo-950/20"
-              status="upcoming"
             />
           </div>
 

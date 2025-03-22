@@ -1,13 +1,15 @@
 import React from 'react';
 import ActionWidget from './ActionWidget';
-import { Lightbulb, Loader, Loader2, Sparkles } from 'lucide-react';
+import { Loader2, Sparkles } from 'lucide-react';
 import FormField from '@/components/common/FormField';
-import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import { useMutation } from '@tanstack/react-query';
 import { useFormActionProperty } from '@/zustand/store';
 import { useRouter } from 'next/navigation';
+import AnimatedPromptTextarea from './AnimatedTextarea';
+import { NewFeatureBadge } from '@/components/common/FeatureReleaseBadge';
+import useFeatureAnnouncer from '@/hooks/useFeatureAnnouncer';
 
 const useGeminiChat = () => {
   return useMutation({
@@ -32,15 +34,23 @@ const useGeminiChat = () => {
   });
 };
 
+const examplePrompts = [
+  'User registration form with email and password fields',
+  'Product review form with rating and comment fields',
+  'Contact form with name, email, and message fields',
+  'Job application form with name, email, and resume fields',
+  'Sales lead capture form with name, email, and company fields',
+];
+
 const BuildWithAI = () => {
   const { mutateAsync, isPending } = useGeminiChat();
-
+  const [value, setValue] = React.useState('');
   const setFormConfig = useFormActionProperty('setFormConfig');
   const router = useRouter();
+  const hasAnnouncedAiFormGenFeature = useFeatureAnnouncer('ai-form-generation');
 
-  const promptRef = React.useRef<HTMLTextAreaElement>(null);
   const handlePromptSubmit = () => {
-    const prompt = promptRef.current?.value.trim();
+    const prompt = value;
 
     if (!prompt?.length) return toast.error('Please describe what you need');
 
@@ -64,18 +74,20 @@ const BuildWithAI = () => {
 
   return (
     <ActionWidget
-      title="Build with AI ✨"
+      title={
+        <span className="flex items-center gap-2">
+          Build with AI ✨{' '}
+          {!hasAnnouncedAiFormGenFeature && (
+            <NewFeatureBadge className="w-fit px-3 py-0.5" childrenClass="text-[10px]" />
+          )}
+        </span>
+      }
       icon={Sparkles}
       description="Describe what you need, and we wll generate a form for you instantly"
       className="bg-gradient-to-b from-black via-[#101316] to-[#1f1f23] w-full"
     >
       <FormField label="Describe what you need" id="description" className="gradient-text-dark font-normal text-sm">
-        <Textarea
-          ref={promptRef}
-          placeholder="Eg: I need a form to collect customer details"
-          className="text-white resize-none focus-visible:gradient-border focus-visible:ring-0  focus-visible:border focus-visible:border-white/30"
-          rows={4}
-        />
+        <AnimatedPromptTextarea placeholders={examplePrompts} onValueChange={setValue} />
         <small className="text-xs text-muted-foreground">
           Tip💡 : Provide details like fields, validation rules, and layout preferences for better results.
         </small>
@@ -93,7 +105,7 @@ const BuildWithAI = () => {
         )}
         {isPending && (
           <>
-            Generating... <Loader2 className="animate-spin" />
+            AI is working... <Loader2 className="ml-2 animate-spin h-4 w-4" />
           </>
         )}
       </Button>

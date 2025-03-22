@@ -9,7 +9,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useFormActionProperty, useFormProperty } from '@/zustand/store';
 
 import { FormConfig } from '@/types/form-config';
-import ComingSoonBadge from '@/components/common/ComingSoonBadge';
+import ComingSoonBadge from '@/components/common/FeatureReleaseBadge';
 
 const usePropertyAndUpdate = <K extends keyof FormConfig>(key: K) => {
   const v = useFormProperty(key)!;
