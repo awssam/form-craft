@@ -25,6 +25,10 @@
       @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400;
     }
 
+    .gradient-text-dark {
+      @apply bg-clip-text text-transparent bg-gradient-to-r from-zinc-800 to-[#191923];
+    }
+
     .gradient-text-light {
       @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-300;
     }

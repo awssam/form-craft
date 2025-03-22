@@ -1,4 +1,3 @@
-import ComingSoonBadge from '@/components/common/ComingSoonBadge';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -12,39 +11,17 @@ import {
 } from '@/components/ui/dialog';
 import { useCreateFormMutation } from '@/data-fetching/client/form';
 import { useFormActionProperty } from '@/zustand/store';
-import { LucideBuilding, PuzzleIcon, Sparkles } from 'lucide-react';
+import { LayoutTemplate, PuzzleIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import React from 'react';
 import { toast } from 'sonner';
+import BuildWithAI from './BuildWithAI';
+import ActionWidget from './ActionWidget';
 
 interface CreateFormModalProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   className?: string;
 }
-
-const FormCreationOption = ({
-  icon: Icon,
-  title,
-  onClick,
-  isActive = true,
-}: {
-  icon: React.ElementType;
-  title: string;
-  onClick?: () => void;
-  isActive?: boolean;
-}) => {
-  return (
-    <div
-      onClick={onClick}
-      className="rounded-lg relative cursor-pointer border-dashed border hover:border-yellow-200/30 px-2 py-6 grid place-items-center bg-card group"
-    >
-      <Icon className="w-6 h-6 text-muted-foreground" />
-      <p className="mt-2 text-center text-sm gradient-text">{title}</p>
-      {!isActive && <ComingSoonBadge className="mt-2" />}
-    </div>
-  );
-};
 
 const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => {
   const router = useRouter();
@@ -84,16 +61,36 @@ const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => 
           Create a new form
         </Button>
       </DialogTrigger>
-      <DialogContent className="rounded-lg">
+      <DialogContent className="rounded-lg sm:max-w-[700px]">
         <DialogHeader>
           <DialogTitle>New Form</DialogTitle>
           <DialogDescription>Choose how you want to create your form.</DialogDescription>
         </DialogHeader>
 
-        <div className="grid md:grid-cols-3 gap-4 my-8">
-          <FormCreationOption onClick={handleBuildFromScratch} icon={PuzzleIcon} title="Build from scratch" />
-          <FormCreationOption onClick={handleWithTemplateOption} icon={LucideBuilding} title="Start with a template" />
-          <FormCreationOption isActive={false} icon={Sparkles} title="Build with AI ✨" />
+        <div className="flex flex-col gap-4">
+          <BuildWithAI />
+          <div className="flex flex-wrap gap-4">
+            <ActionWidget
+              title="Build from scratch"
+              icon={PuzzleIcon}
+              description="Create a form from scratch"
+              className="bg-gradient-to-br from-[#080808] to-[#1c212dc7] basis-[100%] md:basis-[48%]"
+            >
+              <Button variant={'secondary'} className="w-full" onClick={handleBuildFromScratch}>
+                Create from scratch
+              </Button>
+            </ActionWidget>
+            <ActionWidget
+              title="Start with a template"
+              icon={LayoutTemplate}
+              description="Create a form from pre-built templates"
+              className="bg-gradient-to-br from-green-950/30 to-emerald-950/30 md:basis-[48%] basis-[100%]"
+            >
+              <Button variant="outline" className="w-full" onClick={handleWithTemplateOption}>
+                Browse templates
+              </Button>
+            </ActionWidget>
+          </div>
         </div>
 
         <DialogFooter>

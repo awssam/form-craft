@@ -69,7 +69,7 @@ export interface FieldEntity {
   allowMultiSelect?: boolean;
 }
 
-export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'file' | 'textarea';
+export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea';
 
 export type CustomValidationType = 'withValue' | 'binary';
 
