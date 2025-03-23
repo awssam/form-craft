@@ -75,7 +75,18 @@ export const useUpdateFormConfigMutation = () => {
   const { userId } = useAuth();
 
   const { mutateAsync, isPending, error } = useMutation({
-    mutationFn: async ({ id, update }: { id: string; update: Partial<FormConfig> }) => updateForm(id, update),
+    mutationFn: async ({ id, update }: { id: string; update: Partial<FormConfig> }) => {
+      const fieldEntities = Object.values(update.fieldEntities || {})?.reduce((acc, field) => {
+        acc[field.id] = {
+          ...field,
+          value: undefined,
+        };
+        return acc;
+      }, {} as Record<FieldEntity['id'], FieldEntity>);
+      update.fieldEntities = fieldEntities;
+      return updateForm(id, update);
+    },
+
     onMutate: ({ id, update }) => {
       queryClient.setQueryData(['all-forms', userId], (prev: FormConfigWithMeta[]) => {
         if (prev) {

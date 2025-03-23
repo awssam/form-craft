@@ -50,7 +50,7 @@ export interface PageEntity {
   fields: string[]; // Array of field IDs to maintain the order of appearance of fields
 }
 
-type ValueType = string | number | Date | boolean | string[];
+type ValueType = string | number | Date | boolean | string[] | File[];
 
 export interface FieldEntity {
   id: string; // Unique identifier for the field,
@@ -67,9 +67,12 @@ export interface FieldEntity {
   width: FormFieldWidth;
   value?: ValueType;
   allowMultiSelect?: boolean;
+  maxFileSize?: number; // Maximum file size in bytes for file uploads (optional)
+  maxCount?: number; // Maximum number of allowed files for file uploads (optional)
+  acceptedFileTypes?: string[]; // Accepted file types for file uploads (optional)
 }
 
-export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea';
+export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea' | 'file';
 
 export type CustomValidationType = 'withValue' | 'binary';
 

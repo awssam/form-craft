@@ -15,6 +15,7 @@ const usePopulateFieldValidation = (pageId: string) => {
       fieldType: FieldType,
       validationType: CustomValidationType,
       validatorKey: string,
+      valueToCheck?: string,
     ) => {
       const field = fieldEntities?.[fieldId];
       const fieldValidations =
@@ -32,6 +33,12 @@ const usePopulateFieldValidation = (pageId: string) => {
 
       if (validationType === 'binary') {
         args = [customValidation?.message];
+
+        if (valueToCheck === 'false' || !valueToCheck) {
+          return {
+            [validatorKey]: () => true,
+          };
+        }
       }
 
       const validationFunctor = validationMap?.[validatorKey as keyof typeof validationMap] as (
@@ -58,9 +65,11 @@ const usePopulateFieldValidation = (pageId: string) => {
 
       Object.entries(field?.validation?.custom || {})?.forEach(([key, value]) => {
         const fieldType = field?.type as FieldType;
+        const fieldValueToValidate = value?.value;
+
         fieldUpdates.validation.validate = {
           ...fieldUpdates.validation.validate,
-          ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key),
+          ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key, fieldValueToValidate),
         };
       });
 
