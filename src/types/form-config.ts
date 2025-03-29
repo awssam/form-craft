@@ -66,10 +66,7 @@ export interface FieldEntity {
   conditionalLogic?: ConditionalLogic; // Conditional logic for showing/hiding the field (optional)
   width: FormFieldWidth;
   value?: ValueType;
-  allowMultiSelect?: boolean;
-  maxFileSize?: number; // Maximum file size in bytes for file uploads (optional)
-  maxCount?: number; // Maximum number of allowed files for file uploads (optional)
-  acceptedFileTypes?: string[]; // Accepted file types for file uploads (optional)
+  allowMultiSelect?: boolean; // Allow multiple selections for supported fields
 }
 
 export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea' | 'file';

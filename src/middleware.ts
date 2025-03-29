@@ -8,6 +8,7 @@ const isPublicRoute = createRouteMatcher([
   '/form/(.*)',
   '/api/refresh(.*)',
   '/api/webhook(.*)',
+  '/api/form/cloudinary(.*)',
 ]);
 
 export default clerkMiddleware(async (auth, request) => {

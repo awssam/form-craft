@@ -47,10 +47,8 @@ export const createNewFormField = ({
       baseField.placeholder = 'Click to upload or drag and drop';
       baseField.defaultValue = undefined;
       baseField.value = undefined;
-      baseField.maxFileSize = 10; // 10MB
-      baseField.maxCount = 1;
       baseField.allowMultiSelect = false;
-      baseField.helperText = 'Use this area to hint users about the file size and any other rules';
+      baseField.helperText = 'Use this area to hint users about any rules';
 
       break;
 
@@ -99,10 +97,8 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
       break;
     case 'file':
       newField.placeholder = 'Click to upload or drag and drop';
-      newField.maxFileSize = 10;
-      newField.maxCount = 1;
       newField.allowMultiSelect = false;
-      newField.helperText = 'Use this area to hint users about the file size and any other rules';
+      newField.helperText = 'Use this area to hint users about any rules';
 
       delete newField['defaultValue'];
       delete newField['value'];

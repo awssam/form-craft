@@ -51,7 +51,7 @@ You are an expert structured form configuration generator. Your task is to gener
 Each field must include:
 - **id**: *(string)* Unique identifier (UUID).
 - **name**: *(string)* Name of the field.
-- **type**: *(enum)* One of: \`'text'\`, \`'checkbox'\`, \`'radio'\`, \`'dropdown'\`, \`'date'\`, \`'textarea'\`.
+- **type**: *(enum)* One of: \`'text'\`, \`'checkbox'\`, \`'radio'\`, \`'dropdown'\`, \`'date'\`, \`'textarea'\`, \`'file'\`.
 - **label**: *(string)* Display label.
 - **placeholder**: *(string, optional)* Placeholder text.
 - **helperText**: *(string, optional)* Additional guidance.
@@ -61,8 +61,7 @@ Each field must include:
 - **options**: *(FieldOption[], optional)* For fields like radio, checkbox, dropdown.
 - **validation**: *(FieldValidation, optional)* (Note: **All validation rules must be included inside the \`custom\` object**).
 - **conditionalLogic**: *(ConditionalLogic, optional)* Defines when the field is displayed.
-- **allowMultiSelect**: *(boolean, optional)* Allows multiple selections for supported fields.
-
+- **allowMultiSelect**: *(boolean, optional)* Allows multiple selections for supported fields. **Required** for the 'dropdown' and 'file' field type.
 ---
 
 ### **FieldOption Structure**
@@ -74,9 +73,9 @@ Each field must include:
 
 ### **FieldValidation Structure**
 - **custom**: *(Record<string, CustomValidationRule>)*
-  - **For \`text\` fields, \`withValue\` rules include**:
+  - **For \`text\` and \`textarea\` fields, \`withValue\` rules include**:
     - \`equals\`, \`exactLength\`, \`startsWith\`, \`endsWith\`, \`minLength\`, \`maxLength\`, \`contains\`, \`matchesRegex\`
-  - **For \`text\` fields, \`binary\` rules include**:
+  - **For \`text\` and \`textarea\` fields, \`binary\` rules include**:
     - \`required\`, \`noWhitespace\`, \`isEmail\`, \`isURL\`, \`isNumeric\`, \`isAlpha\`, \`isAlphanumeric\`
   - **For \`date\` fields, \`withValue\` rules include**:
     - \`isBefore\`, \`isAfter\`
@@ -84,7 +83,14 @@ Each field must include:
     - \`isValidDate\`, \`restrictFutureDate\`, \`restrictPastDate\`, \`required\`
   - **For \`radio\`, \`checkbox\`, \`dropdown\` fields**:
     - \`equals\`, \`minCount\`, \`maxCount\`, \`contains\`, \`required\`
+  - - **For \`file\` fields, \`withValue\` rules include**:
+    - \`maxFileSize\` (Max file size in MB)
+    - \`minCount\` (Minimum number of files required)
+    - \`maxCount\` (Maximum number of files allowed)
+  - **For \`file\` fields, \`binary\` rules include**:
+    - \`required\` (Ensures at least one file is uploaded)
 
+  
 **Validation Example:**
 \`\`\`json
 "custom": {
@@ -101,6 +107,31 @@ Each field must include:
 }
 \`\`\`
 
+**Validation Example For \`file\` field:**
+\`\`\`json
+  "custom": {
+      "required": {
+        "value": true,
+        "message": "File upload is required",
+        "type": "binary"
+      },
+      "maxFileSize": {
+        "value": 5,
+        "message": "File size should not exceed 5MB",
+        "type": "withValue"
+      },
+      "minCount": {
+        "value": 1,
+        "message": "At least one file must be uploaded",
+        "type": "withValue"
+      },
+      "maxCount": {
+        "value": 3,
+        "message": "You can upload up to 3 files",
+        "type": "withValue"
+      }
+  }
+\`\`\`
 ---
 
 ### **ConditionalLogic Structure**

@@ -164,6 +164,10 @@ export const postDataIntoGoogleSheet = async (
         return (value as unknown as string[])?.join(', ');
       }
 
+      if (fieldType === 'file') {
+        return (value as unknown as { name: string; url: string }[]).map((f) => `${f?.name} : ${f?.url}`).join('\n\n');
+      }
+
       return value;
     }) as string[];
 
@@ -245,6 +249,16 @@ export const postDataIntoAirtable = async (
 
       if ((fieldType === 'checkbox' || fieldType === 'dropdown') && Array.isArray(value)) {
         return { ...acc, [column]: (value as unknown as string[])?.join(', ') };
+      }
+
+      if (fieldType === 'file') {
+        return {
+          ...acc,
+          [column]: (value as unknown as { name: string; url: string }[]).map((f) => ({
+            url: f?.url,
+            filename: f?.name,
+          })),
+        };
       }
 
       return { ...acc, [column]: value };

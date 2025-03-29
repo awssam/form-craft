@@ -27,7 +27,7 @@ const FileInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
 
   const dropZoneConfig = useMemo(
     () => ({
-      maxFiles: +field?.validation?.custom?.maxFiles?.value || (field?.allowMultiSelect ? 30 : 1),
+      maxFiles: +field?.validation?.custom?.maxFiles?.value || (field?.allowMultiSelect ? 10 : 1),
       maxSize: 1024 * 1024 * +(field?.validation?.custom?.maxFileSize?.value || 4),
       multiple: field?.allowMultiSelect,
       accept: ACCEPTED_FILE_TYPES_MAP,

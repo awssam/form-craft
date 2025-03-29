@@ -5,6 +5,7 @@ import { ArrowRightIcon, CheckCircle2, Sparkles, Layers, Database, BarChart3, Za
 import FeatureCard from './feature-card';
 import TemplateShowcase from './template-showcase';
 import Link from 'next/link';
+import { getAppOriginUrl } from '@/lib/utils';
 
 const LINKS = {
   githubProfile: 'https://github.com/Varadarajan-M',
@@ -13,6 +14,7 @@ const LINKS = {
   signin: '/sign-in',
   templates: '/templates',
   dashboard: '/',
+  aiFormBuilder: `/sign-in?redirect_url=${getAppOriginUrl()}?ai-form-builder=1`,
   signup: '/sign-up',
   portfolio: 'https://varadarajan-m.vercel.app',
 };
@@ -52,13 +54,13 @@ const LandingPage = () => {
 
         <div className="container mx-auto px-4 py-24 md:py-32 relative z-10">
           <div className="max-w-3xl mx-auto text-center mb-12">
-            <Link href={`${LINKS.dashboard}?ai-form-builder=1`}>
+            <Link href={LINKS.aiFormBuilder}>
               <Badge
                 variant="outline"
                 className="mb-4 px-3 py-1 gradient-border bg-orange-500/10 text-white font-normal"
               >
                 <Sparkles className="mr-1 h-3 w-3 text-yellow-650" /> <span className="font-bold mr-2">New: </span> AI
-                Form Builder is out now!!! <ArrowRightIcon className="ml-2 h-3 w-3" />
+                Form Builder with File Uploads is out now!!! <ArrowRightIcon className="ml-2 h-3 w-3" />
               </Badge>
             </Link>
             <h1 className="text-3xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
