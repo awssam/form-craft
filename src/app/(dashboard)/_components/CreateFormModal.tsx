@@ -67,7 +67,7 @@ const CreateFormModal = ({ open, setOpen, className }: CreateFormModalProps) => 
           </Button>
         </div>
       </DialogTrigger>
-      <DialogContent className="rounded-lg max-w-[95dvw] sm:max-w-[700px] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="rounded-lg max-w-[95dvw] sm:max-w-[700px] max-h-[90dvh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>New Form</DialogTitle>
           <DialogDescription>Choose how you want to create your form.</DialogDescription>

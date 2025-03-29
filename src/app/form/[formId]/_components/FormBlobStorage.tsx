@@ -5,7 +5,7 @@ type CloudinaryFileMap = Record<string, { name: string; url: string }>;
 interface StorageContextProps {
   allFiles: Record<string, File[]>;
   uploadedFileIds: React.MutableRefObject<Set<string>>;
-  updateFiles: (pageId: string, files: File[]) => void;
+  updateFiles: (fieldId: string, files: File[]) => void;
   cloudinaryFiles: Record<string, CloudinaryFileMap>;
   updateCloudinaryFiles: (fieldId: string, files: CloudinaryFileMap) => void;
 }
@@ -24,22 +24,24 @@ const FormBlobStorageProvider: React.FC<React.PropsWithChildren> = ({ children }
   const [cloudinaryFiles, setCloudinaryFiles] = useState<Record<string, CloudinaryFileMap>>({});
 
   const updateFiles = useCallback(
-    (pageId: string, files: File[]) => {
-      const newFiles = {} as Record<string, File[]>;
+    (fieldId: string, files: File[]) => {
+      const newFiles: Record<string, File[]> = {};
 
-      if (!allFiles[pageId] && Object.keys(allFiles).length === 0) {
-        newFiles[pageId] = files;
+      Object.entries(allFiles).forEach(([key, value]) => {
+        newFiles[key] = value;
+      });
+
+      if (!allFiles[fieldId]) {
+        newFiles[fieldId] = files;
       } else {
         Object.entries(allFiles).forEach(([key, value]) => {
-          if (key !== pageId) {
+          if (key !== fieldId) {
             newFiles[key] = value;
           } else {
             newFiles[key] = files;
           }
         });
       }
-
-      console.log('newFiles', newFiles);
 
       setAllFiles(newFiles);
     },

@@ -34,14 +34,7 @@ const uploadToCloudinary = async (files: File[]) => {
   Unique identifier for each file is the name
  */
 
-const FormFileUploadField = ({
-  field,
-  className,
-  formConfig,
-  control,
-  pageId,
-  actionDisabler,
-}: FieldProps) => {
+const FormFileUploadField = ({ field, className, formConfig, control, actionDisabler }: FieldProps) => {
   const { inputBorderColor, primaryTextColor, secondaryTextColor } = formConfig?.theme?.properties ?? {};
 
   const {
@@ -52,13 +45,13 @@ const FormFileUploadField = ({
     updateCloudinaryFiles,
   } = useStorageContext();
 
-  const files = useMemo(() => allFiles?.[pageId] ?? [], [allFiles, pageId]);
+  const files = useMemo(() => allFiles?.[field?.id] ?? [], [allFiles, field?.id]);
   const cloudinaryFiles = useMemo(
     () => cloudinaryFileMapByFieldId?.[field?.id] ?? {},
     [cloudinaryFileMapByFieldId, field?.id],
   );
 
-  const setFiles = updateFiles.bind(null, pageId);
+  const setFiles = updateFiles.bind(null, field?.id);
   const setCloudinaryFiles = updateCloudinaryFiles.bind(null, field?.id);
 
   const setValue = useFormContext().setValue;
