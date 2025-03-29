@@ -80,13 +80,13 @@ export default function TableDemo() {
     return (
       <>
         <TableHead className="">#</TableHead>
-        <TableHead className="">Date of Submission</TableHead>
+        <TableHead className="min-w-[200px]">Date of Submission</TableHead>
         {fieldIdsInOrder?.map((fieldId) => {
           const field = fieldEntites?.[fieldId];
 
           return (
             <>
-              <TableHead className="min-w-[150px]" key={field?.name}>
+              <TableHead className="min-w-[250px]" key={field?.name}>
                 {field?.label}
               </TableHead>
             </>
