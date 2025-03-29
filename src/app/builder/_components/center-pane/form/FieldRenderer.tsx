@@ -7,6 +7,7 @@ import FormTextareaInput from './fields/TextareaInput';
 import FormDateInput from './fields/DateInput';
 import FormDropdown from './fields/DropdownInput';
 import { Control } from 'react-hook-form';
+import FileUploaderInput from './fields/FileInput';
 
 interface FieldRendererProps {
   field: FieldEntity;
@@ -28,7 +29,8 @@ const FieldRenderer = (props: FieldRendererProps) => {
       return <FormRadioInput {...props} />;
     case 'dropdown':
       return <FormDropdown {...props} />;
-
+    case 'file':
+      return <FileUploaderInput {...props} />;
     default:
       return null;
   }

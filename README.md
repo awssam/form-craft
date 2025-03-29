@@ -1,12 +1,21 @@
 # FormCraft
 
-FormCraft is a powerful visual form builder that empowers you to create beautiful, responsive forms without writing a single line of code. With an intuitive drag-and-drop interface, advanced conditional logic, seamless integrations, and real-time analytics, FormCraft simplifies the form creation process—helping you capture data and drive conversions effortlessly.
+FormCraft is an AI powered visual form builder that empowers you to create beautiful, responsive forms without writing a single line of code. With an intuitive drag-and-drop interface, advanced conditional logic, seamless integrations, file uploads, and real-time analytics, FormCraft simplifies the form creation process—helping you capture data and drive conversions effortlessly.
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/your_username/FormCraft)
+[![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/Varadarajan-M/FormCraft)
 
 Experience Live at: https://form-craft-v1-beta.vercel.app
 
+
 ## Features
+
+### What's new?
+
+- **AI Form Builder:**  
+  Create your forms in seconds with all the validations and logic set for you with the new AI form builder.
+
+- **File Upload:**
+  The missing piece in forms - finally added it!!!🎉
 
 ### Form Creation and Customization
 

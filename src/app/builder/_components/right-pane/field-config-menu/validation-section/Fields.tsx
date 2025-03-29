@@ -92,8 +92,6 @@ export const createGenericSingleValueValidationComponent = ({
         },
       });
 
-      console.log('Selected field validation', selectedField?.label, '::', getUpdatedField(name, value));
-
       updateSelectedField(getUpdatedField(name, value) as unknown as FieldEntity);
     };
 
@@ -155,8 +153,8 @@ export const createGenericBinaryValidationComponent = ({
 
     const required = useMemo(
       () => ({
-        label: value ? 'Yes' : 'No',
-        value: value ? 'true' : 'false',
+        label: value === 'true' || value === true ? 'Yes' : 'No',
+        value: value === 'true' || value === true ? 'true' : 'false',
       }),
       [value],
     );
@@ -544,3 +542,41 @@ export const DropdownFieldContains = createContainsValidationComponent(
   'dropdown',
   'Dropdown should have this value selected',
 );
+
+export const FileUploadFieldRequired = createGenericBinaryValidationComponent({
+  label: 'Required',
+  fieldType: 'file',
+  validatorKey: 'required',
+  isRequired: true,
+  helperText: 'If Yes, this field must be filled out.',
+});
+
+export const FileUploadFieldMaxFileSize = createGenericSingleValueValidationComponent({
+  label: 'Max File Size Per File',
+  fieldType: 'file',
+  validatorKey: 'maxFileSize',
+  placeholder: 'Eg: 5 - This should be in MB',
+  cb: (v) => +v > 0,
+  inputType: 'number',
+  helperText: 'Maximum file size allowed PER FILE in MB.',
+});
+
+export const FileUploadFieldMaxCount = createGenericSingleValueValidationComponent({
+  label: 'Max Count',
+  fieldType: 'file',
+  validatorKey: 'maxCount',
+  placeholder: 'Eg: 4',
+  cb: (v) => +v > 0,
+  inputType: 'number',
+  helperText: 'Maximum number of files that can be uploaded.',
+});
+
+export const FileUploadFieldMinCount = createGenericSingleValueValidationComponent({
+  label: 'Min Count',
+  fieldType: 'file',
+  validatorKey: 'minCount',
+  placeholder: 'Eg: 2',
+  cb: (v) => +v > 0,
+  inputType: 'number',
+  helperText: 'Minimum number of files that must be uploaded.',
+});

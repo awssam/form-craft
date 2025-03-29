@@ -1,6 +1,6 @@
 import { CheckboxIcon } from '@radix-ui/react-icons';
 import { SelectIcon } from '@radix-ui/react-select';
-import { CalendarIcon, CircleDot, FormInputIcon, Notebook, TextIcon } from 'lucide-react';
+import { CalendarIcon, CircleDot, File, FormInputIcon, Notebook, TextIcon } from 'lucide-react';
 
 const sections = [
   {
@@ -30,6 +30,13 @@ const sections = [
         icon: <CalendarIcon className="w-4 h-4 text-white/90" />,
         description: 'A field for selecting a date from a calendar.',
         type: 'date',
+      },
+      {
+        name: 'File Upload',
+        icon: <File className="w-4 h-4 text-white/90" />,
+        description: 'A field for uploading files.',
+        type: 'file',
+        featureTag: 'fileUpload',
       },
       {
         name: 'Dropdown',

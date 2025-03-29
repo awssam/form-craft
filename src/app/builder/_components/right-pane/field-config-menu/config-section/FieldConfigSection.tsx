@@ -33,7 +33,13 @@ const FieldConfigSection = () => {
             <FieldOptionsForm />
           </>
         );
-
+      case 'file':
+        return (
+          <>
+            <FieldHelperText />
+            <FieldAllowMultiSelect />
+          </>
+        );
       default:
         return <FieldHelperText />;
     }
@@ -51,7 +57,7 @@ const FieldConfigSection = () => {
       <FieldWidth />
       <FieldLabel />
       <FieldPlaceholder />
-      <FieldDefaultValue />
+      {selectedField?.type !== 'file' && <FieldDefaultValue />}
       {renderFieldSpecificConfig()}
     </FormConfigSection>
   );

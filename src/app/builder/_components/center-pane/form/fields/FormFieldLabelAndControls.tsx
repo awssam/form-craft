@@ -78,7 +78,6 @@ const FormFieldLabelAndControls = ({
       id: field?.id,
       label: value,
     });
-    console.log('selectedField?.id', selectedField?.id, field?.id);
     if (selectedField?.id === field?.id) {
       setSelectedField({
         ...selectedField,
@@ -96,7 +95,7 @@ const FormFieldLabelAndControls = ({
           <FormLabel htmlFor={field?.id} className="relative flex " onClick={onClick}>
             <span>{field.label || <span className="text-muted-foreground">{"What's this field called?"}</span>}</span>
             <span className="sr-only">{field?.helperText}</span>
-            {field?.validation?.custom?.required?.value && (
+            {field?.validation?.custom?.required?.value !== 'false' && !!field?.validation?.custom?.required?.value && (
               <sup className="top-[-0.1em] ml-[1px] font-bold text-red-500 text-sm">*</sup>
             )}
           </FormLabel>

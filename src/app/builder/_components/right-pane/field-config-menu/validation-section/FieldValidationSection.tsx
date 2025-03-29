@@ -29,6 +29,10 @@ import {
   CheckboxFieldContains,
   TextFieldEquals,
   DropdownFieldContains,
+  FileUploadFieldRequired,
+  FileUploadFieldMaxFileSize,
+  FileUploadFieldMaxCount,
+  FileUploadFieldMinCount,
 } from './Fields';
 import { Button } from '@/components/ui/button';
 import { useSelectedFieldStore } from '@/zustand/store';
@@ -90,6 +94,14 @@ const FieldValidationSection = () => {
           CheckboxFieldMinCount,
           CheckboxFieldMaxCount,
           DropdownFieldContains,
+        );
+        break;
+      case 'file':
+        fieldComponents.push(
+          FileUploadFieldRequired,
+          FileUploadFieldMinCount,
+          FileUploadFieldMaxCount,
+          FileUploadFieldMaxFileSize,
         );
         break;
       default:

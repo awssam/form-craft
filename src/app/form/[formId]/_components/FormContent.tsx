@@ -54,6 +54,8 @@ const FormContent = ({
     },
   });
 
+  const [shouldDisableActions, setShouldDisableActions] = React.useState(false);
+
   const formValues = useWatch({ control: form.control });
 
   const fieldEntitiesWithNameKeys = useMemo(() => {
@@ -109,12 +111,14 @@ const FormContent = ({
           control={form.control}
           formValuesByPageMap={formValuesByPageMap}
           fieldVisibilityMap={fieldVisibilityMap}
+          actionDisabler={setShouldDisableActions}
         />
         <FormActions
           isFormSubmitting={isFormSubmitting}
           activePageId={activePageId}
           formConfig={formConfig}
           onActivePageIdChange={onActivePageIdChange}
+          shouldDisableActions={shouldDisableActions}
         />
       </form>
     </Form>
@@ -127,12 +131,14 @@ const FormFieldContainer = ({
   control,
   formValuesByPageMap,
   fieldVisibilityMap,
+  actionDisabler,
 }: {
   activePage: PageEntity;
   formConfig: FormProps['formConfig'];
   control: UseFormReturn['control'];
   formValuesByPageMap: FormContentProps['formValuesByPageMap'];
   fieldVisibilityMap?: FormContentProps['fieldVisibilityMap'];
+  actionDisabler?: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const pageFields = activePage?.fields;
   const activePageId = activePage?.id;
@@ -150,6 +156,7 @@ const FormFieldContainer = ({
               control={control}
               formValuesByPageMap={formValuesByPageMap}
               pageId={activePageId}
+              actionDisabler={actionDisabler}
             />
           ),
       )}
@@ -162,7 +169,10 @@ export const FormActions = ({
   formConfig,
   onActivePageIdChange,
   isFormSubmitting,
-}: Pick<FormContentProps, 'activePageId' | 'formConfig' | 'onActivePageIdChange' | 'isFormSubmitting'>) => {
+  shouldDisableActions,
+}: Pick<FormContentProps, 'activePageId' | 'formConfig' | 'onActivePageIdChange' | 'isFormSubmitting'> & {
+  shouldDisableActions?: boolean;
+}) => {
   const isFirstPage = activePageId === formConfig?.pages?.[0];
   const isLastPage = activePageId === formConfig?.pages?.[formConfig?.pages?.length - 1];
 
@@ -177,7 +187,7 @@ export const FormActions = ({
           <Button
             type="button"
             variant={'secondary'}
-            disabled={isFirstPage || isFormSubmitting}
+            disabled={isFirstPage || isFormSubmitting || shouldDisableActions}
             onClick={() => onActivePageIdChange(previousPageId)}
             size={'default'}
           >
@@ -185,7 +195,7 @@ export const FormActions = ({
           </Button>
         )}
 
-        <Button type="submit" variant={'default'} disabled={isFormSubmitting} size={'default'}>
+        <Button type="submit" variant={'default'} disabled={isFormSubmitting || shouldDisableActions} size={'default'}>
           {isLastPage ? 'Submit' : 'Next'}
           {isLastPage && isFormSubmitting && <LoaderCircle className="ml-2 w-4 h-4 animate-spin" />}
         </Button>

@@ -97,6 +97,7 @@ const FieldConditionalLogicSection = () => {
     updateConditionalLogic(index, {
       operator: selectedOperator?.value as ConditionalLogicOperator,
       operatorType: selectedOperator?.type as CustomValidationType,
+      // ...(selectedOperator?.type === 'binary' && { value: true }),
     });
   };
 

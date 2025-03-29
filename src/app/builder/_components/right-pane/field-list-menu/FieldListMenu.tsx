@@ -50,6 +50,7 @@ const FieldListMenu = () => {
           name={field.name}
           type={field.type}
           description={field.description}
+          featureTag={field?.featureTag}
           onClick={handleAddField}
         />
       ))}

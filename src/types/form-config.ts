@@ -50,7 +50,7 @@ export interface PageEntity {
   fields: string[]; // Array of field IDs to maintain the order of appearance of fields
 }
 
-type ValueType = string | number | Date | boolean | string[];
+type ValueType = string | number | Date | boolean | string[] | File[];
 
 export interface FieldEntity {
   id: string; // Unique identifier for the field,
@@ -66,10 +66,10 @@ export interface FieldEntity {
   conditionalLogic?: ConditionalLogic; // Conditional logic for showing/hiding the field (optional)
   width: FormFieldWidth;
   value?: ValueType;
-  allowMultiSelect?: boolean;
+  allowMultiSelect?: boolean; // Allow multiple selections for supported fields
 }
 
-export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea';
+export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea' | 'file';
 
 export type CustomValidationType = 'withValue' | 'binary';
 

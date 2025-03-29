@@ -107,7 +107,7 @@ export const FieldPlaceholder = memo(() => {
 FieldPlaceholder.displayName = 'FieldPlaceholder';
 
 export const FieldLabel = memo(() => {
-  const { handlePropertyChange } = useSelectedFieldUpdate(100);
+  const { handlePropertyChange } = useSelectedFieldUpdate(0);
   const selectedField = useSelectedField();
 
   return (

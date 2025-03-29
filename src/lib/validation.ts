@@ -18,15 +18,18 @@ export const CUSTOM_FIELD_VALIDATIONS = {
         return val?.endsWith(endsWith) || msg;
       },
       minLength: (minLength: number, msg?: string) => (val: string) => {
+        if (+minLength < 1) return true;
         return val?.length >= +minLength || msg;
       },
       maxLength: (maxLength: number, msg?: string) => (val: string) => {
         return val?.length <= +maxLength || msg;
       },
       contains: (substring: string, msg?: string) => (val: string) => {
+        if (!substring || substring?.trim()?.length === 0) return true;
         return val?.includes(substring) || msg;
       },
       matchesRegex: (pattern: RegExp, msg?: string) => (val: string) => {
+        if (!(pattern instanceof RegExp)) pattern = new RegExp(pattern);
         return pattern?.test(val) || msg;
       },
     },
@@ -179,6 +182,35 @@ export const CUSTOM_FIELD_VALIDATIONS = {
     binary: {
       required: (msg: string) => (val: string | string[]) => {
         return val?.length > 0 || msg;
+      },
+    },
+  },
+
+  file: {
+    binary: {
+      required: (msg: string) => (val: File[]) => {
+        if (val?.length === 0 || val?.[0]?.size === 0) return msg;
+        return (val?.length > 0 && val?.[0]?.size > 0) || msg;
+      },
+    },
+    withValue: {
+      maxFileSize: (maxFileSize: number, msg?: string) => (val: File[]) => {
+        console.log('val', val, maxFileSize);
+        if (val?.length === 0 || val?.[0]?.size === 0) return true;
+
+        return val?.some((f) => {
+          if (+f?.size > +maxFileSize * 1024 * 1024) {
+            return msg;
+          }
+          return true;
+        });
+      },
+      minCount: (minCount: number, msg?: string) => (val: File[]) => {
+        if (minCount === 0) return true;
+        return val?.length >= +minCount || msg;
+      },
+      maxCount: (maxCount: number, msg?: string) => (val: File[]) => {
+        return val?.length <= +maxCount || msg;
       },
     },
   },

@@ -43,6 +43,15 @@ export const createNewFormField = ({
       baseField.placeholder = 'Select a date...';
       baseField.defaultValue = undefined;
 
+    case 'file':
+      baseField.placeholder = 'Click to upload or drag and drop';
+      baseField.defaultValue = undefined;
+      baseField.value = undefined;
+      baseField.allowMultiSelect = false;
+      baseField.helperText = 'Use this area to hint users about any rules';
+
+      break;
+
     default:
       baseField.helperText = `This is a ${type} field`;
       break;
@@ -86,6 +95,16 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
       delete newField['defaultValue'];
       delete newField['value'];
       break;
+    case 'file':
+      newField.placeholder = 'Click to upload or drag and drop';
+      newField.allowMultiSelect = false;
+      newField.helperText = 'Use this area to hint users about any rules';
+
+      delete newField['defaultValue'];
+      delete newField['value'];
+
+      break;
+
     default:
       break;
   }
@@ -93,18 +112,12 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
   return newField;
 };
 
-export const Field_Type_Options = [
-  'text',
-  'date',
-  'radio',
-  'checkbox',
-  'dropdown',
-  // "file",
-  'textarea',
-]?.map((type) => ({
-  label: type?.replace(type?.charAt(0), type?.charAt(0)?.toUpperCase()),
-  value: type,
-}));
+export const Field_Type_Options = ['text', 'date', 'radio', 'checkbox', 'dropdown', 'file', 'textarea']?.map(
+  (type) => ({
+    label: type?.replace(type?.charAt(0), type?.charAt(0)?.toUpperCase()),
+    value: type,
+  }),
+);
 
 export const createNewForm = (userId: string | null): FormConfig | null => {
   const defaultField = createNewFormField({
@@ -161,3 +174,32 @@ export const loadFormConfigFromLocalStorage = () => {
   const formConfig = localStorage.getItem('formConfig');
   return formConfig ? JSON.parse(formConfig) : null;
 };
+
+export const ACCEPTED_FILE_TYPES_MAP = {
+  'image/*': ['.jpg', '.jpeg', '.png', '.gif'],
+  'application/pdf': ['.pdf'],
+  'application/msword': ['.doc', '.docx'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+  'audio/*': ['.mp3', '.wav', '.ogg'],
+  'video/*': ['.mp4', '.avi', '.mov'],
+};
+
+export const READABLE_FILE_TYPE_MAP = {
+  'image/*': 'Image',
+  'application/pdf': 'PDF',
+  'application/msword': 'Word',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': 'Docx',
+  'audio/*': 'Audio',
+  'video/*': 'Video',
+};
+
+export const REVERSE__FILE_MAP = Object.keys(ACCEPTED_FILE_TYPES_MAP)?.reduce((acc, key) => {
+  const value = READABLE_FILE_TYPE_MAP[key as keyof typeof READABLE_FILE_TYPE_MAP];
+  acc[value as string] = key;
+  return acc;
+}, {} as Record<string, string>);
+
+export const ACCEPTED_FILE_TYPES_OPTIONS = Object.entries(ACCEPTED_FILE_TYPES_MAP).map(([key, value]) => ({
+  label: READABLE_FILE_TYPE_MAP[key as keyof typeof READABLE_FILE_TYPE_MAP],
+  value: value?.join(', '),
+}));

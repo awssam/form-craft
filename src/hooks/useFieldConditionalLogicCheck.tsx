@@ -37,7 +37,7 @@ const useFieldConditionalLogicCheckGeneric = (
 
           const isValid = validationFn(conditionalFieldValue);
 
-          conditions.push(isValid);
+          conditions.push(isValid === true);
         });
 
         if (operator === 'OR') {

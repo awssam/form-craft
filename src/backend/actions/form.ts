@@ -130,7 +130,6 @@ export const updateFormConfigAction = async (id: string, update: Partial<FormCon
     };
   } catch (error) {
     if (error instanceof Error) return { success: false, error: error?.message };
-
     return {
       success: false,
       error: error,

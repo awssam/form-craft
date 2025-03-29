@@ -7,6 +7,7 @@ import FormDropdownField from './Dropdown';
 import FormRadioField from './Radio';
 import FormCheckboxField from './Checkbox';
 import FormDatePickerField from './Datepicker';
+import FileUploadField from './FileUpload';
 
 interface FieldRendererProps {
   field: FieldEntity;
@@ -14,6 +15,7 @@ interface FieldRendererProps {
   control: UseFormReturn['control'];
   formValuesByPageMap?: { [key: string]: FieldValues };
   pageId: string;
+  actionDisabler?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type FieldProps = FieldRendererProps & GenericProps;
@@ -25,6 +27,7 @@ const COMPONENT_MAP: { [key in FieldType]?: React.FC<FieldProps> } = {
   radio: FormRadioField,
   checkbox: FormCheckboxField,
   date: FormDatePickerField,
+  file: FileUploadField,
 };
 
 const FieldRenderer = (props: FieldRendererProps) => {
