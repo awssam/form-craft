@@ -25,7 +25,7 @@ import { cn } from '@/lib/utils';
 import { FieldEntity } from '@/types/form-config';
 import { ReloadIcon } from '@radix-ui/react-icons';
 import { formatDate } from 'date-fns';
-import { SlashIcon } from 'lucide-react';
+import { ExternalLinkIcon, SlashIcon } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useMemo } from 'react';
@@ -41,8 +41,26 @@ const FieldRenderer = ({ field, value }: { field: FieldEntity; value: unknown })
     case 'textarea':
       return <CustomTooltip tooltip={value as string}>{(value as string)?.slice(0, 50)}</CustomTooltip>;
 
+    case 'file':
+      return (
+        <div className="flex flex-wrap gap-2">
+          {(value as { name: string; url: string }[]).map((f, i) => (
+            <a
+              className="flex items-center gap-1"
+              href={f?.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              key={f?.name}
+            >
+              {f?.name || 'File' + (i + 1)} {f?.url && <ExternalLinkIcon className="w-4 h-4" />}
+            </a>
+          ))}
+        </div>
+      );
+      break;
+
     default:
-      return <>{value}</>;
+      return <> {value}</>;
   }
 };
 

@@ -5,6 +5,7 @@ import type { CustomValidationType, FieldType, FormConfig } from '@/types/form-c
 import React, { useCallback, useEffect, useMemo } from 'react';
 import FormContent from './FormContent';
 import FormHeader from './FormHeader';
+import FormBlobStorageProvider from './FormBlobStorage';
 import { toast } from 'sonner';
 import { FieldValues } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
@@ -117,6 +118,7 @@ const Form = ({ formConfig: config }: FormProps) => {
       fieldType: FieldType,
       validationType: CustomValidationType,
       validatorKey: string,
+      valueToCheck?: string,
     ) => {
       const field = fieldEntities?.[fieldId];
       const fieldValidations =
@@ -134,6 +136,12 @@ const Form = ({ formConfig: config }: FormProps) => {
 
       if (validationType === 'binary') {
         args = [customValidation?.message];
+
+        if (valueToCheck === 'false' || !valueToCheck) {
+          return {
+            [validatorKey]: () => true,
+          };
+        }
       }
 
       const validationFunctor = validationMap?.[validatorKey as keyof typeof validationMap] as (
@@ -163,9 +171,11 @@ const Form = ({ formConfig: config }: FormProps) => {
 
         Object.entries(field?.validation?.custom || {})?.forEach(([key, value]) => {
           const fieldType = field?.type as FieldType;
+          const fieldValueToValidate = value?.value;
+
           fieldUpdates.validation.validate = {
             ...fieldUpdates.validation.validate,
-            ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key),
+            ...getFieldUpdateWithCorrectValidationType(fieldId, fieldType, value?.type, key, fieldValueToValidate),
           };
         });
 
@@ -213,18 +223,21 @@ const Form = ({ formConfig: config }: FormProps) => {
       }}
     >
       <FormHeader formConfig={formConfig} currentPageNumber={currentPageNumber} />
-      <FormContent
-        key={activePageId} // should destroy and re-render when activePageId changes
-        formConfig={formConfig}
-        formValuesByPageMap={formValuesByPage}
-        fieldVisibilityMap={fieldVisibilityMap}
-        activePageId={activePageId}
-        onActivePageIdChange={handleActivePageIdChange}
-        onFormSubmit={handleFormSubmit}
-        onPageFieldChange={setFieldEntities}
-        onFormValueChange={setFormValuesByPage}
-        isFormSubmitting={isSubmitting}
-      />
+      <FormBlobStorageProvider>
+        <FormContent
+          key={activePageId} // should destroy and re-render when activePageId changes
+          formConfig={formConfig}
+          formValuesByPageMap={formValuesByPage}
+          fieldVisibilityMap={fieldVisibilityMap}
+          activePageId={activePageId}
+          onActivePageIdChange={handleActivePageIdChange}
+          onFormSubmit={handleFormSubmit}
+          onPageFieldChange={setFieldEntities}
+          onFormValueChange={setFormValuesByPage}
+          isFormSubmitting={isSubmitting}
+        />
+      </FormBlobStorageProvider>
+
       {/* <FormFooter /> */}
     </section>
   );

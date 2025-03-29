@@ -221,7 +221,7 @@ export const FileUploaderContent = forwardRef<HTMLDivElement, React.HTMLAttribut
 
     return (
       // eslint-disable-next-line jsx-a11y/aria-props
-      <div className={cn('w-full px-1')} ref={containerRef} aria-description="content file holder">
+      <div className={cn('w-full px-1 max-h-[250px] overflow-auto')} ref={containerRef}>
         <div
           {...props}
           ref={ref}
@@ -249,7 +249,7 @@ export const FileUploaderItem = forwardRef<HTMLDivElement, { index: number } & R
         ref={ref}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'h-6 p-1 justify-between cursor-pointer relative',
+          ' py-2 px-1 justify-between whitespace-break-spaces break-all h-max cursor-pointer relative',
           className,
           isSelected ? 'bg-muted' : '',
         )}
