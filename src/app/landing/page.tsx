@@ -59,8 +59,8 @@ const LandingPage = () => {
                 variant="outline"
                 className="mb-4 px-3 py-1 gradient-border bg-orange-500/10 text-white font-normal"
               >
-                <Sparkles className="mr-1 h-3 w-3 text-yellow-650" /> <span className="font-bold mr-2">New: </span> AI
-                Form Builder with File Uploads is out now!!! <ArrowRightIcon className="ml-2 h-3 w-3" />
+                <Sparkles className="mr-1 h-3 w-3 text-yellow-650 sm:inline-block hidden" />
+                AI Form Builder with File Uploads is out now!!! <ArrowRightIcon className="ml-2 h-3 w-3" />
               </Badge>
             </Link>
             <h1 className="text-3xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-500">
@@ -279,12 +279,12 @@ const LandingPage = () => {
               <h3 className="font-semibold mb-4 text-white">Resources</h3>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+                  <a href={`${LINKS.projectRepo}/issues`} className="text-zinc-400 hover:text-white transition-colors">
                     Help Center
                   </a>
                 </li>
                 <li>
-                  <a href="#" className="text-zinc-400 hover:text-white transition-colors">
+                  <a href={`${LINKS.projectRepo}/issues`} className="text-zinc-400 hover:text-white transition-colors">
                     Contact Support
                   </a>
                 </li>
