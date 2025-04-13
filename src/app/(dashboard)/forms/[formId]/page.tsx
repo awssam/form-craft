@@ -44,9 +44,9 @@ const FieldRenderer = ({ field, value }: { field: FieldEntity; value: unknown })
     case 'file':
       return (
         <div className="flex flex-wrap gap-2">
-          {(value as { name: string; url: string }[]).map((f, i) => (
+          {(value as { name: string; url: string }[])?.map((f, i) => (
             <a
-              className="flex items-center gap-1"
+              className="flex items-center gap-1 text-underline text-blue-500 hover:text-blue-600"
               href={f?.url}
               target="_blank"
               rel="noopener noreferrer"
@@ -60,7 +60,7 @@ const FieldRenderer = ({ field, value }: { field: FieldEntity; value: unknown })
       break;
 
     default:
-      return <> {value}</>;
+      return <>{value}</>;
   }
 };
 
