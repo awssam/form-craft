@@ -15,6 +15,8 @@ import { getAllFonts } from "@/data-fetching/functions/google";
 import { Skeleton } from "@/components/ui/skeleton";
 import { memo, useCallback, useMemo } from "react";
 import useDynamicFontLoader from "@/hooks/useDynamicFontLoader";
+import useFeatureAnnouncer from "@/hooks/useFeatureAnnouncer";
+import { NewFeatureBadge } from "@/components/common/FeatureReleaseBadge";
 
 const useFormThemeUpdater = () => {
   const theme = useFormProperty("theme")!;
@@ -122,6 +124,8 @@ const useFonts = () => {
 };
 
 const FormFontPicker = () => {
+  const hasAnnouncedFeatureTag = useFeatureAnnouncer("font-family");
+
   const { data, isLoading } = useFonts();
 
   const updateFormStyles = useFormActionProperty("updateFormStyles");
@@ -144,7 +148,18 @@ const FormFontPicker = () => {
   useDynamicFontLoader(fontFamily);
 
   return (
-    <FormField label="Font Family" id="font">
+    <FormField
+      label="Font Family"
+      id="font"
+      renderLabelExtraContent={() =>
+        !hasAnnouncedFeatureTag ? (
+          <NewFeatureBadge
+            className="ml-3 px-3 py-0.1 w-fit"
+            childrenClass="text-[12px]"
+          />
+        ) : null
+      }
+    >
       {isLoading && <Skeleton className="w-full h-8" />}
 
       {!isLoading && (
