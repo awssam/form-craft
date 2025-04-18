@@ -56,6 +56,9 @@ export default function RootLayout({
   return (
     <ClerkProvider appearance={CLERK_APPEARANCE_CONFIG}>
       <html lang="en">
+        <head>
+          <link id='font-link' rel='stylesheet' />
+        </head>
         <body className={`bg-black antialiased dark overflow-x-hidden overflow-y-auto`}>
           <ReactQueryProvider>
             {children}

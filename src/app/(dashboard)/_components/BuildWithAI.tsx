@@ -22,9 +22,7 @@ const useGeminiChat = () => {
         body: JSON.stringify({ prompt }),
       });
       const data = await res.json();
-
-      console.log('data', data);
-
+      
       if (data?.content) {
         return data?.content;
       } else {
@@ -78,7 +76,7 @@ const BuildWithAI = () => {
         <span className="flex items-center gap-2">
           Build with AI ✨{' '}
           {!hasAnnouncedAiFormGenFeature && (
-            <NewFeatureBadge className="w-fit px-3 py-0.5" childrenClass="text-[10px]" />
+            <NewFeatureBadge className="px-3 py-0.5 w-fit" childrenClass="text-[10px]" />
           )}
         </span>
       }
@@ -86,26 +84,26 @@ const BuildWithAI = () => {
       description="Describe what you need, and we wll generate a form for you instantly"
       className="bg-gradient-to-b from-black via-[#101316] to-[#1f1f23] w-full"
     >
-      <FormField label="Describe what you need" id="description" className="gradient-text-dark font-normal text-sm">
+      <FormField label="Describe what you need" id="description" className="font-normal gradient-text-dark text-sm">
         <AnimatedPromptTextarea placeholders={examplePrompts} onValueChange={setValue} />
-        <small className="text-xs text-muted-foreground">
+        <small className="text-muted-foreground text-xs">
           Tip💡 : Provide details like fields, validation rules, and layout preferences for better results.
         </small>
       </FormField>
       <Button
         variant={'default'}
-        className="w-full flex items-center mt-4"
+        className="flex items-center mt-4 w-full"
         onClick={handlePromptSubmit}
         disabled={isPending}
       >
         {!isPending && (
           <>
-            Generate with AI <Sparkles className="ml-2 h-4 w-4" color="#000" />{' '}
+            Generate with AI <Sparkles className="ml-2 w-4 h-4" color="#000" />{' '}
           </>
         )}
         {isPending && (
           <>
-            AI is working... <Loader2 className="ml-2 animate-spin h-4 w-4" />
+            AI is working... <Loader2 className="ml-2 w-4 h-4 animate-spin" />
           </>
         )}
       </Button>

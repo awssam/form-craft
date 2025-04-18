@@ -117,8 +117,6 @@ const FormFileUploadField = ({ field, className, formConfig, control, actionDisa
         uploadTrackerRef.current.add(file.name);
       }
 
-      console.log('Updated cloudinary map =>>>', updatedCloudinaryMap);
-
       // Update state
       setFiles(selectedFiles);
       setCloudinaryFiles(updatedCloudinaryMap);
@@ -139,13 +137,13 @@ const FormFileUploadField = ({ field, className, formConfig, control, actionDisa
         <FormItem className={cn('flex flex-col gap-4 space-y-0', className, 'hover:bg-transparent')}>
           <Label
             htmlFor={field?.id}
-            className="flex gap-3 text-sm font-semibold md:text-[12px]"
+            className="flex gap-3 font-semibold md:text-[12px] text-sm"
             style={{ color: primaryTextColor }}
           >
             <span className="relative">
               {field.label}
               {field?.validation?.custom?.required?.value && (
-                <sup className="absolute top-[-0.2em] right-[-8px] ml-[1px] font-bold text-red-500 text-sm inline">
+                <sup className="inline top-[-0.2em] right-[-8px] absolute ml-[1px] font-bold text-red-500 text-sm">
                   *
                 </sup>
               )}
@@ -156,20 +154,20 @@ const FormFileUploadField = ({ field, className, formConfig, control, actionDisa
               value={files}
               onValueChange={(files) => handleFileChange(files)}
               dropzoneOptions={dropZoneConfig}
-              className="relative bg-background rounded-lg p-2"
+              className="relative bg-background p-2 rounded-lg"
             >
               <FileInput
-                className="outline-dashed outline-2 outline-offset-1"
+                className="outline-2 outline-dashed outline-offset-1"
                 style={{ outlineColor: inputBorderColor, borderColor: inputBorderColor }}
               >
-                <div className="flex items-center justify-center gap-1 flex-col pt-3 pb-4 w-full ">
+                <div className="flex flex-col justify-center items-center gap-1 pt-3 pb-4 w-full">
                   {isUploading ? (
-                    <Loader2 className="animate-spin ml-2 h-8 w-8" />
+                    <Loader2 className="ml-2 w-8 h-8 animate-spin" />
                   ) : (
                     <FileSvgDraw style={{ color: primaryTextColor }} />
                   )}
                   <p
-                    className="mb-1 text-xs md:text-sm mx-auto max-w-[80%] text-center"
+                    className="mx-auto mb-1 max-w-[80%] text-xs md:text-sm text-center"
                     style={{ color: primaryTextColor }}
                   >
                     <span className="font-semibold">
@@ -177,7 +175,7 @@ const FormFileUploadField = ({ field, className, formConfig, control, actionDisa
                     </span>
                   </p>
                   {!isUploading && (
-                    <p className="text-xs mx-auto text-center max-w-[80%]" style={{ color: primaryTextColor }}>
+                    <p className="mx-auto max-w-[80%] text-xs text-center" style={{ color: primaryTextColor }}>
                       {Object.values(ACCEPTED_FILE_TYPES_MAP)
                         .flatMap((d) => d?.join(', '))
                         .join(', ')}
@@ -189,7 +187,7 @@ const FormFileUploadField = ({ field, className, formConfig, control, actionDisa
                 <FormMessage style={{ color: secondaryTextColor }} className="flex-1">
                   {field?.helperText}
                 </FormMessage>
-                <span style={{ color: secondaryTextColor }} className="text-[10px] font-semibold ml-auto">
+                <span style={{ color: secondaryTextColor }} className="ml-auto font-semibold text-[10px]">
                   Max size per file: {field?.validation?.custom?.maxFileSize?.value || 4} MB
                 </span>
               </div>
@@ -197,16 +195,16 @@ const FormFileUploadField = ({ field, className, formConfig, control, actionDisa
                 {files &&
                   files?.map((file: unknown, i) => (
                     <FileUploaderItem key={i} index={i} className="">
-                      <Paperclip className="h-4 w-4 stroke-current" style={{ color: primaryTextColor }} />
+                      <Paperclip className="stroke-current w-4 h-4" style={{ color: primaryTextColor }} />
                       <a
                         /* @ts-expect-error: error property doesn't exist */
                         href={cloudinaryFiles[file?.name]?.url || file?.url}
                         target="_blank"
                         style={{ color: primaryTextColor }}
-                        className="max-w-[85%] overflow-hidden flex gap-1 items-center text-ellipsis"
+                        className="flex items-center gap-1 max-w-[85%] overflow-hidden text-ellipsis"
                       >
                         {/* @ts-expect-error: error property doesn't exist */}
-                        {file?.name || file?.url} {file?.url && <ExternalLink className="h-4 w-4" />}
+                        {file?.name || file?.url} {file?.url && <ExternalLink className="w-4 h-4" />}
                       </a>
                     </FileUploaderItem>
                   ))}

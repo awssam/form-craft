@@ -195,7 +195,6 @@ export const CUSTOM_FIELD_VALIDATIONS = {
     },
     withValue: {
       maxFileSize: (maxFileSize: number, msg?: string) => (val: File[]) => {
-        console.log('val', val, maxFileSize);
         if (val?.length === 0 || val?.[0]?.size === 0) return true;
 
         return val?.some((f) => {

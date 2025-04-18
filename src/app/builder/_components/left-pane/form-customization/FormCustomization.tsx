@@ -1,9 +1,16 @@
-'use client';
+"use client";
 
-import { Brush } from 'lucide-react';
-import FormConfigSection from '@/components/common/FormConfigSection';
+import { Brush } from "lucide-react";
+import FormConfigSection from "@/components/common/FormConfigSection";
 
-import { FormFontPrimaryColor, FormFontSecondaryColor, FormThemePicker } from './fields';
+import fields from "./fields";
+
+const {
+  FormFontPicker,
+  FormThemePicker,
+  FormFontPrimaryColor,
+  FormFontSecondaryColor,
+} = fields;
 
 const FormCustomization = () => {
   return (
@@ -12,8 +19,9 @@ const FormCustomization = () => {
       title="Form Appearance"
       subtitle="Make your form look like your brand."
     >
-      <div className="flex flex-col gap-3 border-input bg-background px-3 py-5 border border-dashed rounded-md min-w-100">
+      <div className="flex flex-col gap-3 bg-background px-3 py-5 border border-input border-dashed rounded-md min-w-100">
         <FormThemePicker />
+        <FormFontPicker />
         <FormFontPrimaryColor />
         <FormFontSecondaryColor />
       </div>

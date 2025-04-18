@@ -128,8 +128,6 @@ export const useAutoSaveFormConfig = () => {
   useEffect(() => {
     if (formConfig?.createdBy === 'SYSTEM' || !hasUserInteractedWithSite) return; // Don't auto save templates
 
-    console.log('update triggered');
-
     let timerId = timer?.current as NodeJS.Timeout;
 
     if (timerId) clearTimeout(timerId);
@@ -151,10 +149,6 @@ export const useAutoSaveFormConfig = () => {
 
       const toastId = toast.loading('Saving changes...');
       const updatedFormConfig = { ...formConfig, fieldEntities: fieldEntitiesWithoutValidationFns };
-
-      console.info({
-        updatedFormConfig,
-      });
 
       if (formConfig)
         updateFormMutation({

@@ -123,7 +123,4 @@ export interface FormSettings {
 
 export interface FormStyles {
   fontFamily?: string;
-  backgroundColor?: string;
-  fontPrimaryColor?: string;
-  fontSecondaryColor?: string;
 }

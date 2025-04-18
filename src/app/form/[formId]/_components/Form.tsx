@@ -18,6 +18,7 @@ import { useCreateFormSubmissionMutation } from '@/data-fetching/client/formSubm
 
 import { CUSTOM_FIELD_VALIDATIONS } from '@/lib/validation';
 import { useCreateActivityMutation } from '@/data-fetching/client/activity';
+import useDynamicFontLoader from '@/hooks/useDynamicFontLoader';
 
 export interface FormProps {
   formConfig: FormConfig;
@@ -34,6 +35,8 @@ const Form = ({ formConfig: config }: FormProps) => {
   const [formConfig, setFormConfig] = React.useState(config);
   const [activePageId, setActivePageId] = React.useState(formConfig?.pages?.[0]);
   const [fieldEntities, setFieldEntities] = React.useState(config?.fieldEntities);
+
+  const fontFamily = config?.styles?.fontFamily || "Poppins";
 
   const [isSubmissionSuccess, setIsSubmissionSuccess] = React.useState(false);
 
@@ -196,15 +199,16 @@ const Form = ({ formConfig: config }: FormProps) => {
   }, [config]);
 
   useFieldConditionalLogicCheckGeneric(allFields!, fieldEntities, handleFieldVisibilityChange);
+  useDynamicFontLoader(fontFamily);
 
   if (isSubmissionSuccess) {
     return (
       <section
         className={'m-auto relative z-[2] text-center grid gap-1'}
-        style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor }}
+        style={{ backgroundColor: formConfig?.theme?.properties?.formBackgroundColor, fontFamily }}
       >
-        <h3 className="text-white text-xl sm:text-3xl font-bold">Thank you!</h3>
-        <p className="text-white/90  text-sm sm:text-xl">Your form has been successfully submitted.</p>
+        <h3 className="font-bold text-white text-xl sm:text-3xl">Thank you!</h3>
+        <p className="text-white/90 text-sm sm:text-xl">Your form has been successfully submitted.</p>
 
         <Button variant={'default'} onClick={() => router.replace('/')}>
           Go Home
@@ -220,6 +224,7 @@ const Form = ({ formConfig: config }: FormProps) => {
         backgroundColor: formConfig?.theme?.properties?.formBackgroundColor,
         boxShadow: '1px 1px 20px 4px #130d18',
         borderRadius: 20,
+        fontFamily
       }}
     >
       <FormHeader formConfig={formConfig} currentPageNumber={currentPageNumber} />

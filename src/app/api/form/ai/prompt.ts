@@ -185,10 +185,7 @@ Conditional Logic Example:
 ---
 
 ### **FormStyles Structure**
-- **fontFamily**: *(string, optional)* Custom font family.
-- **backgroundColor**: *(string, optional)* Form background color.
-- **fontPrimaryColor**: *(string, optional)* Primary text color.
-- **fontSecondaryColor**: *(string, optional)* Secondary text color.
+- **fontFamily**: *(string, optional)* Custom font family = Always provide Poppins.
 
 ---
 

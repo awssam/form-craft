@@ -200,9 +200,6 @@ export const formConfig: FormConfig = {
   },
   styles: {
     fontFamily: 'Arial, sans-serif',
-    backgroundColor: '#0a0909', // black background color
-    fontPrimaryColor: '#e0c7c7', // lighter  font color
-    fontSecondaryColor: '#666666', // Lighter font color for secondary text
   },
   theme: {
     type: 'charcoal-black',

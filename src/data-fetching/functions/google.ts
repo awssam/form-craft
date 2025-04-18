@@ -1,11 +1,12 @@
 import {
   disconnectGoogleAccountAction,
   getAllColumnHeadersFromWorksheetAction,
+  getAllFontsAction,
   getAllUserSpreadSheetsFromDriveAction,
   getAllWorksheetsFromSpreadSheetAction,
   getAuthorizationUrl as getAuthorizationUrlAction,
   getConnectedGoogleAccountAction,
-} from '@/backend/actions/google';
+} from "@/backend/actions/google";
 
 export const getAuthorizationUrl = async () => {
   const res = await getAuthorizationUrlAction();
@@ -14,7 +15,7 @@ export const getAuthorizationUrl = async () => {
     throw new Error(res?.error as string);
   }
 
-  return res?.data || '';
+  return res?.data || "";
 };
 
 export const getConnectedGoogleAccount = async () => {
@@ -47,7 +48,9 @@ export const getAllUserSpreadSheetsFromDrive = async () => {
   return res?.data || [];
 };
 
-export const getAllWorksheetsFromSpreadSheet = async (spreadsheetId: string) => {
+export const getAllWorksheetsFromSpreadSheet = async (
+  spreadsheetId: string
+) => {
   const res = await getAllWorksheetsFromSpreadSheetAction(spreadsheetId);
 
   if (!res?.success) {
@@ -57,12 +60,26 @@ export const getAllWorksheetsFromSpreadSheet = async (spreadsheetId: string) => 
   return res?.data || [];
 };
 
-export const getAllColumnHeadersFromWorksheet = async (spreadsheetId: string, sheetName: string) => {
-  const res = await getAllColumnHeadersFromWorksheetAction(spreadsheetId, sheetName);
+export const getAllColumnHeadersFromWorksheet = async (
+  spreadsheetId: string,
+  sheetName: string
+) => {
+  const res = await getAllColumnHeadersFromWorksheetAction(
+    spreadsheetId,
+    sheetName
+  );
 
   if (!res?.success) {
     throw new Error(res?.error as string);
   }
+
+  return res?.data || [];
+};
+
+export const getAllFonts = async () => {
+  const res = await getAllFontsAction();
+
+  if (!res?.success) throw new Error(res?.error as string);
 
   return res?.data || [];
 };
