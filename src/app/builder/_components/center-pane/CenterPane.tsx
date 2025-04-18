@@ -1,22 +1,22 @@
-'use client';
+"use client";
 
-import React, { useRef } from 'react';
-import { useFormProperty, useUIEventsProperty } from '@/zustand/store';
-import DroppableFormPage from './form/DroppableFormPage';
-import NewPagePlaceholder from './form/NewPagePlaceholder';
+import React, { useRef } from "react";
+import { useFormProperty, useUIEventsProperty } from "@/zustand/store";
+import DroppableFormPage from "./form/DroppableFormPage";
+import NewPagePlaceholder from "./form/NewPagePlaceholder";
 
-import { cn } from '@/lib/utils';
-import { GenericProps } from '@/types/common';
-import { FieldEntity } from '@/types/form-config';
-import FormContent from './form/FormContent';
+import { cn } from "@/lib/utils";
+import { GenericProps } from "@/types/common";
+import { FieldEntity } from "@/types/form-config";
+import FormContent from "./form/FormContent";
 
 interface CenterPaneProps extends GenericProps {
   activeField: FieldEntity | null;
 }
 
 const CenterPane = ({ className, activeField }: CenterPaneProps) => {
-  const isDraggingFormField = useUIEventsProperty('isDraggingFormField');
-  const pages = useFormProperty('pages');
+  const isDraggingFormField = useUIEventsProperty("isDraggingFormField");
+  const pages = useFormProperty("pages");
 
   const paneRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
@@ -24,8 +24,8 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
   const scrollTop = useRef(0);
 
   const classes = cn(
-    'h-full relative overflow-auto bg-background flex flex-col items-center py-12 px-4 center-pane',
-    className,
+    "h-full relative overflow-auto bg-background flex flex-col items-center py-12 px-4 center-pane",
+    className
   );
 
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -68,7 +68,7 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
       onMouseLeave={handleMouseLeave}
     >
       <div
-        className="flex flex-col items-center gap-12 w-full min-h-[200dvh] h-max transition-all ease-in-out duration-200"
+        className="flex flex-col items-center gap-12 w-full h-max min-h-[200dvh] transition-all duration-200 ease-in-out"
         id="form-canvas"
       >
         {pages?.map((pageId, index) => (
@@ -79,7 +79,11 @@ const CenterPane = ({ className, activeField }: CenterPaneProps) => {
             totalPages={pages?.length}
             className="relative items-start !cursor-auto"
           >
-            <FormContent activeField={activeField} pageId={pageId} isLastPage={index === pages.length - 1} />
+            <FormContent
+              activeField={activeField}
+              pageId={pageId}
+              isLastPage={index === pages.length - 1}
+            />
           </DroppableFormPage>
         ))}
         <NewPagePlaceholder />

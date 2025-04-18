@@ -16,9 +16,7 @@ export const debounce = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   return (...args: any) => {
     if (timer) clearTimeout(timer);
-    console.log(timer);
     timer = setTimeout(() => {
-      console.log('debounced call');
       func(...args);
     }, duration);
   };

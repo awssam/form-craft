@@ -10,6 +10,11 @@ import {
 import { FormConfig, Theme } from "@/types/form-config";
 import { formThemes } from "@/zustand/data";
 import { Combobox, Option } from "@/components/ui/combobox";
+import { useQuery } from "@tanstack/react-query";
+import { getAllFonts } from "@/data-fetching/functions/google";
+import { Skeleton } from "@/components/ui/skeleton";
+import { memo, useCallback, useMemo } from "react";
+import useDynamicFontLoader from "@/hooks/useDynamicFontLoader";
 
 const useFormThemeUpdater = () => {
   const theme = useFormProperty("theme")!;
@@ -22,13 +27,13 @@ const useFormThemeUpdater = () => {
         properties: {
           ...theme?.properties,
           [key]: val,
-        }
+        },
       });
     };
   return handleChange;
 };
 
-export const FormFontPrimaryColor = () => {
+const FormFontPrimaryColor = () => {
   const fontPrimary = useFormConfigStore(
     (state) => state?.formConfig?.theme?.properties?.primaryTextColor
   );
@@ -46,7 +51,7 @@ export const FormFontPrimaryColor = () => {
   );
 };
 
-export const FormFontSecondaryColor = () => {
+const FormFontSecondaryColor = () => {
   const fontSecondary = useFormConfigStore(
     (state) => state?.formConfig?.theme?.properties?.secondaryTextColor
   );
@@ -72,7 +77,7 @@ const formThemeOptions = Object.keys(formThemes).map((theme) => ({
   value: theme,
 }));
 
-export const FormThemePicker = () => {
+const FormThemePicker = () => {
   const updateFormTheme = useFormActionProperty("updateFormTheme");
   const theme = useFormProperty("theme");
 
@@ -98,3 +103,67 @@ export const FormThemePicker = () => {
     </FormField>
   );
 };
+
+const useFonts = () => {
+  const query = useQuery({
+    queryKey: ["google-fonts"],
+    staleTime: Infinity,
+    queryFn: getAllFonts,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    select(data) {
+      return data?.items?.slice(0, 100)?.map((d: Record<string, string>) => ({
+        label: d?.family,
+        value: d?.family,
+      }));
+    },
+  });
+  return query;
+};
+
+const FormFontPicker = () => {
+  const { data, isLoading } = useFonts();
+
+  const updateFormStyles = useFormActionProperty("updateFormStyles");
+  const fontFamily = useFormProperty("styles")?.fontFamily || "Poppins";
+
+  const handleFontChange = useCallback(
+    (opt: Option[]) => {
+      updateFormStyles({
+        fontFamily: opt?.[0]?.value as string,
+      });
+    },
+    [updateFormStyles]
+  );
+
+  const selectedFont = useMemo(
+    () => [data?.find((d: Option) => d?.value === (fontFamily || "Poppins"))],
+    [data, fontFamily]
+  );
+
+  useDynamicFontLoader(fontFamily);
+
+  return (
+    <FormField label="Font Family" id="font">
+      {isLoading && <Skeleton className="w-full h-8" />}
+
+      {!isLoading && (
+        <Combobox
+          handleChange={handleFontChange}
+          selectedValues={selectedFont}
+          allowMultiple={false}
+          options={data}
+        />
+      )}
+    </FormField>
+  );
+};
+
+const components = {
+  FormFontPicker: memo(FormFontPicker),
+  FormThemePicker: memo(FormThemePicker),
+  FormFontPrimaryColor: memo(FormFontPrimaryColor),
+  FormFontSecondaryColor: memo(FormFontSecondaryColor),
+};
+
+export default components;

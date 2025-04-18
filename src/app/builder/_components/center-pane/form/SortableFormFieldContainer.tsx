@@ -23,6 +23,8 @@ export interface FormFieldsProps {
 const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFieldsProps) => {
   const fieldEntities = useFormProperty('fieldEntities');
   const pageEntities = useFormProperty('pageEntities');
+  const fontFamily = useFormProperty("styles")?.fontFamily || "Poppins";
+
 
   const setFieldVisibility = useFieldVisibilityStore((s) => s.setFieldVisibility);
 
@@ -47,8 +49,9 @@ const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFie
             (data) => console.log(data),
             (errors) => console.log(JSON.stringify(errors, null, 2)),
           )}
+          style={{fontFamily, letterSpacing:'normal !important'}}
         >
-          <div className="flex flex-wrap w-full overflow-clip [column-gap:0.5rem] transition-all duration-200 ease-in-out">
+          <div className="flex flex-wrap w-full overflow-clip transition-all duration-200 ease-in-out [column-gap:0.5rem]">
             {fields?.map((fieldId) => (
               <Fragment key={fieldId}>
                 <FieldRenderer control={form.control} field={fieldEntities?.[fieldId] as FieldEntity} />
@@ -57,8 +60,8 @@ const SortableFormFieldContainer = ({ pageId, isLastPage, activeField }: FormFie
           </div>
 
           {fields?.length === 0 && (
-            <div className="flex items-center justify-center w-full h-full mt-7">
-              <h2 className="text-xl font-semibold text-muted-foreground">No fields found</h2>
+            <div className="flex justify-center items-center mt-7 w-full h-full">
+              <h2 className="font-semibold text-muted-foreground text-xl">No fields found</h2>
             </div>
           )}
 

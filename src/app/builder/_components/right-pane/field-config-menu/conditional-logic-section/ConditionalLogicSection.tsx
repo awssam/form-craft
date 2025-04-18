@@ -152,7 +152,6 @@ const FieldConditionalLogicSection = () => {
     const fieldType = fieldEntities?.[condition?.fieldId]?.type;
 
     const getDatePickerValue = (formValue: Date | string | string[] | undefined) => {
-      console.log('formValue', formValue, typeof formValue);
       return typeof formValue === 'string' && formValue?.length > 2 ? new Date(formValue) : undefined;
     };
 
@@ -235,7 +234,7 @@ const FieldConditionalLogicSection = () => {
         return (
           <section
             key={index}
-            className="space-y-4 border border-dashed border-input bg-background px-3 py-5 rounded-md flex flex-col gap-3 hover:border-yellow-200/30 transition-colors duration-300"
+            className="flex flex-col gap-3 space-y-4 bg-background px-3 py-5 border border-input hover:border-yellow-200/30 border-dashed rounded-md transition-colors duration-300"
           >
             <FormField label="Show this field if" id="field" helperText="Select a field and specify the condition.">
               <Combobox
