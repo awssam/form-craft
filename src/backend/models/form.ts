@@ -127,9 +127,6 @@ const formSettingsSchema = new mongoose.Schema<FormSettings>({
 
 const formStylesSchema = new mongoose.Schema<FormStyles>({
   fontFamily: String,
-  backgroundColor: String,
-  fontPrimaryColor: String,
-  fontSecondaryColor: String,
 });
 
 export const formSchema = new mongoose.Schema(
