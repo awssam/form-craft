@@ -45,7 +45,7 @@ const EditableText = ({
             onChange={(e) => onChange(e.target.value)}
             value={value}
             className={cn(
-              'border-0 p-0 w-full border-b-[1px] border-b-greyBorder rounded-none focus-visible:ring-0  focus-visible:border-b-input text-white/80 font-semibold text-[13px] tracking-tight',
+              'border-0 p-0 w-full border-b-[1px] border-b-greyBorder rounded-none focus-visible:ring-0  focus-visible:border-b-input text-gray-900 font-semibold text-[13px] tracking-tight',
               inputClassName,
             )}
             placeholder={inputPlaceholder}

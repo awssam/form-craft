@@ -8,7 +8,7 @@ import { useFormActionProperty, useFormProperty } from '@/zustand/store';
 
 const Header = () => {
   return (
-    <header className="flex flex-col pt-1 gap-2 sticky top-[-13px] pb-2 bg-[#0c0a0a] z-20">
+    <header className="flex flex-col pt-1 gap-2 sticky top-[-13px] pb-2  z-20">
       <FormName />
     </header>
   );

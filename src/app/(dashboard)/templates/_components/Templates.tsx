@@ -8,6 +8,10 @@ import { FormConfig } from '@/types/form-config';
 import { useRouter } from 'next/navigation';
 import { toast } from 'sonner';
 import { Info, Sparkles } from 'lucide-react';
+import { handleInsertTemplates } from '../data';
+import { Input } from '@/components/ui/input';
+import { Combobox } from '@/components/ui/combobox';
+import { Button } from '@/components/ui/button';
 
 const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => {
   const router = useRouter();
@@ -37,10 +41,24 @@ const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => 
     }, 500);
   };
 
+  const loadTemplate = () => {
+    handleInsertTemplates().then(() => {
+      // if (res) {
+        toast.success('Templates loaded successfully!');
+        router.refresh();
+      // } else {
+      //   toast.error('Failed to load templates. Please try again later.');
+      // }
+    }).catch((error) => {
+      console.error('Error loading templates:', error);
+      toast.error('An error occurred while loading templates.');
+    });
+  }
+
   return (
     <>
       <div className="flex flex-col gap-6">
-        {/* <header className="flex flex-col sm:flex-row justify-between gap-4 items-center">
+         <header className="flex flex-col sm:flex-row justify-between gap-4 items-center">
           <Input
             className="md:w-[500px] h-11 bg-zinc-900/30 border-zinc-800/60 backdrop-blur-sm focus:border-zinc-700/70 transition-all"
             placeholder="Start typing what you want and we will try to find a template for you..."
@@ -58,7 +76,14 @@ const Templates = ({ templates }: { templates: FormTemplate[] | undefined }) => 
             selectedValues={[]}
             allowMultiple={false}
           />
-        </header> */}
+          <Button 
+            variant="outline"
+            size="sm"
+            onClick={() => loadTemplate()}
+          >
+            Load Templates
+          </Button>
+        </header> 
 
         <section className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 rounded-lg">
           {templates?.map((template) => (

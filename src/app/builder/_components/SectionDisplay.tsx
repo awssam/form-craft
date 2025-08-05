@@ -1,9 +1,9 @@
 'use client';
 
 import React, { Dispatch, SetStateAction } from 'react';
-
 import dynamic from 'next/dynamic';
 
+// Optimize dynamic imports with better loading components
 const LeftPane = dynamic(() => import('./left-pane/LeftPane'), {
   ssr: false,
   loading: () => <LeftPaneSkeleton />,
@@ -19,7 +19,10 @@ const CenterPane = dynamic(() => import('./center-pane/CenterPane'), {
   loading: () => <CenterPaneSkeleton />,
 });
 
-const MobileSectionDisplayer = dynamic(() => import('@/components/common/MobileSectionDisplayer'), { ssr: false });
+const MobileSectionDisplayer = dynamic(() => import('@/components/common/MobileSectionDisplayer'), { 
+  ssr: false,
+  loading: () => <div /> // Add a loading component
+});
 
 import { cn } from '@/lib/utils';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
@@ -47,9 +50,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 const SectionDisplay = () => {
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor), useSensor(KeyboardSensor));
   const [activeField, setActiveField] = React.useState<FieldEntity | null>(null);
+  const [isMounted, setIsMounted] = React.useState(false);
 
   const { section, setSection, FORMSECTIONS } = useFormSectionDisplay();
   const isLargeScreen = useMediaQuery('(min-width: 1024px)');
+
+  // Ensure component only renders on client side after hydration
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const leftPaneClasses = cn('border-r-greyBorder md:border-r md:basis-1/5 min-w-[300px]', {
     'hidden md:flex': section !== FORMSECTIONS.Customize,
@@ -139,6 +148,19 @@ const SectionDisplay = () => {
   };
 
   useAutoSaveFormConfig();
+
+  // Show loading until component is mounted on client side
+  if (!isMounted) {
+    return (
+      <main className="flex md:flex-row flex-col flex-nowrap bg-background w-[100dvw] h-[100dvh]">
+        <div className="flex-1 flex">
+          <LeftPaneSkeleton />
+          <CenterPaneSkeleton />
+          <RightPaneSkeleton />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="flex md:flex-row flex-col flex-nowrap bg-background w-[100dvw] h-[100dvh]">

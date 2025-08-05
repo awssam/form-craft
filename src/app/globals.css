@@ -23,15 +23,15 @@
     }
 
     .gradient-text {
-      @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400;
+      @apply bg-clip-text text-transparent bg-gradient-to-r from-black to-zinc-400;
     }
 
     .gradient-text-dark {
-      @apply bg-clip-text text-transparent bg-gradient-to-r from-zinc-400 to-zinc-700;
+      @apply bg-clip-text text-transparent bg-gradient-to-r from-black to-zinc-400;
     }
 
     .gradient-text-light {
-      @apply bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-300;
+      @apply bg-clip-text text-transparent bg-gradient-to-r from-black to-zinc-400;
     }
 
     .gradient-border {

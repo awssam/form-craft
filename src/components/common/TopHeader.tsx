@@ -94,7 +94,7 @@ const TopHeader = () => {
 
   return (
     <>
-      <header className="w-full z-[9999999] px-4 pt-4 mb-2 center-pane bg-[#0c0a0a]">
+      <header className="w-full z-[9999999] px-4 pt-4 mb-2 center-pane ">
         <div className="flex justify-between items-center gap-2">
           <LeftPaneBreadCrumbs links={links} />
           {isTemplate ? (
