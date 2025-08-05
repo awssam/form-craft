@@ -18,6 +18,17 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
 
   const { setValue } = useFormContext();
 
+  // Determine granularity based on field type
+  const getGranularity = (fieldType: string): 'day' | 'minute' => {
+    switch (fieldType) {
+      case 'datetime':
+        return 'minute';
+      case 'date':
+      default:
+        return 'day';
+    }
+  };
+
   useEffect(() => {
     setValue(field?.name, field?.defaultValue);
   }, [field?.defaultValue, field?.name, setValue]);
@@ -56,12 +67,12 @@ const DateInput = ({ field, className, control, isOverlay }: FormFieldProps) => 
               />
 
               <DateTimePicker
-                granularity="day"
+                granularity={getGranularity(field.type)}
                 style={{ color: primaryColor, borderColor: inputBorderColor }}
                 value={getDatePickerValue(rhFormField?.value)}
                 onChange={(d) => setValue(field?.name, d, { shouldValidate: true })}
                 className={className}
-                placeholder={field.placeholder ?? 'Pick a date'}
+                placeholder={field.placeholder ?? (field.type === 'datetime' ? 'Pick date and time' : 'Pick a date')}
                 placeHolderClasses={cn({
                   'text-[#7F7F7F]': theme === 'midnight-black',
                   'text-[#A1A1A1]': theme === 'deep-space',

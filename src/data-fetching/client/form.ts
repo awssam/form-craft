@@ -1,7 +1,8 @@
-import { MutationFunction, useMutation, UseMutationOptions, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, UseMutationOptions, useQuery, useQueryClient } from '@tanstack/react-query';
 import { createForm, deleteForm, fetchAllForms, publishForm, updateForm } from '../functions/form';
 import { useAuth } from '@clerk/nextjs';
 import { FieldEntity, FormConfig, FormConfigWithMeta } from '@/types/form-config';
+import { FormUsageType } from '@/types/form-templates';
 import { useFormConfigStore } from '@/zustand/store';
 import { toast } from 'sonner';
 import { useEffect, useRef, useState } from 'react';
@@ -29,7 +30,7 @@ export const useCreateFormMutation = ({
   const { userId } = useAuth();
 
   const { mutate } = useMutation({
-    mutationFn: createForm as MutationFunction<FormConfig>,
+    mutationFn: (formType?: FormUsageType) => createForm(formType),
     onMutate,
     onSuccess: (data, _, context) => {
       onSuccess(data, context);

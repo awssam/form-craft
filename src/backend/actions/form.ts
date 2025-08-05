@@ -5,14 +5,15 @@ import connectDb from '../db/connection';
 import Form from '../models/form';
 import { convertToPlainObject, verifyAuth } from '../util';
 import { FormConfig } from '@/types/form-config';
+import { FormUsageType } from '@/types/form-templates';
 
-export const createFormConfigAction = async () => {
+export const createFormConfigAction = async (formType?: FormUsageType) => {
   try {
     const userId = await verifyAuth();
 
     await connectDb();
 
-    const newForm = createNewForm(userId as string);
+    const newForm = createNewForm(userId as string, formType);
     const form = new Form(newForm);
     const res = await form.save();
 

@@ -1,4 +1,6 @@
 import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
+import { FormUsageType } from '@/types/form-templates';
+import { FORM_TYPE_CONFIGS } from '@/config/form-types';
 import { generateId } from './utils';
 import { formThemes } from '@/zustand/data';
 import { format } from '@/lib/datetime';
@@ -90,11 +92,35 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
       newField.placeholder = 'Select an option...';
       newField.defaultValue = undefined;
       break;
+      
     case 'date':
       newField.placeholder = 'Select a date...';
       delete newField['defaultValue'];
       delete newField['value'];
       break;
+      
+    case 'datetime':
+      newField.placeholder = 'Select date and time...';
+      delete newField['defaultValue'];
+      delete newField['value'];
+      break;
+      
+    case 'email':
+      newField.placeholder = 'Enter email address...';
+      newField.defaultValue = '';
+      break;
+      
+    case 'phone':
+      newField.placeholder = 'Enter phone number...';
+      newField.defaultValue = '';
+      break;
+      
+    case 'number':
+      newField.placeholder = 'Enter a number...';
+      newField.defaultValue = '';
+      delete newField['options'];
+      break;
+      
     case 'file':
       newField.placeholder = 'Click to upload or drag and drop';
       newField.allowMultiSelect = false;
@@ -102,24 +128,39 @@ export const convertFieldType = (field: FieldEntity, newFieldType: FieldType): F
 
       delete newField['defaultValue'];
       delete newField['value'];
-
       break;
 
     default:
+      // For text and textarea, keep basic defaults
       break;
   }
 
   return newField;
 };
 
-export const Field_Type_Options = ['text', 'date', 'radio', 'checkbox', 'dropdown', 'file', 'textarea']?.map(
+export const Field_Type_Options = [
+  'text', 
+  'email', 
+  'phone', 
+  'number', 
+  'date', 
+  'datetime', 
+  'textarea', 
+  'radio', 
+  'checkbox', 
+  'dropdown', 
+  'file'
+]?.map(
   (type) => ({
     label: type?.replace(type?.charAt(0), type?.charAt(0)?.toUpperCase()),
     value: type,
   }),
 );
 
-export const createNewForm = (userId: string | null): FormConfig | null => {
+export const createNewForm = (
+  userId: string | null, 
+  formType?: FormUsageType
+): FormConfig | null => {
   const defaultField = createNewFormField({
     type: 'text',
     name: generateId(),
@@ -129,14 +170,28 @@ export const createNewForm = (userId: string | null): FormConfig | null => {
   const defaultPage = createNewPageEntity();
   const defaultPageId = defaultPage.id;
 
+  // Get form type configuration and field mappings
+  const formTypeConfig = formType ? FORM_TYPE_CONFIGS[formType] : null;
+  const fieldMappings = formTypeConfig?.fieldMappings || {};
+  
+  // Determine primary table based on form type
+  const getPrimaryTable = (type?: FormUsageType): string => {
+    const tableMap: Record<FormUsageType, string> = {
+      'event-registration': 'event_registrations',
+      'exhibitor-registration': 'exhibitor_registrations',
+      'general': 'general_forms', // Default table for general forms
+    };
+    return type ? tableMap[type] || 'event_registrations' : 'event_registrations';
+  };
+
   return {
     id: generateId(),
-    name: 'Form - ' + format(new Date(), 'dd-MM-yyyy hh:mm'),
+    name: formTypeConfig ? `${formTypeConfig.name} - ${format(new Date(), 'dd-MM-yyyy')}` : `Form - ${format(new Date(), 'dd-MM-yyyy hh:mm')}`,
     createdBy: userId!,
-    description: 'Your form description goes here',
+    description: formTypeConfig?.description || 'Your form description goes here',
     image: '',
     status: 'draft',
-    tags: [],
+    tags: formType ? [formType.replace('-', ' ')] : [],
     multiPage: false,
     pages: [defaultPageId],
     pageEntities: {
@@ -162,6 +217,13 @@ export const createNewForm = (userId: string | null): FormConfig | null => {
       id: 'charcoal-black',
       properties: formThemes['charcoal-black'],
     },
+    // Enhanced form configuration
+    formType: formType || 'event-registration',
+    fieldMappings: fieldMappings,
+    dbConfig: {
+      primaryTable: getPrimaryTable(formType),
+      enableAutoMapping: !!formType
+    }
   };
 };
 

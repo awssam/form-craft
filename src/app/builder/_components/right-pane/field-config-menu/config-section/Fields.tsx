@@ -6,9 +6,10 @@ import { DateTimePicker } from '@/components/ui/datepicker';
 import { Form, FormControl, FormField, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { convertFieldType, Field_Type_Options } from '@/lib/form';
+// import { Badge } from '@/components/ui/badge';
+// import { convertFieldType, Field_Type_Options } from '@/lib/form';
 import { cn, debounce } from '@/lib/utils';
-import { FieldEntity, FieldType as AvailableFieldTypes } from '@/types/form-config';
+import { FieldEntity } from '@/types/form-config';
 import { useSelectedFieldStore } from '@/zustand/store';
 import { Plus, Trash } from 'lucide-react';
 import React, { memo } from 'react';
@@ -57,37 +58,99 @@ export const FieldName = memo(() => {
 });
 FieldName.displayName = 'FieldName';
 
-export const FieldType = memo(() => {
-  const selectedField = useSelectedField();
-  const updateSelectedField = useSelectedFieldStore((state) => state.updateSelectedField);
-  const [selectedFieldTypeOption, setSelectedFieldTypeOption] = React.useState<Option>(() => {
-    return Field_Type_Options.find((option) => option.value === selectedField?.type) ?? Field_Type_Options[0];
-  });
+// export const FieldType = memo(() => {
+//   const selectedField = useSelectedField();
+//   const formType = useFormProperty('formType');
+//   const updateSelectedField = useSelectedFieldStore((state) => state.updateSelectedField);
+//   const [selectedFieldTypeOption, setSelectedFieldTypeOption] = React.useState<Option>(() => {
+//     return Field_Type_Options.find((option) => option.value === selectedField?.type) ?? Field_Type_Options[0];
+//   });
 
-  const handleUpdateType = (v: Option[]) => {
-    setSelectedFieldTypeOption(v[0]);
-    const newField = convertFieldType(selectedField!, v[0].value as AvailableFieldTypes);
+//   // Get compatible database fields count for current and potential field types
+//   const getCompatibilityInfo = React.useCallback((fieldType: string) => {
+//     if (!formType) return { count: 0, hasCompatible: false };
+    
+//     const compatibleFields = getCompatibleDatabaseFieldsForFormField(formType, fieldType);
+//     return {
+//       count: compatibleFields.length,
+//       hasCompatible: compatibleFields.length > 0
+//     };
+//   }, [formType]);
 
-    updateSelectedField(newField);
-  };
+//   const currentFieldCompatibility = getCompatibilityInfo(selectedField?.type || 'text');
 
-  return (
-    <FormFieldWrapper
-      id="type"
-      label="Field Type"
-      required
-      helperText="Conversion of types will reset field specific settings"
-    >
-      <Combobox
-        options={Field_Type_Options}
-        selectedValues={[selectedFieldTypeOption]}
-        handleChange={handleUpdateType}
-      />
-    </FormFieldWrapper>
-  );
-});
+//   const handleUpdateType = (v: Option[]) => {
+//     setSelectedFieldTypeOption(v[0]);
+//     const newField = convertFieldType(selectedField!, v[0].value as AvailableFieldTypes);
 
-FieldType.displayName = 'FieldType';
+//     updateSelectedField(newField);
+//   };
+
+//   return (
+//     <FormFieldWrapper
+//       id="type"
+//       label="Field Type"
+//       required
+//       helperText={formType 
+//         ? "Choose a field type that's compatible with your database schema"
+//         : "Choose the type of input field you want to create"
+//       }
+//     >
+//       <div className="space-y-3">
+//         <Combobox
+//           options={Field_Type_Options}
+//           selectedValues={[selectedFieldTypeOption]}
+//           handleChange={handleUpdateType}
+//         />
+        
+//         {/* Compatibility Information */}
+//         <div className="p-3 rounded-lg bg-muted">
+//           {formType ? (
+//             // Show compatibility info when form type is available
+//             <>
+//               <div className="flex items-center gap-2 text-sm">
+//                 {currentFieldCompatibility.hasCompatible ? (
+//                   <CheckCircle2 className="w-4 h-4 text-green-600" />
+//                 ) : (
+//                   <AlertTriangle className="w-4 h-4 text-yellow-600" />
+//                 )}
+//                 <span className="font-medium">
+//                   {currentFieldCompatibility.hasCompatible 
+//                     ? 'Compatible Field Type' 
+//                     : 'Limited Compatibility'
+//                   }
+//                 </span>
+//               </div>
+//               <p className="text-xs text-muted-foreground mt-1">
+//                 {currentFieldCompatibility.hasCompatible 
+//                   ? `${currentFieldCompatibility.count} database fields available for mapping`
+//                   : 'No compatible database fields found for this field type'
+//                 }
+//               </p>
+//               <Badge variant="outline" className="mt-2 text-xs">
+//                 Form Type: {formType}
+//               </Badge>
+//             </>
+//           ) : (
+//             // Show "from scratch" info when no form type
+//             <>
+//               <div className="flex items-center gap-2 text-sm">
+//                 <span className="font-medium text-muted-foreground">
+//                   From Scratch Form
+//                 </span>
+//               </div>
+//               <p className="text-xs text-muted-foreground mt-1">
+//                 Database mapping is not available for forms created from scratch. Choose a form template to enable database integration.
+//               </p>
+//             </>
+//           )}
+//         </div>
+//       </div>
+//     </FormFieldWrapper>
+//   );
+// });
+
+// FieldType.displayName = 'FieldType';
 
 export const FieldPlaceholder = memo(() => {
   const { handlePropertyChange } = useSelectedFieldUpdate();

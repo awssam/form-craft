@@ -206,6 +206,45 @@ export const formSchema = new mongoose.Schema(
       required: false,
       default: {},
     },
+    // Enhanced form configuration
+    formType: {
+      type: String,
+      required: false,
+      enum: [
+        'event-registration',
+        'exhibitor-registration'
+      ],
+      default: 'event-registration'
+    },
+    fieldMappings: {
+      type: Map,
+      of: {
+        targetTable: String,
+        targetField: String,
+        validation: String,
+        transform: String,
+        required: Boolean
+      },
+      required: false,
+      default: {}
+    },
+    dbConfig: {
+      primaryTable: {
+        type: String,
+        required: false,
+        default: 'form_submissions'
+      },
+      relatedTables: {
+        type: [String],
+        required: false,
+        default: []
+      },
+      enableAutoMapping: {
+        type: Boolean,
+        required: false,
+        default: false
+      }
+    }
   },
   {
     timestamps: true,

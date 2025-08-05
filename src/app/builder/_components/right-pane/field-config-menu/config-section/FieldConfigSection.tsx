@@ -3,7 +3,7 @@ import React from 'react';
 import {
   FieldName,
   FieldLabel,
-  FieldType,
+  // FieldType,
   FieldPlaceholder,
   FieldHelperText,
   FieldDefaultValue,
@@ -40,6 +40,16 @@ const FieldConfigSection = () => {
             <FieldAllowMultiSelect />
           </>
         );
+      case 'text':
+      case 'email':
+      case 'phone':
+      case 'number':
+        return <FieldHelperText />;
+      case 'textarea':
+        return <FieldHelperText />;
+      case 'date':
+      case 'datetime':
+        return <FieldHelperText />;
       default:
         return <FieldHelperText />;
     }
@@ -53,7 +63,7 @@ const FieldConfigSection = () => {
       key={selectedField?.id}
     >
       <FieldName />
-      <FieldType />
+      {/* <FieldType /> */}
       <FieldWidth />
       <FieldLabel />
       <FieldPlaceholder />

@@ -1,4 +1,5 @@
 import { FieldEntity, FieldType, FormConfig } from '@/types/form-config';
+import { FormUsageType, FieldMapping, EnhancedFieldMapping } from '@/types/form-templates';
 import { create } from 'zustand';
 import { formConfig } from './data';
 import { generateId } from '@/lib/utils';
@@ -23,6 +24,14 @@ type FormAction = {
   addPage: () => void;
   updatePageName: (pageId: string, name: string) => void;
   batchUpdateFields: (fields: Record<FieldEntity['id'], Partial<FieldEntity>>) => void;
+  // Form type and mapping actions
+  updateFormType: (formType: FormUsageType) => void;
+  updateFieldMappings: (mappings: Record<string, FieldMapping>) => void;
+  updateDbConfig: (dbConfig: Partial<FormConfig['dbConfig']>) => void;
+  addFieldMapping: (fieldId: string, mapping: FieldMapping) => void;
+  removeFieldMapping: (fieldId: string) => void;
+  // Enhanced mapping actions
+  updateFieldMapping: (fieldId: string, mapping: EnhancedFieldMapping) => void;
 };
 
 export const useFormConfigStore = create<FormState & FormAction>((set, get) => ({
@@ -278,6 +287,68 @@ export const useFormConfigStore = create<FormState & FormAction>((set, get) => (
 
     set(update);
   },
+
+  // Form type and mapping actions
+  updateFormType: (formType: FormUsageType) =>
+    set((state) => ({
+      formConfig: {
+        ...state.formConfig,
+        formType,
+      },
+    })),
+
+  updateFieldMappings: (mappings: Record<string, FieldMapping>) =>
+    set((state) => ({
+      formConfig: {
+        ...state.formConfig,
+        fieldMappings: mappings,
+      },
+    })),
+
+  updateDbConfig: (dbConfig: Partial<FormConfig['dbConfig']>) =>
+    set((state) => ({
+      formConfig: {
+        ...state.formConfig,
+        dbConfig: state.formConfig.dbConfig ? {
+          ...state.formConfig.dbConfig,
+          ...dbConfig,
+        } : dbConfig as FormConfig['dbConfig'],
+      },
+    })),
+
+  addFieldMapping: (fieldId: string, mapping: FieldMapping) =>
+    set((state) => ({
+      formConfig: {
+        ...state.formConfig,
+        fieldMappings: {
+          ...state.formConfig.fieldMappings,
+          [fieldId]: mapping,
+        },
+      },
+    })),
+
+  removeFieldMapping: (fieldId: string) =>
+    set((state) => {
+      const newMappings = { ...state.formConfig.fieldMappings };
+      delete newMappings[fieldId];
+      return {
+        formConfig: {
+          ...state.formConfig,
+          fieldMappings: newMappings,
+        },
+      };
+    }),
+
+  updateFieldMapping: (fieldId: string, mapping: EnhancedFieldMapping) =>
+    set((state) => ({
+      formConfig: {
+        ...state.formConfig,
+        fieldMappings: {
+          ...state.formConfig.fieldMappings,
+          [fieldId]: mapping,
+        },
+      },
+    })),
 }));
 
 /**

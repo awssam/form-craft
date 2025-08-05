@@ -15,6 +15,21 @@ const FormTextInput = ({ field, control, className, isOverlay = false }: FormFie
   const primaryColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.primaryTextColor);
   const inputBorderColor = useFormConfigStore((s) => s.formConfig.theme?.properties?.inputBorderColor);
 
+  // Map field types to HTML input types
+  const getInputType = (fieldType: string): string => {
+    switch (fieldType) {
+      case 'email':
+        return 'email';
+      case 'phone':
+        return 'tel';
+      case 'number':
+        return 'number';
+      case 'text':
+      default:
+        return 'text';
+    }
+  };
+
   return (
     <FormFieldWrapper
       control={control}
@@ -39,6 +54,7 @@ const FormTextInput = ({ field, control, className, isOverlay = false }: FormFie
                 isDragging={isOverlay}
               />
               <Input
+                type={getInputType(field.type)}
                 placeholder={field.placeholder}
                 id={field.id}
                 className={cn('focus-visible:![border-color:rgba(255,255,255,0.5)]', {

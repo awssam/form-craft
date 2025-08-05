@@ -18,10 +18,14 @@ interface FieldRendererProps {
 const FieldRenderer = (props: FieldRendererProps) => {
   switch (props?.field?.type) {
     case 'text':
+    case 'email':
+    case 'phone':
+    case 'number':
       return <FormTextInput {...props} />;
     case 'textarea':
       return <FormTextareaInput {...props} />;
     case 'date':
+    case 'datetime':
       return <FormDateInput {...props} />;
     case 'checkbox':
       return <FormCheckboxInput {...props} />;

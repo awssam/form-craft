@@ -1,3 +1,5 @@
+import { FormUsageType, FieldMapping, EnhancedFieldMapping } from './form-templates';
+
 export type FormConfigWithMeta = {
   meta: {
     title: string;
@@ -24,6 +26,13 @@ export interface FormConfig {
   settings: FormSettings; // Form-level settings such as submission handling, file upload limit, etc.
   styles: FormStyles;
   theme: FormTheme;
+  // Enhanced with form type and database mapping
+  formType?: FormUsageType; // Type of form for predefined structures
+  fieldMappings?: Record<string, FieldMapping | EnhancedFieldMapping>; // Database field mappings
+  dbConfig?: {
+    primaryTable: string; // Primary table for form submissions (auto-determined by form type)
+    enableAutoMapping?: boolean; // Auto-map fields based on form type
+  };
 }
 
 export type Theme = 'midnight-black' | 'deep-space' | 'charcoal-black' | 'deep-violet' | 'night-sky';
@@ -69,7 +78,7 @@ export interface FieldEntity {
   allowMultiSelect?: boolean; // Allow multiple selections for supported fields
 }
 
-export type FieldType = 'text' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'textarea' | 'file';
+export type FieldType = 'text' | 'email' | 'phone' | 'number' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'datetime' | 'textarea' | 'file';
 
 export type CustomValidationType = 'withValue' | 'binary';
 

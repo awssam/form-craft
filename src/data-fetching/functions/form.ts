@@ -6,6 +6,7 @@ import {
   updateFormConfigAction,
 } from '@/backend/actions/form';
 import { FormConfig, FormConfigWithMeta } from '@/types/form-config';
+import { FormUsageType } from '@/types/form-templates';
 
 export const fetchAllForms = async () => {
   const res = await getAllUserFormsAction();
@@ -17,8 +18,8 @@ export const fetchAllForms = async () => {
   }
 };
 
-export const createForm = async () => {
-  const res = await createFormConfigAction();
+export const createForm = async (formType?: FormUsageType) => {
+  const res = await createFormConfigAction(formType);
 
   if (res?.success) return res?.data;
 

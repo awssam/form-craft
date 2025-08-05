@@ -2,7 +2,7 @@
 
 import { UserButton } from '@clerk/nextjs';
 import React, { useEffect, useState } from 'react';
-import CreateFormModal from './CreateFormModal';
+import CreateFormModal from './EnhancedCreateFormModal';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
