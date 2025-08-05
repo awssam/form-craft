@@ -59,7 +59,7 @@ export default function RootLayout({
         <head>
           <link id='font-link' rel='stylesheet' />
         </head>
-        <body className={`bg-black antialiased dark overflow-x-hidden overflow-y-auto`}>
+        <body className={` antialiased  overflow-x-hidden overflow-y-auto`}>
           <ReactQueryProvider>
             {children}
             <Toaster
