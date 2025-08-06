@@ -1,10 +1,15 @@
+
+
 import React, { useMemo, useState } from 'react';
 import { BaseFieldProps } from '../base/FieldTypes';
+import { FieldEntity } from '@/types/form-config';
 import TextField from './TextField';
 import { cn } from '@/lib/utils';
 
 /**
- * EmailField component with built-in email validation and domain suggestions
+ * EmailField - A specialized wrapper around TextField with email-specific enhancements
+ * This component demonstrates the migration pattern: wrap legacy fields with specialized logic
+ * while maintaining all existing functionality (dragging, validation, theming, etc.)
  */
 export interface EmailFieldProps extends BaseFieldProps {
   /** Allowed email domains for validation */
@@ -37,104 +42,178 @@ const EmailField: React.FC<EmailFieldProps> = ({
   className,
   ...props
 }) => {
-  const [inputValue, setInputValue] = useState(config.defaultValue as string || '');
+  const [currentValue, setCurrentValue] = useState<string>((config.defaultValue as string) || '');
   const [showSuggestions, setShowSuggestions] = useState(false);
 
-  // Email validation regex
-  const emailRegex = useMemo(() => 
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
-    []
-  );
-
-  // Validate email format
-  const isValidEmail = useMemo(() => {
-    if (!inputValue) return true; // Empty is valid (required validation handles this)
-    return emailRegex.test(inputValue);
-  }, [inputValue, emailRegex]);
-
-  // Check if domain is allowed
-  const isDomainAllowed = useMemo(() => {
-    if (!allowedDomains || !inputValue.includes('@')) return true;
-    const domain = inputValue.split('@')[1];
-    return allowedDomains.includes(domain);
-  }, [allowedDomains, inputValue]);
+  // Create enhanced config specifically for email fields with default validation
+  const enhancedConfig = useMemo((): FieldEntity => {
+    const baseConfig = { ...config };
+    
+    // Force email type and add email-specific properties
+    baseConfig.type = 'email';
+    baseConfig.placeholder = baseConfig.placeholder || 'Enter your email address';
+    
+    // Apply default email validation rules
+    const customValidation = { ...baseConfig.validation?.custom };
+    
+    // 1. Email format validation (always applied)
+    customValidation.email = {
+      value: true,
+      message: 'Please enter a valid email address',
+      type: 'binary' as const,
+    };
+    
+    // 2. Required validation (default for email fields)
+    baseConfig.validation = {
+      ...baseConfig.validation,
+      required: baseConfig.validation?.required !== false, // Default to required unless explicitly set to false
+    };
+    
+    // 3. Minimum length validation for email
+    customValidation.minLength = {
+      value: 5, // Shortest possible email: a@b.c
+      message: 'Email must be at least 5 characters long',
+      type: 'withValue' as const,
+    };
+    
+    // 4. Maximum length validation for email
+    customValidation.maxLength = {
+      value: 254, // RFC 5321 standard
+      message: 'Email must not exceed 254 characters',
+      type: 'withValue' as const,
+    };
+    
+    // 5. Pattern validation for email format
+    customValidation.pattern = {
+      value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+      message: 'Please enter a valid email address format',
+      type: 'withValue' as const,
+    };
+    
+    // 6. No consecutive dots validation
+    customValidation.noConsecutiveDots = {
+      value: /^(?!.*\.\.)/,
+      message: 'Email cannot contain consecutive dots',
+      type: 'withValue' as const,
+    };
+    
+    // 7. Domain restriction if provided
+    if (allowedDomains && allowedDomains.length > 0) {
+      customValidation.allowedDomain = {
+        value: allowedDomains,
+        message: `Email must be from one of these domains: ${allowedDomains.join(', ')}`,
+        type: 'withValue' as const,
+      };
+    }
+    
+    // 8. Block common disposable email domains (optional - can be overridden)
+    const disposableDomains = [
+      '10minutemail.com',
+      'tempmail.org',
+      'guerrillamail.com',
+      'mailinator.com',
+      'temp-mail.org'
+    ];
+    
+    if (!baseConfig.validation?.allowDisposableEmails) {
+      customValidation.noDisposableEmail = {
+        value: disposableDomains,
+        message: 'Disposable email addresses are not allowed',
+        type: 'withValue' as const,
+      };
+    }
+    
+    // Apply all email validation rules
+    baseConfig.validation = {
+      ...baseConfig.validation,
+      custom: customValidation,
+    };
+    
+    return baseConfig;
+  }, [config, allowedDomains]);
 
   // Get domain suggestions based on current input
   const filteredSuggestions = useMemo(() => {
-    if (!showDomainSuggestions || !inputValue.includes('@')) return [];
+    if (!showDomainSuggestions || !currentValue.includes('@')) return [];
     
-    const [, domainPart = ''] = inputValue.split('@');
+    const [, domainPart = ''] = currentValue.split('@');
     if (!domainPart) return domainSuggestions;
     
     return domainSuggestions.filter(domain => 
       domain.toLowerCase().startsWith(domainPart.toLowerCase())
     );
-  }, [inputValue, domainSuggestions, showDomainSuggestions]);
+  }, [currentValue, domainSuggestions, showDomainSuggestions]);
 
-  // Handle input change
-  const handleChange = (value: string) => {
-    setInputValue(value);
-    onChange?.(value);
+  // Handle value changes with email-specific logic
+  const handleEmailChange = (value: string) => {
+    setCurrentValue(value);
     
     // Show suggestions when typing domain
     setShowSuggestions(value.includes('@') && showDomainSuggestions);
+    
+    // Call parent onChange
+    onChange?.(value);
   };
 
   // Handle suggestion click
   const handleSuggestionClick = (domain: string) => {
-    const localPart = inputValue.split('@')[0];
+    const localPart = currentValue.split('@')[0];
     const newValue = `${localPart}@${domain}`;
-    setInputValue(newValue);
+    setCurrentValue(newValue);
     onChange?.(newValue);
     setShowSuggestions(false);
   };
 
-  // Enhanced config with email-specific validation
-  const enhancedConfig = useMemo(() => ({
-    ...config,
-    type: 'email' as const,
-    validation: {
-      ...config.validation,
-      custom: {
-        ...config.validation?.custom,
-        email: {
-          value: true,
-          message: 'Please enter a valid email address',
-          type: 'binary' as const,
-        },
-        ...(allowedDomains && {
-          allowedDomain: {
-            value: allowedDomains,
-            message: `Email must be from one of these domains: ${allowedDomains.join(', ')}`,
-            type: 'withValue' as const,
-          },
-        }),
-      },
-    },
-  }), [config, allowedDomains]);
+  // Email validation logic for visual feedback
+  const emailValidation = useMemo(() => {
+    if (!currentValue) return { isValid: true, message: '' };
+    
+    const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    const isValidFormat = emailRegex.test(currentValue);
+    
+    if (!isValidFormat) {
+      return { isValid: false, message: 'Please enter a valid email address' };
+    }
+    
+    // Check domain restrictions
+    if (allowedDomains && allowedDomains.length > 0) {
+      const domain = currentValue.split('@')[1];
+      if (!allowedDomains.includes(domain)) {
+        return { 
+          isValid: false, 
+          message: `Email domain not allowed. Allowed domains: ${allowedDomains.join(', ')}` 
+        };
+      }
+    }
+    
+    return { isValid: true, message: 'Valid email address' };
+  }, [currentValue, allowedDomains]);
 
   return (
-    <div className={cn('email-field-container relative', className)}>
+    <div className={cn('email-field-wrapper relative', className)}>
+      {/* Use TextField as the core component - maintains all existing functionality */}
       <TextField
         {...props}
         config={enhancedConfig}
         variant="email"
-        onChange={handleChange}
+        onChange={handleEmailChange}
         inputProps={{
           autoComplete: 'email',
           spellCheck: false,
           className: cn({
-            'border-red-500': !isValidEmail || !isDomainAllowed,
-            'border-green-500': isValidEmail && isDomainAllowed && inputValue,
+            'border-red-500': !emailValidation.isValid && currentValue,
+            'border-green-500': emailValidation.isValid && currentValue,
           }),
         }}
       />
+      
+      {/* Email-specific enhancements */}
       
       {/* Domain Suggestions Dropdown */}
       {showSuggestions && filteredSuggestions.length > 0 && (
         <div className="absolute top-full left-0 right-0 z-10 bg-white border border-gray-300 rounded-md shadow-lg mt-1 max-h-48 overflow-y-auto">
           {filteredSuggestions.map((domain) => {
-            const localPart = inputValue.split('@')[0];
+            const localPart = currentValue.split('@')[0];
             
             return (
               <button
@@ -151,19 +230,13 @@ const EmailField: React.FC<EmailFieldProps> = ({
         </div>
       )}
       
-      {/* Validation Messages */}
-      {inputValue && (
+      {/* Email-specific validation feedback */}
+      {currentValue && (
         <div className="mt-1 text-xs">
-          {!isValidEmail && (
-            <p className="text-red-600">Please enter a valid email address</p>
-          )}
-          {isValidEmail && !isDomainAllowed && (
-            <p className="text-red-600">
-              Email domain not allowed. Allowed domains: {allowedDomains?.join(', ')}
-            </p>
-          )}
-          {isValidEmail && isDomainAllowed && (
-            <p className="text-green-600">Valid email address</p>
+          {!emailValidation.isValid ? (
+            <p className="text-red-600">{emailValidation.message}</p>
+          ) : (
+            <p className="text-green-600">{emailValidation.message}</p>
           )}
         </div>
       )}
