@@ -45,7 +45,7 @@ export interface ThemeProperties {
   inputBorderColor: string; // Color for input field borders
   borderRadius: string; // Border radius for form elements
 }
-interface FormTheme {
+export interface FormTheme {
   type: Theme;
   id: Theme;
   properties: ThemeProperties;
@@ -107,7 +107,7 @@ export interface FieldOption {
   helperText?: string;
 }
 
-type FormFieldWidth = '25%' | '50%' | '75%' | '100%';
+type FormFieldWidth = string;
 
 export interface ConditionalLogic {
   showWhen: {
