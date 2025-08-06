@@ -262,6 +262,9 @@ export const FieldDefaultValue = memo(() => {
         return null;
     }
   };
+  if(renderDefaultValueInput() === null) {
+    return null;
+  }
 
   return (
     <FormFieldWrapper

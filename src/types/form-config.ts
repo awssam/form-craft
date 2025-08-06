@@ -78,7 +78,7 @@ export interface FieldEntity {
   allowMultiSelect?: boolean; // Allow multiple selections for supported fields
 }
 
-export type FieldType = 'text' | 'email' | 'phone' | 'number' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'datetime' | 'textarea' | 'file';
+export type FieldType = 'text' | 'email' | 'phone' | 'url' | 'number' | 'checkbox' | 'radio' | 'dropdown' | 'date' | 'datetime' | 'textarea' | 'file';
 
 export type CustomValidationType = 'withValue' | 'binary';
 

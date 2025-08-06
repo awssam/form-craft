@@ -46,67 +46,119 @@ const FieldValidationSection = () => {
 
     const fieldComponents = [];
 
-    switch (selectedField.type) {
-      case 'text':
-      case 'textarea':
-        fieldComponents.push(
-          FieldRequired,
-          FieldExactLength,
-          FieldMinLength,
-          FieldMaxLength,
-          TextFieldEquals,
-          FieldStartsWith,
-          FieldEndsWith,
-          FieldContains,
-          FieldMatchesRegex,
-          FieldNoWhitespace,
-          FieldIsValidPhoneNumber,
-          FieldIsEmail,
-          FieldIsURL,
-          FieldIsNumeric,
-          FieldIsAlpha,
-          FieldNoSpecialCharacters,
-        );
-        break;
-      case 'date':
-        fieldComponents.push(
-          DateFieldRequired,
-          DateFieldRestrictPastDate,
-          DateFieldRestrictFutureDate,
-          DateFieldIsBefore,
-          DateFieldIsAfter,
-        );
-        break;
-      case 'radio':
-        fieldComponents.push(FieldRequired, RadioFieldEquals);
-        break;
-      case 'checkbox':
-        fieldComponents.push(
-          CheckboxFieldRequired,
-          CheckboxFieldMinCount,
-          CheckboxFieldMaxCount,
-          CheckboxFieldContains,
-        );
-        break;
-      case 'dropdown':
-        fieldComponents.push(
-          CheckboxFieldRequired,
-          CheckboxFieldMinCount,
-          CheckboxFieldMaxCount,
-          DropdownFieldContains,
-        );
-        break;
-      case 'file':
-        fieldComponents.push(
-          FileUploadFieldRequired,
-          FileUploadFieldMinCount,
-          FileUploadFieldMaxCount,
-          FileUploadFieldMaxFileSize,
-        );
-        break;
-      default:
-        break;
-    }
+        switch (selectedField.type) {
+          case 'text':
+            fieldComponents.push(
+              FieldRequired,
+              FieldExactLength,
+              FieldMinLength,
+              FieldMaxLength,
+              TextFieldEquals,
+              FieldStartsWith,
+              FieldEndsWith,
+              FieldContains,
+              FieldMatchesRegex,
+              FieldNoWhitespace,
+              FieldIsAlpha,
+              FieldIsNumeric,
+              FieldNoSpecialCharacters,
+            );
+            break;
+          case 'textarea':
+            fieldComponents.push(
+              FieldRequired,
+              FieldExactLength,
+              FieldMinLength,
+              FieldMaxLength,
+              TextFieldEquals,
+              FieldStartsWith,
+              FieldEndsWith,
+              FieldContains,
+              FieldMatchesRegex,
+              FieldNoWhitespace,
+              FieldNoSpecialCharacters,
+            );
+            break;
+          case 'email':
+            fieldComponents.push(
+              FieldRequired,
+              FieldIsEmail,
+              FieldMaxLength,
+              FieldMinLength,
+            );
+            break;
+          case 'phone':
+            fieldComponents.push(
+              FieldRequired,
+              FieldIsValidPhoneNumber,
+              FieldMaxLength,
+              FieldMinLength,
+            );
+            break;
+          case 'url':
+            fieldComponents.push(
+              FieldRequired,
+              FieldIsURL,
+              FieldMaxLength,
+              FieldMinLength,
+            );
+            break;
+          case 'number':
+            fieldComponents.push(
+              FieldRequired,
+              FieldIsNumeric,
+              FieldMaxLength,
+              FieldMinLength,
+            );
+            break;
+          case 'date':
+            fieldComponents.push(
+              DateFieldRequired,
+              DateFieldRestrictPastDate,
+              DateFieldRestrictFutureDate,
+              DateFieldIsBefore,
+              DateFieldIsAfter,
+            );
+            break;
+          case 'datetime':
+            fieldComponents.push(
+              DateFieldRequired,
+              DateFieldRestrictPastDate,
+              DateFieldRestrictFutureDate,
+              DateFieldIsBefore,
+              DateFieldIsAfter,
+            );
+            break;
+          case 'radio':
+            fieldComponents.push(FieldRequired, RadioFieldEquals);
+            break;
+          case 'checkbox':
+            fieldComponents.push(
+              CheckboxFieldRequired,
+              CheckboxFieldMinCount,
+              CheckboxFieldMaxCount,
+              CheckboxFieldContains,
+            );
+            break;
+          case 'dropdown':
+            fieldComponents.push(
+              CheckboxFieldRequired,
+              CheckboxFieldMinCount,
+              CheckboxFieldMaxCount,
+              DropdownFieldContains,
+            );
+            break;
+          case 'file':
+            fieldComponents.push(
+              FileUploadFieldRequired,
+              FileUploadFieldMinCount,
+              FileUploadFieldMaxCount,
+              FileUploadFieldMaxFileSize,
+            );
+            break;
+          default:
+            break;
+        }
 
     return fieldComponents;
   }, [selectedField]);

@@ -1,6 +1,6 @@
+import { CalendarIcon, CircleDot, File, FormInputIcon, Notebook, TextIcon, Mail, Phone, Link, Hash, Clock } from 'lucide-react';
 import { CheckboxIcon } from '@radix-ui/react-icons';
 import { SelectIcon } from '@radix-ui/react-select';
-import { CalendarIcon, CircleDot, File, FormInputIcon, Notebook, TextIcon } from 'lucide-react';
 
 const sections = [
   {
@@ -20,6 +20,30 @@ const sections = [
         type: 'text',
       },
       {
+        name: 'Email Field',
+        icon: <Mail className="w-4 h-4" />,
+        description: 'A field for entering an email address.',
+        type: 'email',
+      },
+      {
+        name: 'Phone Field',
+        icon: <Phone className="w-4 h-4" />,
+        description: 'A field for entering a phone number.',
+        type: 'phone',
+      },
+      {
+        name: 'URL Field',
+        icon: <Link className="w-4 h-4" />,
+        description: 'A field for entering a website URL.',
+        type: 'url',
+      },
+      {
+        name: 'Number Field',
+        icon: <Hash className="w-4 h-4" />,
+        description: 'A field for entering numeric values.',
+        type: 'number',
+      },
+      {
         name: 'Multi-Line Text Field',
         icon: <Notebook className="w-4 h-4" />,
         description: 'A text area for longer text entries or comments.',
@@ -30,6 +54,12 @@ const sections = [
         icon: <CalendarIcon className="w-4 h-4" />,
         description: 'A field for selecting a date from a calendar.',
         type: 'date',
+      },
+      {
+        name: 'Date & Time Picker',
+        icon: <Clock className="w-4 h-4" />,
+        description: 'A field for selecting a date and time.',
+        type: 'datetime',
       },
       {
         name: 'File Upload',
