@@ -5,8 +5,8 @@ import './globals.css';
 import ReactQueryProvider from '@/providers/react-query';
 import { getAppOriginUrl } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/react';
-import { FieldRegistryProvider } from '@/components/fields/FieldRegistryContext';
-import FieldRegistryInitializer from '@/components/fields/FieldRegistryInitializer';
+import { FieldRegistryProvider } from '@/components/fields/context/FieldRegistryContext';
+import FieldRegistryInitializer from '@/components/fields/context/FieldRegistryInitializer';
 
 export const metadata = {
   title: 'FormCraft: No Code Visual Form Builder',

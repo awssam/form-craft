@@ -8,7 +8,7 @@ import { generateId } from '@/lib/utils';
 import { FieldType } from '@/types/form-config';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
 import { toast } from 'sonner';
-import { useFieldData } from '@/components/fields/FieldRegistryContext';
+import { useFieldData } from '@/components/fields/context/FieldRegistryContext';
 
 const FieldListMenu = () => {
   const addField = useFormActionProperty('addField');

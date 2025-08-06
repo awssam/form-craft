@@ -48,18 +48,3 @@ export const DEFAULT_FIELD_CATEGORIES: FieldCategory[] = [
     order: 6,
   },
 ];
-
-/**
- * Initialize default categories in the registry
- */
-export const initializeDefaultCategories = (registerCategory: (category: FieldCategory) => void) => {
-  console.log('🚀 Starting category initialization...');
-  console.log('📋 Categories to register:', DEFAULT_FIELD_CATEGORIES.length);
-  
-  DEFAULT_FIELD_CATEGORIES.forEach((category, index) => {
-    console.log(`📝 Registering category ${index + 1}:`, category.id, category.name);
-    registerCategory(category);
-  });
-  
-  console.log('✅ Finished category initialization');
-};

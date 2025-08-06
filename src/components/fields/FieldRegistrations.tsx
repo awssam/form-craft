@@ -1,5 +1,4 @@
-import FieldRegistry from './FieldRegistry';
-import { initializeDefaultCategories } from './FieldCategories';
+// import { initializeDefaultCategories } from './FieldCategories';
 
 // Import all specialized field components
 import TextField from './specialized/TextField';
@@ -343,80 +342,3 @@ const fileFieldConfig: Omit<FieldConfiguration, "type" | "component"> = {
     { key: 'acceptedFileTypes', type: 'array', label: 'Accepted File Types' },
   ],
 };
-/**
- * Register all specialized field components with the registry
- */
-export function registerSpecializedFields(): void {
-  console.log('🚀 Starting field registration...');
-
-  // Register each field component with its configuration
-  console.log('📝 Registering text field...');
-  FieldRegistry.registerWithComponent('text', textFieldConfig, TextField);
-  
-  console.log('📝 Registering email field...');
-  FieldRegistry.registerWithComponent('email', emailFieldConfig, EmailField);
-  
-  console.log('📝 Registering phone field...');
-  FieldRegistry.registerWithComponent('phone', phoneFieldConfig, PhoneField);
-  
-  console.log('📝 Registering number field...');
-  FieldRegistry.registerWithComponent('number', numberFieldConfig, NumberField);
-  
-  console.log('📝 Registering textarea field...');
-  FieldRegistry.registerWithComponent('textarea', textareaFieldConfig, TextareaField);
-  
-  console.log('📝 Registering dropdown field...');
-  FieldRegistry.registerWithComponent('dropdown', dropdownFieldConfig, DropdownField);
-  
-  console.log('📝 Registering radio field...');
-  FieldRegistry.registerWithComponent('radio', radioFieldConfig, RadioField);
-  
-  console.log('📝 Registering checkbox field...');
-  FieldRegistry.registerWithComponent('checkbox', checkboxFieldConfig, CheckboxField);
-  
-  console.log('📝 Registering date field...');
-  FieldRegistry.registerWithComponent('date', dateFieldConfig, DateField);
-  
-  console.log('📝 Registering datetime field...');
-  FieldRegistry.registerWithComponent('datetime', datetimeFieldConfig, DatetimeField);
-  
-  console.log('📝 Registering file field...');
-  FieldRegistry.registerWithComponent('file', fileFieldConfig, FileField);
-
-  console.log('✅ All specialized field components registered successfully');
-  
-  // Log registration statistics
-  const stats = FieldRegistry.getEnhancedStats();
-  console.log(`📊 Registry stats: ${stats.totalFields} fields, ${stats.totalCategories} categories`);
-  
-  // Verify field registration
-  const allFields = FieldRegistry.getAllFields();
-  console.log('🔍 Verified registered fields:', allFields.length);
-}
-
-/**
- * Initialize the field registry with all specialized components
- * This function should be called once at application startup
- */
-export function initializeFieldRegistry(): void {
-  if (FieldRegistry.isInitialized()) {
-    console.log('FieldRegistry already initialized');
-    return;
-  }
-
-  try {
-    // Initialize categories first
-    initializeDefaultCategories();
-    
-    
-    // Then register field components
-    registerSpecializedFields();
-    console.log('🚀 Field registry initialization complete');
-  } catch (error) {
-    console.error('❌ Failed to initialize field registry:', error);
-    throw error;
-  }
-}
-
-// Auto-initialize when this module is imported
-initializeFieldRegistry();

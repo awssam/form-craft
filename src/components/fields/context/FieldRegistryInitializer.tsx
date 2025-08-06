@@ -1,22 +1,22 @@
 "use client";
 import React, { useEffect } from 'react';
 import { useFieldRegistration, useFieldData } from './FieldRegistryContext';
-import { DEFAULT_FIELD_CATEGORIES } from './FieldCategories';
+import { DEFAULT_FIELD_CATEGORIES } from '../FieldCategories';
 
-// Import all specialized field components
-import TextField from './specialized/TextField';
-import EmailField from './specialized/EmailField';
-import PhoneField from './specialized/PhoneField';
-import NumberField from './specialized/NumberField';
-import TextareaField from './specialized/TextareaField';
-import DropdownField from './specialized/DropdownField';
-import RadioField from './specialized/RadioField';
-import CheckboxField from './specialized/CheckboxField';
-import DateField from './specialized/DateField';
-import DatetimeField from './specialized/DatetimeField';
-import FileField from './specialized/FileField';
 
-// Import validation rules
+import TextField from '../specialized/TextField';
+import EmailField from '../specialized/EmailField';
+import PhoneField from '../specialized/PhoneField';
+import NumberField from '../specialized/NumberField';
+import TextareaField from '../specialized/TextareaField';
+import DropdownField from '../specialized/DropdownField';
+import RadioField from '../specialized/RadioField';
+import CheckboxField from '../specialized/CheckboxField';
+import DateField from '../specialized/DateField';
+import DatetimeField from '../specialized/DatetimeField';
+import FileField from '../specialized/FileField';
+
+
 import { 
   RequiredValidation,
   MinLengthValidation,
@@ -28,9 +28,9 @@ import {
   DateValidation,
   FileValidation,
   OptionsValidation
-} from './validation/ValidationRules';
+} from '../validation/ValidationRules';
 
-// Import icons
+
 import { 
   Type, 
   Mail, 
@@ -53,7 +53,7 @@ export const FieldRegistryInitializer: React.FC = () => {
   const { initialized } = useFieldData();
 
   useEffect(() => {
-    // Prevent re-initialization if already done
+    
     if (initialized) {
       console.log('🔄 Field Registry already initialized, skipping...');
       return;
@@ -61,20 +61,20 @@ export const FieldRegistryInitializer: React.FC = () => {
     
     console.log('🚀 Initializing Field Registry with React Context...');
     
-    // First register categories
+    
     console.log('📝 Registering categories...');
     DEFAULT_FIELD_CATEGORIES.forEach((category, index) => {
       console.log(`📝 Registering category ${index + 1}:`, category.id, category.name);
       registerCategory(category);
     });
     
-    // Then register all field components
+    
     console.log('📝 Registering field components...');
     
-    // Text Field
+    
     registerField('text', {
       icon: <Type className="w-4 h-4" />,
-      displayName: 'Text Field',
+      displayName: 'Text Fieldor',
       description: 'Single-line text input for short entries',
       category: 'basic',
       tags: ['input', 'text', 'string'],
@@ -84,10 +84,10 @@ export const FieldRegistryInitializer: React.FC = () => {
         width: '100%',
       },
       validationRules: [
-        RequiredValidation,
-        MinLengthValidation,
-        MaxLengthValidation,
-        PatternValidation,
+        // RequiredValidation,
+        // MinLengthValidation,
+        // MaxLengthValidation,
+        // PatternValidation,
       ],
       customizations: [
         { key: 'placeholder', type: 'text', label: 'Placeholder Text' },
@@ -101,7 +101,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, TextField);
 
-    // Email Field
+    
     registerField('email', {
       icon: <Mail className="w-4 h-4" />,
       displayName: 'Email Field',
@@ -125,7 +125,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, EmailField);
 
-    // Phone Field
+    
     registerField('phone', {
       icon: <Phone className="w-4 h-4" />,
       displayName: 'Phone Field',
@@ -154,7 +154,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, PhoneField);
 
-    // Number Field
+    
     registerField('number', {
       icon: <Hash className="w-4 h-4" />,
       displayName: 'Number Field',
@@ -179,7 +179,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, NumberField);
 
-    // Textarea Field
+    
     registerField('textarea', {
       icon: <FileText className="w-4 h-4" />,
       displayName: 'Textarea Field',
@@ -204,7 +204,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, TextareaField);
 
-    // Dropdown Field
+    
     registerField('dropdown', {
       icon: <ChevronDown className="w-4 h-4" />,
       displayName: 'Dropdown Field',
@@ -233,7 +233,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, DropdownField);
 
-    // Radio Field
+    
     registerField('radio', {
       icon: <Circle className="w-4 h-4" />,
       displayName: 'Radio Field',
@@ -264,7 +264,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, RadioField);
 
-    // Checkbox Field
+    
     registerField('checkbox', {
       icon: <CheckSquare className="w-4 h-4" />,
       displayName: 'Checkbox Field',
@@ -298,7 +298,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, CheckboxField);
 
-    // Date Field
+    
     registerField('date', {
       icon: <Calendar className="w-4 h-4" />,
       displayName: 'Date Field',
@@ -327,7 +327,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, DateField);
 
-    // DateTime Field
+    
     registerField('datetime', {
       icon: <Clock className="w-4 h-4" />,
       displayName: 'DateTime Field',
@@ -352,7 +352,7 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, DatetimeField);
 
-    // File Field
+    
     registerField('file', {
       icon: <Upload className="w-4 h-4" />,
       displayName: 'File Upload',
@@ -375,14 +375,15 @@ export const FieldRegistryInitializer: React.FC = () => {
       ],
     }, FileField);
 
-    // Mark as initialized
+    
     setInitialized(true);
     
     console.log('✅ Field Registry initialization complete!');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialized]); // Only depend on initialized flag from context
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialized]);
+  
 
-  return null; // This component doesn't render anything
+  return null; 
 };
 
 export default FieldRegistryInitializer;
