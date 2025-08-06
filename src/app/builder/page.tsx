@@ -7,10 +7,8 @@ import { FormSectionDisplayProvider } from '@/hooks/useFormSectionDisplay';
 const FormBuilderPage = () => {
   return (
     <FormSectionDisplayProvider>
-      <>
-        <TopHeader />
-        <SectionDisplay />
-      </>
+      <TopHeader />
+      <SectionDisplay />
     </FormSectionDisplayProvider>
   );
 };

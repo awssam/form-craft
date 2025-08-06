@@ -1,4 +1,5 @@
 import FieldRegistry from './FieldRegistry';
+import { initializeDefaultCategories } from './FieldCategories';
 
 // Import all specialized field components
 import TextField from './specialized/TextField';
@@ -41,7 +42,7 @@ import {
   Clock, 
   Upload 
 } from 'lucide-react';
-import { FieldConfiguration } from '.';
+import { FieldConfiguration } from './base/FieldTypes';
 
 // Individual field configurations
 const textFieldConfig: Omit<FieldConfiguration, "type" | "component"> = {
@@ -134,7 +135,7 @@ const numberFieldConfig: Omit<FieldConfiguration, "type" | "component"> = {
   icon: <Hash className="w-4 h-4" />,
   displayName: 'Number Field',
   description: 'Numeric input with constraints and formatting',
-  category: 'basic',
+  category: 'numeric',
   tags: ['number', 'numeric', 'integer', 'decimal'],
   defaultConfig: {
     placeholder: 'Enter number...',
@@ -346,19 +347,40 @@ const fileFieldConfig: Omit<FieldConfiguration, "type" | "component"> = {
  * Register all specialized field components with the registry
  */
 export function registerSpecializedFields(): void {
-  console.log('Registering specialized field components...');
+  console.log('🚀 Starting field registration...');
 
   // Register each field component with its configuration
+  console.log('📝 Registering text field...');
   FieldRegistry.registerWithComponent('text', textFieldConfig, TextField);
+  
+  console.log('📝 Registering email field...');
   FieldRegistry.registerWithComponent('email', emailFieldConfig, EmailField);
+  
+  console.log('📝 Registering phone field...');
   FieldRegistry.registerWithComponent('phone', phoneFieldConfig, PhoneField);
+  
+  console.log('📝 Registering number field...');
   FieldRegistry.registerWithComponent('number', numberFieldConfig, NumberField);
+  
+  console.log('📝 Registering textarea field...');
   FieldRegistry.registerWithComponent('textarea', textareaFieldConfig, TextareaField);
+  
+  console.log('📝 Registering dropdown field...');
   FieldRegistry.registerWithComponent('dropdown', dropdownFieldConfig, DropdownField);
+  
+  console.log('📝 Registering radio field...');
   FieldRegistry.registerWithComponent('radio', radioFieldConfig, RadioField);
+  
+  console.log('📝 Registering checkbox field...');
   FieldRegistry.registerWithComponent('checkbox', checkboxFieldConfig, CheckboxField);
+  
+  console.log('📝 Registering date field...');
   FieldRegistry.registerWithComponent('date', dateFieldConfig, DateField);
+  
+  console.log('📝 Registering datetime field...');
   FieldRegistry.registerWithComponent('datetime', datetimeFieldConfig, DatetimeField);
+  
+  console.log('📝 Registering file field...');
   FieldRegistry.registerWithComponent('file', fileFieldConfig, FileField);
 
   console.log('✅ All specialized field components registered successfully');
@@ -366,6 +388,10 @@ export function registerSpecializedFields(): void {
   // Log registration statistics
   const stats = FieldRegistry.getEnhancedStats();
   console.log(`📊 Registry stats: ${stats.totalFields} fields, ${stats.totalCategories} categories`);
+  
+  // Verify field registration
+  const allFields = FieldRegistry.getAllFields();
+  console.log('🔍 Verified registered fields:', allFields.length);
 }
 
 /**
@@ -379,6 +405,11 @@ export function initializeFieldRegistry(): void {
   }
 
   try {
+    // Initialize categories first
+    initializeDefaultCategories();
+    
+    
+    // Then register field components
     registerSpecializedFields();
     console.log('🚀 Field registry initialization complete');
   } catch (error) {

@@ -5,7 +5,6 @@ export type {
   BaseFieldProps,
   FieldConfiguration,
   FieldCategory,
-  ValidationRule,
   ValidationRuleProps,
   CustomizationOption,
   FieldRendererProps,
@@ -23,14 +22,7 @@ export {
   type FieldRegistrationOptions
 } from './FieldRegistry';
 
-// Validation System (Phase 4)
-export { 
-  default as ValidationRegistry,
-  type ValidationComponent,
-  type ValidationComponentProps,
-  type ValidationRuleWithComponent,
-  type ValidationChangeData
-} from './validation/ValidationRegistry';
+
 
 export {
   RequiredValidation,
@@ -53,7 +45,6 @@ export { default as ValidationSystemDemo } from './ValidationSystemDemo';
 export {
   registerSpecializedFields,
   initializeFieldRegistry,
-  FIELD_CONFIGURATIONS
 } from './FieldRegistrations';
 
 // Categories
@@ -87,3 +78,4 @@ export { default as FileField } from './specialized/FileField';
 // Example and demo components
 export { default as ExampleTextField } from './examples/ExampleTextField';
 export { default as EnhancedFieldSystemDemo } from './examples/FieldSystemDemo';
+export * from "./FieldCategories"

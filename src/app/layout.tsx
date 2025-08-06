@@ -5,6 +5,8 @@ import './globals.css';
 import ReactQueryProvider from '@/providers/react-query';
 import { getAppOriginUrl } from '@/lib/utils';
 import { Analytics } from '@vercel/analytics/react';
+import { FieldRegistryProvider } from '@/components/fields/FieldRegistryContext';
+import FieldRegistryInitializer from '@/components/fields/FieldRegistryInitializer';
 
 export const metadata = {
   title: 'FormCraft: No Code Visual Form Builder',
@@ -60,21 +62,24 @@ export default function RootLayout({
           <link id='font-link' rel='stylesheet' />
         </head>
         <body className={` antialiased  overflow-x-hidden overflow-y-auto`}>
-          <ReactQueryProvider>
-            {children}
-            <Toaster
-              position="bottom-center"
-              className="z-[99999999999999999999999] mt-3"
-              duration={2000}
-              toastOptions={{
-                classNames: {
-                  success: 'bg-[#000] border border-input text-white',
-                  info: 'bg-[#000] border border-input text-white',
-                },
-              }}
-            />
-            <Analytics />
-          </ReactQueryProvider>
+          <FieldRegistryProvider>
+            <FieldRegistryInitializer />
+            <ReactQueryProvider>
+              {children}
+              <Toaster
+                position="bottom-center"
+                className="z-[99999999999999999999999] mt-3"
+                duration={2000}
+                toastOptions={{
+                  classNames: {
+                    success: 'bg-[#000] border border-input text-white',
+                    info: 'bg-[#000] border border-input text-white',
+                  },
+                }}
+              />
+              <Analytics />
+            </ReactQueryProvider>
+          </FieldRegistryProvider>
         </body>
       </html>
     </ClerkProvider>

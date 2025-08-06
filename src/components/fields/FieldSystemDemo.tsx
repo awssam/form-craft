@@ -99,7 +99,7 @@ const registerExampleFields = () => {
  */
 export const FieldSystemDemo: React.FC = () => {
   const [mode, setMode] = React.useState<'builder' | 'runtime'>('builder');
-  const [fieldConfig, setFieldConfig] = React.useState({
+  const [fieldConfig, ] = React.useState({
     id: 'demo-field-1',
     name: 'demoField',
     type: 'text' as FieldType,
@@ -109,9 +109,9 @@ export const FieldSystemDemo: React.FC = () => {
     width: '100%' as const,
   });
 
-  const handleConfigChange = (updates: Partial<typeof fieldConfig>) => {
-    setFieldConfig(prev => ({ ...prev, ...updates }));
-  };
+  // const handleConfigChange = (updates: Partial<typeof fieldConfig>) => {
+  //   setFieldConfig(prev => ({ ...prev, ...updates }));
+  // };
 
   const handleValueChange = (value: string | number | boolean | File[]) => {
     console.log('Field value changed:', value);
@@ -163,13 +163,13 @@ export const FieldSystemDemo: React.FC = () => {
               config={fieldConfig}
               mode={mode}
               onChange={handleValueChange}
-              onConfigChange={mode === 'builder' ? handleConfigChange : undefined}
+              // onConfigChange={mode === 'builder' ? handleConfigChange : undefined}
             >
               <ExampleTextField
                 config={fieldConfig}
                 mode={mode}
                 onChange={handleValueChange}
-                onConfigChange={mode === 'builder' ? handleConfigChange : undefined}
+                // onConfigChange={mode === 'builder' ? handleConfigChange : undefined}
               />
             </BaseField>
           </FieldWrapper>

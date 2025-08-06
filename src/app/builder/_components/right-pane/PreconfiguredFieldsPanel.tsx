@@ -13,6 +13,8 @@ import { Plus, Database, MapPin, CheckCircle2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { useMemo } from 'react';
 import useFormSectionDisplay from '@/hooks/useFormSectionDisplay';
+import FieldRegistry from '@/components/fields/FieldRegistry';
+import { FieldType } from '@/types/form-config';
 
 interface PreconfiguredFieldsPanelProps {
   className?: string;
@@ -116,19 +118,10 @@ const PreconfiguredFieldsPanel = ({ className }: PreconfiguredFieldsPanelProps) 
     });
   };
 
-  const getFieldTypeIcon = (type: string) => {
-    const icons: Record<string, string> = {
-      text: '📝',
-      email: '📧',
-      phone: '📱',
-      dropdown: '📋',
-      radio: '🔘',
-      checkbox: '☑️',
-      textarea: '📄',
-      date: '📅',
-      file: '📎'
-    };
-    return icons[type] || '📝';
+  // Get field type icon from registry
+  const getFieldTypeIcon = (type: FieldType) => {
+    const fieldConfig = FieldRegistry.getFieldConfig(type);
+    return fieldConfig?.icon || '📝';
   };
 
   if (!formType || !formTypeConfig) {
